@@ -5,10 +5,11 @@ import { LineChartModule } from "@swimlane/ngx-charts";
 import { AppComponent } from "./app.component";
 import { APIService, GlobalErrorHandler, RegionService } from "./services";
 import { ComponentsModule } from "./shared/components.module";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, ComponentsModule, HttpClientModule, LineChartModule],
+  imports: [BrowserModule, ComponentsModule, HttpClientModule, LineChartModule, NgbModule],
   providers: [APIService, RegionService, { provide: ErrorHandler, useClass: GlobalErrorHandler }],
   bootstrap: [AppComponent],
 })
