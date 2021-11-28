@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  appInsightKey: "080ff9cf-5cf2-4f91-9c1b-790d79bdfc75",
+  appInsightKey: "9d7253ae-ba61-4450-900a-15da6a6ae804",
 };

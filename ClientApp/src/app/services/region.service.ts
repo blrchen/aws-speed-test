@@ -9,8 +9,6 @@ import data from "../../assets/data/regions.json";
 export class RegionService {
   private regionSubject = new BehaviorSubject<RegionModel[]>([]);
 
-  constructor() {}
-
   updateRegions(regions: RegionModel[]) {
     this.regionSubject.next(regions);
     localStorage.setItem(DefaultRegionsKey, JSON.stringify(regions));
