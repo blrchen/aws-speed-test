@@ -5,7 +5,7 @@
 [![forks badge]][forks]
 [![issues badge]][issues]
 
-Azure speed test tool. Test your network latency, download and upload speed to Azure datacenters around the world.
+AWS speed test tool. Test your network latency, download and upload speed to AWS datacenters around the world.
 
 ## Demo
 
@@ -28,11 +28,11 @@ See README [here](ClientApp/README.md)
 [MIT](/LICENSE)
 
 [licence badge]:https://img.shields.io/badge/license-MIT-blue.svg
-[stars badge]:https://img.shields.io/github/stars/blrchen/azure-speed-test.svg
-[forks badge]:https://img.shields.io/github/forks/blrchen/azure-speed-test.svg
-[issues badge]:https://img.shields.io/github/issues/blrchen/azure-speed-test.svg
+[stars badge]:https://img.shields.io/github/stars/blrchen/aws-speed-test.svg
+[forks badge]:https://img.shields.io/github/forks/blrchen/aws-speed-test.svg
+[issues badge]:https://img.shields.io/github/issues/blrchen/aws-speed-test.svg
 
-[licence]:https://github.com/blrchen/azure-speed-test/blob/master/LICENSE
-[stars]:https://github.com/blrchen/azure-speed-test/stargazers
-[forks]:https://github.com/blrchen/azure-speed-test/network
-[issues]:https://github.com/blrchen/azure-speed-test/issues
+[licence]:https://github.com/blrchen/aws-speed-test/blob/master/LICENSE
+[stars]:https://github.com/blrchen/aws-speed-test/stargazers
+[forks]:https://github.com/blrchen/aws-speed-test/network
+[issues]:https://github.com/blrchen/aws-speed-test/issues
