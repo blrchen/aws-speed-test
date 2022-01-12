@@ -119,6 +119,19 @@
   {
     "availabilityZoneCount": 0,
     "availabilityZoneStatus": null,
+    "displayName": "Jakarta",
+    "geography": "Asia Pacific",
+    "latitude": null,
+    "longitude": null,
+    "pairedRegion": null,
+    "physicalLocation": null,
+    "regionalDisplayName": null,
+    "regionName": "ap-southeast-3",
+    "storageAccountName": "astap-southeast-3"
+  },
+  {
+    "availabilityZoneCount": 0,
+    "availabilityZoneStatus": null,
     "displayName": "Sydney",
     "geography": "Asia Pacific",
     "latitude": null,
