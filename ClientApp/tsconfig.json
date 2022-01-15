@@ -2,9 +2,12 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "noUnusedParameters": true,
-    "noUnusedLocals": true,
     "noImplicitAny": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./",

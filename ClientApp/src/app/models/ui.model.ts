@@ -1,6 +1,6 @@
 export const DefaultRegionsKey = "currentSelectedRegions";
 
-export interface Region {
+export class Region {
   availabilityZoneCount?: number;
   availabilityZoneStatus?: string;
   displayName: string;
@@ -14,23 +14,23 @@ export interface Region {
   storageAccountName: string;
 }
 
-export interface RegionModel extends Region {
+export class RegionModel extends Region {
   averageLatency?: number;
   checked?: boolean;
   url?: string;
 }
 
-export interface RegionGroupModel {
+export class RegionGroupModel {
   geography: string;
   regions: RegionModel[];
   checked?: boolean;
 }
 
-export interface HistoryModel {
+export class HistoryModel {
   [key: string]: any[];
 }
 
-export interface BlobModel {
+export class BlobModel {
   endpoint: string;
   accountName: string;
   containerName: string;
@@ -38,7 +38,7 @@ export interface BlobModel {
   sas: string;
 }
 
-export interface BlobUploadSpeedModel {
+export class BlobUploadSpeedModel {
   fileName: any;
   fileSize: string;
   region: string;

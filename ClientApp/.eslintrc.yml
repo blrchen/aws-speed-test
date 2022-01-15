@@ -37,3 +37,4 @@ rules:
     - "warn"
     - argsIgnorePattern: "^_"
       varsIgnorePattern: "^_"
+  security/detect-non-literal-fs-filename: "off"
