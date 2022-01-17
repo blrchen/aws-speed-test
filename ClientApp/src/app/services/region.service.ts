@@ -19,7 +19,15 @@ export class RegionService {
   }
 
   getAllRegions(): RegionModel[] {
-    return data;
+    const regions = data
+      .map((_) => {
+        const r = new RegionModel(_);
+        const prefix = "ast";
+        r.storageAccountName = `${prefix}${_.regionName}`;
+        return r;
+      })
+      .filter((_) => _.accessEnabled);
+    return regions;
   }
 
   clearRegions() {

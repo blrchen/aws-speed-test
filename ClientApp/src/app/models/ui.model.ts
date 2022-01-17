@@ -2,7 +2,6 @@ export const DefaultRegionsKey = "currentSelectedRegions";
 
 export class Region {
   availabilityZoneCount?: number;
-  availabilityZoneStatus?: string;
   displayName: string;
   geography: string;
   latitude?: string;
@@ -11,13 +10,20 @@ export class Region {
   physicalLocation?: string;
   regionalDisplayName?: string;
   regionName: string;
-  storageAccountName: string;
+  restricted: boolean;
+  accessEnabled: boolean;
 }
 
 export class RegionModel extends Region {
   averageLatency?: number;
   checked?: boolean;
+  storageAccountName: string;
   url?: string;
+
+  constructor(region: Region) {
+    super();
+    Object.assign(this, region);
+  }
 }
 
 export class RegionGroupModel {

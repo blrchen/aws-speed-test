@@ -82,7 +82,7 @@ export class LatencyComponent implements OnInit, OnDestroy {
   formatData() {
     const tableDataCache: RegionModel[] = [];
     this.regions.forEach((item, index) => {
-      const { regionName, displayName, storageAccountName, physicalLocation, geography } = item;
+      const { regionName, displayName, storageAccountName, physicalLocation, geography, restricted, accessEnabled } = item;
       const t = this.latestPingTime.get(storageAccountName);
       if (t > 0) {
         tableDataCache.push({
@@ -92,6 +92,8 @@ export class LatencyComponent implements OnInit, OnDestroy {
           physicalLocation,
           geography,
           averageLatency: t,
+          restricted,
+          accessEnabled,
         });
       }
 

@@ -3,7 +3,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { LatencyComponent } from "./latency/latency.component";
 
 const routes: Routes = [
-  { path: "latency", component: LatencyComponent },
+  { path: "latency", data: { title: "AWS Latency Test" }, component: LatencyComponent },
   { path: "", redirectTo: "/latency", pathMatch: "full" },
   // TODO: Add global 404 page for all invalid page
   // { path: '**', component: PageNotFoundComponent },
