@@ -1,0 +1,328 @@
+[
+  {
+    "Geography": "Africa",
+    "Regions": [
+      {
+        "displayName": "Cape Town",
+        "geography": "Africa",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "af-south-1",
+        "availabilityZoneCount": 3,
+        "restricted": false,
+        "accessEnabled": true
+      }
+    ]
+  },
+  {
+    "Geography": "Asia Pacific",
+    "Regions": [
+      {
+        "displayName": "Hong Kong",
+        "geography": "Asia Pacific",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "ap-east-1",
+        "availabilityZoneCount": 3,
+        "restricted": false,
+        "accessEnabled": true
+      },
+      {
+        "displayName": "Tokyo",
+        "geography": "Asia Pacific",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "ap-northeast-1",
+        "availabilityZoneCount": 3,
+        "restricted": false,
+        "accessEnabled": true
+      },
+      {
+        "displayName": "Seoul",
+        "geography": "Asia Pacific",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "ap-northeast-2",
+        "availabilityZoneCount": 4,
+        "restricted": false,
+        "accessEnabled": true
+      },
+      {
+        "displayName": "Osaka",
+        "geography": "Asia Pacific",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "ap-northeast-3",
+        "availabilityZoneCount": 3,
+        "restricted": false,
+        "accessEnabled": true
+      },
+      {
+        "displayName": "Mumbai",
+        "geography": "Asia Pacific",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "ap-south-1",
+        "availabilityZoneCount": 3,
+        "restricted": false,
+        "accessEnabled": true
+      },
+      {
+        "displayName": "Singapore",
+        "geography": "Asia Pacific",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "ap-southeast-1",
+        "availabilityZoneCount": 3,
+        "restricted": false,
+        "accessEnabled": true
+      },
+      {
+        "displayName": "Sydney",
+        "geography": "Asia Pacific",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "ap-southeast-2",
+        "availabilityZoneCount": 3,
+        "restricted": false,
+        "accessEnabled": true
+      },
+      {
+        "displayName": "Jakarta",
+        "geography": "Asia Pacific",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "ap-southeast-3",
+        "availabilityZoneCount": 3,
+        "restricted": false,
+        "accessEnabled": true
+      }
+    ]
+  },
+  {
+    "Geography": "Canada",
+    "Regions": [
+      {
+        "displayName": "Central",
+        "geography": "Canada",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "ca-central-1",
+        "availabilityZoneCount": 3,
+        "restricted": false,
+        "accessEnabled": true
+      }
+    ]
+  },
+  {
+    "Geography": "Europe",
+    "Regions": [
+      {
+        "displayName": "Frankfurt",
+        "geography": "Europe",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "eu-central-1",
+        "availabilityZoneCount": 3,
+        "restricted": false,
+        "accessEnabled": true
+      },
+      {
+        "displayName": "Stockholm",
+        "geography": "Europe",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "eu-north-1",
+        "availabilityZoneCount": 3,
+        "restricted": false,
+        "accessEnabled": true
+      },
+      {
+        "displayName": "Milan",
+        "geography": "Europe",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "eu-south-1",
+        "availabilityZoneCount": 3,
+        "restricted": false,
+        "accessEnabled": true
+      },
+      {
+        "displayName": "Ireland",
+        "geography": "Europe",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "eu-west-1",
+        "availabilityZoneCount": 3,
+        "restricted": false,
+        "accessEnabled": true
+      },
+      {
+        "displayName": "London",
+        "geography": "Europe",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "eu-west-2",
+        "availabilityZoneCount": 3,
+        "restricted": false,
+        "accessEnabled": true
+      },
+      {
+        "displayName": "Paris",
+        "geography": "Europe",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "eu-west-3",
+        "availabilityZoneCount": 3,
+        "restricted": false,
+        "accessEnabled": true
+      }
+    ]
+  },
+  {
+    "Geography": "Middle East",
+    "Regions": [
+      {
+        "displayName": "Bahrain",
+        "geography": "Middle East",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "me-south-1",
+        "availabilityZoneCount": 3,
+        "restricted": false,
+        "accessEnabled": true
+      }
+    ]
+  },
+  {
+    "Geography": "South America",
+    "Regions": [
+      {
+        "displayName": "Sao Paulo",
+        "geography": "South America",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "sa-east-1",
+        "availabilityZoneCount": 3,
+        "restricted": false,
+        "accessEnabled": true
+      }
+    ]
+  },
+  {
+    "Geography": "US East",
+    "Regions": [
+      {
+        "displayName": "N. Virginia",
+        "geography": "US East",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "us-east-1",
+        "availabilityZoneCount": 6,
+        "restricted": false,
+        "accessEnabled": true
+      },
+      {
+        "displayName": "Ohio",
+        "geography": "US East",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "us-east-2",
+        "availabilityZoneCount": 3,
+        "restricted": false,
+        "accessEnabled": true
+      }
+    ]
+  },
+  {
+    "Geography": "US West",
+    "Regions": [
+      {
+        "displayName": "N. California",
+        "geography": "US West",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "us-west-1",
+        "availabilityZoneCount": 2,
+        "restricted": false,
+        "accessEnabled": true
+      },
+      {
+        "displayName": "Oregon",
+        "geography": "US West",
+        "latitude": null,
+        "longitude": null,
+        "pairedRegion": null,
+        "physicalLocation": null,
+        "regionalDisplayName": null,
+        "regionName": "us-west-2",
+        "availabilityZoneCount": 4,
+        "restricted": false,
+        "accessEnabled": true
+      }
+    ]
+  }
+]

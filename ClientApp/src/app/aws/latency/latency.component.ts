@@ -2,9 +2,9 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subscription, timer } from "rxjs";
 import { curveBasis } from "d3-shape";
 import { colorSets, DataItem, MultiSeries } from "@swimlane/ngx-charts";
-import { DefaultRegionsKey, HistoryModel, RegionModel } from "../models";
-import { APIService } from "../services/api.service";
-import { RegionService } from "../services/region.service";
+import { DefaultRegionsKey, HistoryModel, RegionModel } from "../../models";
+import { APIService } from "../../services/api.service";
+import { RegionService } from "../../services/region.service";
 
 @Component({
   selector: "app-latency",
