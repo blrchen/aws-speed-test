@@ -10,6 +10,7 @@ import { DefaultRegionsKey, RegionGroupModel, RegionModel } from "src/app/models
 export class RegionGroupComponent implements OnInit {
   regionsGroup: RegionGroupModel[] = [];
   totalCheckedRegions = 0;
+
   ngOnInit() {
     this.initRegions();
   }
