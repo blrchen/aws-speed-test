@@ -1,12 +1,16 @@
 import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
-import { LatencyComponent } from "./latency/latency.component";
+import { Routes, RouterModule } from "@angular/router";
 
 const routes: Routes = [
-  { path: "latency", data: { title: "AWS Latency Test" }, component: LatencyComponent },
-  { path: "", redirectTo: "/latency", pathMatch: "full" },
-  // TODO: Add global 404 page for all invalid page
-  // { path: '**', component: PageNotFoundComponent },
+  {
+    path: "",
+    loadChildren: () => import("./aws/aws.module").then((m) => m.AwsModule),
+  },
+  {
+    path: "**",
+    redirectTo: "",
+    pathMatch: "full",
+  },
 ];
 
 @NgModule({

@@ -27,6 +27,7 @@ export class RegionService {
         return r;
       })
       .filter((_) => _.accessEnabled);
+
     return regions;
   }
 
