@@ -143,6 +143,19 @@
     "accessEnabled": true
   },
   {
+    "displayName": "Zurich",
+    "geography": "Europe",
+    "latitude": null,
+    "longitude": null,
+    "pairedRegion": null,
+    "physicalLocation": null,
+    "regionalDisplayName": null,
+    "regionName": "eu-central-2",
+    "availabilityZoneCount": 3,
+    "restricted": false,
+    "accessEnabled": true
+  },
+  {
     "displayName": "Stockholm",
     "geography": "Europe",
     "latitude": null,
