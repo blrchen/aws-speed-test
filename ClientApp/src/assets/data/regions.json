@@ -78,6 +78,19 @@
     "accessEnabled": true
   },
   {
+    "displayName": "Hyderabad",
+    "geography": "Asia Pacific",
+    "latitude": null,
+    "longitude": null,
+    "pairedRegion": null,
+    "physicalLocation": null,
+    "regionalDisplayName": null,
+    "regionName": "ap-south-2",
+    "availabilityZoneCount": 3,
+    "restricted": false,
+    "accessEnabled": true
+  },
+  {
     "displayName": "Singapore",
     "geography": "Asia Pacific",
     "latitude": null,
@@ -182,6 +195,19 @@
     "accessEnabled": true
   },
   {
+    "displayName": "Spain",
+    "geography": "Europe",
+    "latitude": null,
+    "longitude": null,
+    "pairedRegion": null,
+    "physicalLocation": null,
+    "regionalDisplayName": null,
+    "regionName": "eu-south-2",
+    "availabilityZoneCount": 3,
+    "restricted": false,
+    "accessEnabled": true
+  },
+  {
     "displayName": "Ireland",
     "geography": "Europe",
     "latitude": null,
@@ -216,6 +242,19 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "eu-west-3",
+    "availabilityZoneCount": 3,
+    "restricted": false,
+    "accessEnabled": true
+  },
+  {
+    "displayName": "UAE",
+    "geography": "Middle East",
+    "latitude": null,
+    "longitude": null,
+    "pairedRegion": null,
+    "physicalLocation": null,
+    "regionalDisplayName": null,
+    "regionName": "me-central-1",
     "availabilityZoneCount": 3,
     "restricted": false,
     "accessEnabled": true
