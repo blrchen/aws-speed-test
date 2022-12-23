@@ -32,10 +32,6 @@ export class RegionGroupModel {
   checked?: boolean;
 }
 
-export class HistoryModel {
-  [key: string]: any[];
-}
-
 export class BlobModel {
   endpoint: string;
   accountName: string;
