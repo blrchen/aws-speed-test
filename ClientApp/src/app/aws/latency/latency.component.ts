@@ -2,9 +2,28 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subscription, timer } from "rxjs";
 import { curveBasis } from "d3-shape";
 import { colorSets, DataItem, MultiSeries } from "@swimlane/ngx-charts";
-import { DefaultRegionsKey, HistoryModel, RegionModel } from "../../models";
+import { DefaultRegionsKey, RegionModel } from "../../models";
 import { APIService } from "../../services/api.service";
 import { RegionService } from "../../services/region.service";
+
+class AverageCalculator {
+  n: number;
+  avg: number;
+
+  constructor() {
+    this.n = 0;
+    this.avg = 0;
+  }
+  addSample(new_sample: number) {
+    this.n++;
+
+    this.avg -= this.avg / this.n;
+    this.avg += new_sample / this.n;
+  }
+  getAverage(): number {
+    return Math.round(this.avg);
+  }
+}
 
 @Component({
   selector: "app-latency",
@@ -19,9 +38,9 @@ export class LatencyComponent implements OnInit, OnDestroy {
   maxPingCount = 180;
   updateInterval = 2000;
 
-  history: HistoryModel = {};
   startTime = new Map<string, number>();
   latestPingTime = new Map<string, number>();
+  average = new Map<string, AverageCalculator>();
 
   tableData: RegionModel[] = [];
   tableDataTop3: RegionModel[] = [];
@@ -83,15 +102,14 @@ export class LatencyComponent implements OnInit, OnDestroy {
     const tableDataCache: RegionModel[] = [];
     this.regions.forEach((item, index) => {
       const { regionName, displayName, storageAccountName, physicalLocation, geography, restricted, accessEnabled } = item;
-      const t = this.latestPingTime.get(storageAccountName);
-      if (t > 0) {
+      if (this.latestPingTime.get(storageAccountName) > 0) {
         tableDataCache.push({
           regionName,
           displayName,
           storageAccountName,
           physicalLocation,
           geography,
-          averageLatency: t,
+          averageLatency: this.average.get(storageAccountName).getAverage(),
           restricted,
           accessEnabled,
         });
@@ -102,10 +120,7 @@ export class LatencyComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.tableDataTop3 = this.tableData
-      .slice(0, this.tableData.length)
-      .sort((a, b) => a.averageLatency - b.averageLatency)
-      .slice(0, 3);
+    this.tableDataTop3 = this.tableData.sort((a, b) => a.averageLatency - b.averageLatency).slice(0, 3);
   }
 
   chartTimer() {
@@ -192,15 +207,17 @@ export class LatencyComponent implements OnInit, OnDestroy {
       const sub = this.apiService.ping(region).subscribe(() => {
         const pingTime = (new Date().getTime() - this.startTime.get(storageAccountName)).toFixed(0);
 
-        if (!this.history[storageAccountName]) {
-          this.history[storageAccountName] = [];
+        let average = this.average.get(storageAccountName);
+        if (!average) {
+          average = new AverageCalculator();
+          this.average.set(storageAccountName, average);
         }
 
         // Drop first ping result as it includes extra DNS time
         if (this.pingCount >= 2) {
           console.log(`region = ${region.displayName}, ping count = ${this.pingCount}, ping time = ${pingTime}`);
           this.latestPingTime.set(storageAccountName, Number(pingTime));
-          this.history[storageAccountName].push(pingTime);
+          average.addSample(Number(pingTime));
         }
 
         this.formatData();
