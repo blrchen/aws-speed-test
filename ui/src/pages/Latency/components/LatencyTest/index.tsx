@@ -20,14 +20,14 @@ const LatencyTest = () => {
       const filtered = current.regions.filter((e) => e.checked)
       return acc.concat(filtered)
     }, [] as RegionModel[])
-    console.log('1115===========selectedRegions in onRegionChange', selectedRegions)
+    // console.log('1115===========selectedRegions in onRegionChange', selectedRegions)
     setSelectedRegions(selectedRegions)
   }
 
   const getLatencyMap = async (
     selectedRegions: any
   ): Promise<[Date, Map<string, RegionLatencyModel>]> => {
-    console.log('1115===========selectedRegions in getLatencyMap', selectedRegions)
+    // console.log('1115===========selectedRegions in getLatencyMap', selectedRegions)
     // console.log('1115===========bind_selectedRegions in getLatencyMap', bind_selectedRegions)
     const region1: RegionModel = {
       storageAccountName: 'a8eastasia',
@@ -64,8 +64,6 @@ const LatencyTest = () => {
         return { ...region, latencySnapshot: latency, incomeTime, sentTime } as RegionLatencyModel
       })
     })
-    console.log('time', time)
-    console.log('datamap outside promise', dataMap)
     return [time, dataMap]
   }
 
