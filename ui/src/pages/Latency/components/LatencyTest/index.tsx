@@ -5,7 +5,7 @@ import axios from 'axios'
 import { getLatency } from '@/api/storage.api'
 import { RegionGroupModel, RegionLatencyModel, RegionModel } from '@/models'
 import Intro from '@/pages/Latency/components/LatencyTest/intro'
-import { RegionGroup } from '@/pages/Latency/components/LatencyTest/region.group'
+import RegionGroup from '@/pages/Latency/components/LatencyTest/region.group'
 import TimeLineChart from '@/pages/Latency/components/LatencyTest/timeline.chart'
 
 import FullLatencyCenter from './latency.table.full'
@@ -25,15 +25,15 @@ const LatencyTest = () => {
   }
 
   const getLatencyMap = async (
-    bind_selectedRegions: any
+    selectedRegions: any
   ): Promise<[Date, Map<string, RegionLatencyModel>]> => {
     console.log('1115===========selectedRegions in getLatencyMap', selectedRegions)
-    console.log('1115===========bind_selectedRegions in getLatencyMap', bind_selectedRegions)
+    // console.log('1115===========bind_selectedRegions in getLatencyMap', bind_selectedRegions)
     const region1: RegionModel = {
       storageAccountName: 'a8eastasia',
       displayName: '',
       geography: '',
-      regionName: '',
+      regionName: 'eastasia',
       restricted: true,
       accessEnabled: true
     }
@@ -41,7 +41,7 @@ const LatencyTest = () => {
       storageAccountName: 'a8southeastasia',
       displayName: '',
       geography: '',
-      regionName: '',
+      regionName: 'southeastasia',
       restricted: true,
       accessEnabled: true
     }
@@ -55,7 +55,7 @@ const LatencyTest = () => {
       return items.map((_ele) => {
         const [region, res] = _ele
         const { latency, incomeTime, sentTime } = res as any
-        dataMap.set('eastasia', {
+        dataMap.set((region as RegionModel).regionName, {
           ...region,
           latencySnapshot: latency,
           incomeTime,

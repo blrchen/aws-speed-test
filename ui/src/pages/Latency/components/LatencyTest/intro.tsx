@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Link } from 'react-router-dom'
 
-export default () => {
+const Intro = () => {
   const styleVar = {
     fontSize: 'small'
   }
@@ -37,3 +37,5 @@ export default () => {
     </>
   )
 }
+
+export default Intro

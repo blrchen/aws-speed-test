@@ -2,6 +2,7 @@ import axios from 'axios'
 import type { AxiosRequestConfig, AxiosResponse } from 'axios'
 
 export type ResponseExtended = AxiosResponse<any, any> & {
+  region: string
   latency: number
   incomeTime: number
   sentTime: number

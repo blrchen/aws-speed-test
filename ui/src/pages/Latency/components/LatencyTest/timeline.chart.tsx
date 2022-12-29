@@ -82,6 +82,7 @@ export default class TimeLineChart extends React.Component<propsModel, stateMode
         }
       })
 
+      console.log('1619=============componentDidMount setState fired', [...series])
       this.setState({ series: [...series] })
     }, 5000)
   }
@@ -102,6 +103,7 @@ export default class TimeLineChart extends React.Component<propsModel, stateMode
           data: []
         }))
       )
+      console.log('1619=============componentDidUpdate setState fired', [...latestSeries])
       this.setState({ series: [...latestSeries] })
     }
   }
@@ -114,7 +116,7 @@ export default class TimeLineChart extends React.Component<propsModel, stateMode
   }
 
   private axisPivot: string[] = []
-  generateLatestAxisTicks(): [string[], string, boolean, string | undefined] {
+  generateLatestAxisTicks = (): [string[], string, boolean, string | undefined] => {
     const date = new Date()
     const timeStamp = date.getTime() / 1000
     const currentSecond = timeStamp * 1000
@@ -140,7 +142,6 @@ export default class TimeLineChart extends React.Component<propsModel, stateMode
   }
 
   render() {
-    const { series } = this.state
     return (
       <ResponsiveContainer width="100%" height="100%">
         <LineChart width={500} height={300}>
@@ -149,7 +150,7 @@ export default class TimeLineChart extends React.Component<propsModel, stateMode
           <YAxis dataKey="value" />
           <Tooltip />
           <Legend />
-          {series.map((s, index) => (
+          {this.state.series.map((s, index) => (
             <Line
               key={s.name}
               type="monotone"

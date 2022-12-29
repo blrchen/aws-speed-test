@@ -9,7 +9,7 @@ interface propsModel {
   onRegionAdded?: (regionsGroup: RegionModel[]) => void
 }
 
-export const RegionGroup = (props: propsModel) => {
+const RegionGroup = (props: propsModel) => {
   const styleVar = {
     fontSize: 'small'
   }
@@ -132,3 +132,5 @@ export const RegionGroup = (props: propsModel) => {
     </>
   )
 }
+
+export default RegionGroup
