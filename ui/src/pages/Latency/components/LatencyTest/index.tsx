@@ -20,51 +20,8 @@ const LatencyTest = () => {
       const filtered = current.regions.filter((e) => e.checked)
       return acc.concat(filtered)
     }, [] as RegionModel[])
-    // console.log('1115===========selectedRegions in onRegionChange', selectedRegions)
+    console.log('1115===========selectedRegions in onRegionChange', selectedRegions)
     setSelectedRegions(selectedRegions)
-  }
-
-  const getLatencyMap = async (
-    selectedRegions: any
-  ): Promise<[Date, Map<string, RegionLatencyModel>]> => {
-    // console.log('1115===========selectedRegions in getLatencyMap', selectedRegions)
-    // console.log('1115===========bind_selectedRegions in getLatencyMap', bind_selectedRegions)
-    const region1: RegionModel = {
-      storageAccountName: 'a8eastasia',
-      displayName: '',
-      geography: '',
-      regionName: 'eastasia',
-      restricted: true,
-      accessEnabled: true
-    }
-    const region2: RegionModel = {
-      storageAccountName: 'a8southeastasia',
-      displayName: '',
-      geography: '',
-      regionName: 'southeastasia',
-      restricted: true,
-      accessEnabled: true
-    }
-    const regions: RegionModel[] = [region1, region2]
-    const promises = regions.map((region) =>
-      getLatency(region).then((res) => Promise.resolve([region, res]))
-    )
-    const time = new Date()
-    const dataMap = new Map<string, RegionLatencyModel>()
-    await Promise.all(promises).then((items) => {
-      return items.map((_ele) => {
-        const [region, res] = _ele
-        const { latency, incomeTime, sentTime } = res as any
-        dataMap.set((region as RegionModel).regionName, {
-          ...region,
-          latencySnapshot: latency,
-          incomeTime,
-          sentTime
-        } as RegionLatencyModel)
-        return { ...region, latencySnapshot: latency, incomeTime, sentTime } as RegionLatencyModel
-      })
-    })
-    return [time, dataMap]
   }
 
   useEffect(() => {
@@ -107,7 +64,7 @@ const LatencyTest = () => {
       <div className="border-bottom">
         <h1 className="h4">Azure Latency Test</h1>
       </div>
-      <Intro />
+      {/*<Intro />*/}
       <div className="mt-2">
         <RegionGroup regionsGroup={regionsGroup} onRegionSelected={onRegionChange} />
       </div>
@@ -115,10 +72,7 @@ const LatencyTest = () => {
       <div className="mt-4">
         <div className="mt-2 border bg-light px-2 pt-4">
           <div style={{ width: '100%', height: '280px' }}>
-            <TimeLineChart
-              selectedRegions={selectedRegions}
-              getLatencyMap={getLatencyMap.bind(this, selectedRegions)}
-            />
+            <TimeLineChart selectedRegions={selectedRegions} />
           </div>
         </div>
       </div>

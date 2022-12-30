@@ -49,7 +49,6 @@ const RegionGroup = (props: propsModel) => {
   }
 
   const onPartialSelect = (region: RegionModel, group: RegionGroupModel) => {
-    console.log(region, group)
     region.checked = !region.checked
 
     const regionIndex = group.regions.findIndex((e) => e.regionName === region.regionName)
