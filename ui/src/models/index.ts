@@ -1,2 +1,1 @@
-export * from './common.models'
-export * from './region.model'
+export * from './region'

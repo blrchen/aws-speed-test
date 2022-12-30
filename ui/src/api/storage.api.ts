@@ -1,7 +1,7 @@
-import { AxiosInstanceWithLatency, ResponseExtended } from '@/api/axios-core'
-import { RegionModel } from '@/models'
+import { AxiosInstanceWithLatency, AxiosResponseWithLatency } from '@/api/axios-core'
+import { Region } from '@/models'
 
-export const getLatency = (region: RegionModel): Promise<ResponseExtended> => {
+export const getLatency = (region: Region): Promise<AxiosResponseWithLatency> => {
   const { regionName, geography } = region
   const storageAccountName = `a8${regionName}`
   const url =

@@ -12,7 +12,7 @@ import {
 } from 'recharts'
 
 import { getLatency } from '@/api/storage.api'
-import { RegionLatencyModel, RegionModel } from '@/models/region.model'
+import { RegionLatencyModel, Region } from '@/models/region'
 
 const COLORS = [
   '#0088FE',
@@ -35,7 +35,7 @@ interface Sery {
 }
 
 type propsModel = {
-  selectedRegions: RegionModel[]
+  selectedRegions: Region[]
   // the latency data is cahed value about five seconds ago
   // getLatencyMap: (
   //   selectedRegions: RegionModel[]
@@ -45,99 +45,46 @@ type propsModel = {
 const TimeLineChart = (props: propsModel) => {
   // const { getLatencyMap } = props
   const { selectedRegions } = props
-  const [time, setTime] = React.useState(0)
-  const [regions, setRegions] = useState<RegionModel[]>([])
+  const [timerIndex, setTimerIndex] = React.useState(0)
+  const [regions, setRegions] = useState<Region[]>([])
   const [series, setSeries] = useState<Sery[]>([])
 
-  // constructor(props: any) {
-  //   super(props)
-  //   this.state = {
-  //     series: []
-  //   }
-  // }
-  const interval: any = null
-
+  // Subscribe selectedRegions in region group component
   useEffect(() => {
-    console.log('selectedRegions changed')
     setRegions(selectedRegions)
   }, [selectedRegions])
 
-  // componentDidMount() {
+  // Loop ping test for selected region.
+  // Use setTimeout instead of setInterval here as setInterval can not access the latest region in state.
   useEffect(() => {
-    console.log('1420======================useEffect1 fired', series)
+    // console.log('1420======================useEffect1 fired', series)
 
-    let axisPivot: string[] = []
-    const generateLatestAxisTicks = (): [string[], string, boolean, string | undefined] => {
-      const date = new Date()
-      const timeStamp = date.getTime() / 1000
-      const currentSecond = timeStamp * 1000
-
-      const xLength = 10
-
-      if (axisPivot.length === 0) {
-        const secondArr = Array.from({ length: xLength }, (_j, i) => {
-          const t = timeStamp - i
-          return formatXAxisTick(t * 1000)
-        }).reverse()
-
-        axisPivot = secondArr
-
-        return [axisPivot, secondArr[xLength - 1], true, '']
-      } else {
-        const newLabel = formatXAxisTick(currentSecond)
-        const removedLabel = axisPivot.shift()
-        axisPivot.push(newLabel)
-
-        return [axisPivot, newLabel, false, removedLabel]
-      }
-    }
     setTimeout(async () => {
-      setTime(time + 1)
-      const [axisTicks, newAxisVal, isInit, removedAxisVal] = generateLatestAxisTicks()
-      // if (series.length === 0) return
+      console.log('1556==================setTimeout start')
+      setTimerIndex(timerIndex + 1)
 
+      // Run ping test parallel, save results to map <region, latency>
+      const regionLatencyMap = new Map<string, RegionLatencyModel>()
       const promises = regions.map((region) =>
-        getLatency(region).then((res) => Promise.resolve([region, res]))
+        getLatency(region).then((response) => Promise.resolve([region, response]))
       )
-      const dataMap = new Map<string, RegionLatencyModel>()
       await Promise.all(promises).then((items) => {
         return items.map((_ele) => {
-          const [region, res] = _ele
-          const { latency, incomeTime, sentTime } = res as any
-          dataMap.set((region as RegionModel).regionName, {
+          const [region, regionLatency] = _ele
+          const { latency } = regionLatency as any
+          regionLatencyMap.set((region as Region).regionName, {
             ...region,
-            latencySnapshot: latency,
-            incomeTime,
-            sentTime
+            latencySnapshot: latency
           } as RegionLatencyModel)
-          return {
-            ...region,
-            latencySnapshot: latency,
-            incomeTime,
-            sentTime
-          } as RegionLatencyModel
         })
       })
 
-      // eslint-disable-next-line no-debugger
-
       series.forEach((sery: Sery) => {
-        // eslint-disable-next-line no-debugger
-        // debugger
-        // if (!isInit) {
-        //   sery.data = axisTicks.map((el) => ({ category: el, value: 0 }))
-        // } else {
         const { data } = sery
-        if (data.length > 0 && data[0].category === removedAxisVal) {
-          data.shift()
-        }
-
         data.push({
-          category: time.toString(),
-          value: dataMap.get(sery.name)?.latencySnapshot
+          category: timerIndex.toString(),
+          value: regionLatencyMap.get(sery.name)?.latencySnapshot
         })
-        console.log('2137==========data.push category', time)
-        console.log('2137==========data.push value', dataMap.get(sery.name)?.latencySnapshot)
         sery.data = [...data]
         // }
       })
@@ -147,20 +94,21 @@ const TimeLineChart = (props: propsModel) => {
       // eslint-disable-next-line no-debugger
       // debugger
       // console.log('1619=============useEffect1 setState fired', series[0].data)
-    }, 5000)
-  }, [time])
+      console.log('1556==================setTimeout end')
+    }, 3000)
+  }, [timerIndex])
 
   // }
 
-  // componentDidUpdate(preProps: Readonly<propsModel>, _: Readonly<stateModel>) {
+  // If selected regions are changed, init series for new regions that has not been initialized yet
   useEffect(() => {
     // console.log('1743======================useEffect2 fired', regions)
     const preRegionNames = series.map((e) => e.name)
     const inComingRegionNames = regions.map((e) => e.regionName)
+    const toAddRegionNames = inComingRegionNames.filter((e) => preRegionNames.indexOf(e) === -1)
     const seriesToKeep = series.filter((e) => preRegionNames.indexOf(e.name) > -1)
-    const toAdd = inComingRegionNames.filter((e) => preRegionNames.indexOf(e) === -1)
     const latestSeries = seriesToKeep.concat(
-      toAdd.map((e) => ({
+      toAddRegionNames.map((e) => ({
         name: e,
         data: []
       }))

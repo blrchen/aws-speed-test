@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 
-import { RegionGroupModel, RegionModel } from '@/models/region.model'
+import { RegionGroupModel, Region } from '@/models/region'
 
 interface propsModel {
   regionsGroup: Array<RegionGroupModel>
   onRegionSelected?: (regionsGroup: RegionGroupModel[]) => void
-  onRegionRemoved?: (regionsGroup: RegionModel[]) => void
-  onRegionAdded?: (regionsGroup: RegionModel[]) => void
+  onRegionRemoved?: (regionsGroup: Region[]) => void
+  onRegionAdded?: (regionsGroup: Region[]) => void
 }
 
 const RegionGroup = (props: propsModel) => {
@@ -17,10 +17,10 @@ const RegionGroup = (props: propsModel) => {
   const { regionsGroup, onRegionSelected, onRegionRemoved, onRegionAdded } = props
   const [regionsGroupState, setRegionsGroup] = useState(() => regionsGroup)
   const [totalCheckedRegions, setTotalCheckedRegions] = useState<number>(() => {
-    const regions = regionsGroup.reduce((acc: RegionModel[], current: RegionGroupModel) => {
+    const regions = regionsGroup.reduce((acc: Region[], current: RegionGroupModel) => {
       const filtered = current.regions.filter((e) => e.checked)
       return acc.concat(filtered)
-    }, [] as RegionModel[])
+    }, [] as Region[])
 
     return regions.length
   })
@@ -48,7 +48,7 @@ const RegionGroup = (props: propsModel) => {
     }
   }
 
-  const onPartialSelect = (region: RegionModel, group: RegionGroupModel) => {
+  const onPartialSelect = (region: Region, group: RegionGroupModel) => {
     region.checked = !region.checked
 
     const regionIndex = group.regions.findIndex((e) => e.regionName === region.regionName)

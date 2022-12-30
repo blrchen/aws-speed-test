@@ -1,7 +1,7 @@
 import axios from 'axios'
 import type { AxiosRequestConfig, AxiosResponse } from 'axios'
 
-export type ResponseExtended = AxiosResponse<any, any> & {
+export type AxiosResponseWithLatency = AxiosResponse<any, any> & {
   region: string
   latency: number
   incomeTime: number
@@ -25,16 +25,16 @@ const IsCancel = (error: any) => {
 const AxiosInstanceWithLatency = axios.create({
   // xsrfCookieName: 'xsrf-token',
   // baseURL: process.env.REACT_APP_API_URL,
-  timeout: 1 * 60 * 1000
+  timeout: 5 * 1000
 })
 
 const onRequestFulfilled = async (config: AxiosRequestConfig) => {
-  const heahers = config.headers
+  const headers = config.headers
 
   config = {
     ...config,
     headers: {
-      ...heahers,
+      ...headers,
       sentTime: new Date().getTime()
     }
   }
@@ -42,7 +42,6 @@ const onRequestFulfilled = async (config: AxiosRequestConfig) => {
 }
 
 AxiosInstanceWithLatency.interceptors.request.use(onRequestFulfilled, (error) => {
-  // console.log(error)
   return Promise.reject(error)
 })
 
