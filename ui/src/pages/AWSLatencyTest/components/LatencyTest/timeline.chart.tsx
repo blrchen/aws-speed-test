@@ -36,10 +36,7 @@ interface Sery {
 
 type propsModel = {
   selectedRegions: Region[]
-  // the latency data is cahed value about five seconds ago
-  // getLatencyMap: (
-  //   selectedRegions: RegionModel[]
-  // ) => Promise<[Date, Map<string, RegionLatencyModel>]>
+  getLatencyMap: (selectedRegions: Region[]) => Promise<[Date, Map<string, RegionLatencyModel>]>
 }
 
 const TimeLineChart = (props: propsModel) => {
@@ -66,18 +63,37 @@ const TimeLineChart = (props: propsModel) => {
       // Run ping test parallel, save results to map <region, latency>
       const regionLatencyMap = new Map<string, RegionLatencyModel>()
       const promises = regions.map((region) =>
-        getLatency(region).then((response) => Promise.resolve([region, response]))
+        getLatency(region)
+          .then((response) => Promise.resolve([region, response]))
+          .catch(() => Promise.resolve([region, null]))
       )
-      await Promise.all(promises).then((items) => {
-        return items.map((resolved) => {
-          const [region, regionLatency] = resolved
-          const { latency } = regionLatency as any
-          regionLatencyMap.set((region as Region).regionName, {
-            ...region,
-            latencySnapshot: latency
-          } as RegionLatencyModel)
+      await Promise.all(promises)
+        .then((items) => {
+          return items.map((resolved) => {
+            const [region, regionLatency] = resolved
+            const { latency } = regionLatency as any
+
+            regionLatencyMap.set((region as Region).regionName, {
+              ...region,
+              latencySnapshot: latency
+            } as RegionLatencyModel)
+
+            return {
+              ...region,
+              latencySnapshot: latency
+            } as RegionLatencyModel
+          })
         })
-      })
+        .catch((e) => {
+          console.log(e)
+        })
+      // const validResults = results.filter((result: any) => !(result instanceof Error))
+      // validResults.forEach((_) => {
+      //   regionLatencyMap.set(_.regionName, _)
+      // })
+
+      // console.log('13333================results', results)
+      // console.log('13333================validResults', validResults)
       // eslint-disable-next-line no-debugger
       // debugger
       series.forEach((sery: Sery) => {
