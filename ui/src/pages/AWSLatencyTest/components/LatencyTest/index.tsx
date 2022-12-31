@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import axios from 'axios'
 
+import { getLatency } from '@/api/storage.api'
 import { RegionGroupModel, RegionLatencyModel, Region } from '@/models'
 import Intro from '@/pages/AWSLatencyTest/components/LatencyTest/intro'
 import RegionGroup from '@/pages/AWSLatencyTest/components/LatencyTest/region.group'
@@ -21,6 +22,38 @@ const LatencyTest = () => {
     }, [] as Region[])
     console.log('1115===========selectedRegions in onRegionChange', selectedRegions)
     setSelectedRegions(selectedRegions)
+  }
+
+  // Loop ping test for selected region.
+  const getRegionLatencyMap = async (): Promise<Map<string, RegionLatencyModel>> => {
+    // Run ping test parallel, save results to map <region, latency>
+    const regionLatencyMap = new Map<string, RegionLatencyModel>()
+    const promises = selectedRegions.map((region) =>
+      getLatency(region)
+        .then((response) => Promise.resolve([region, response]))
+        .catch(() => Promise.resolve([region, null]))
+    )
+    await Promise.all(promises)
+      .then((items) => {
+        return items.map((resolved) => {
+          const [region, regionLatency] = resolved
+          const { latency } = regionLatency as any
+
+          regionLatencyMap.set((region as Region).regionName, {
+            ...region,
+            latencySnapshot: latency
+          } as RegionLatencyModel)
+
+          return {
+            ...region,
+            latencySnapshot: latency
+          } as RegionLatencyModel
+        })
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+    return regionLatencyMap
   }
 
   useEffect(() => {
@@ -68,7 +101,10 @@ const LatencyTest = () => {
       <div className="mt-4">
         <div className="mt-2 border bg-light px-2 pt-4">
           <div style={{ width: '100%', height: '280px' }}>
-            <TimeLineChart selectedRegions={selectedRegions} />
+            <TimeLineChart
+              selectedRegions={selectedRegions}
+              getRegionLatencyMap={getRegionLatencyMap}
+            />
           </div>
         </div>
       </div>

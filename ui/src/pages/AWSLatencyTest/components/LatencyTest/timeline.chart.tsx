@@ -36,12 +36,12 @@ interface Sery {
 
 type propsModel = {
   selectedRegions: Region[]
-  // getLatencyMap: (selectedRegions: Region[]) => Promise<[Date, Map<string, RegionLatencyModel>]>
+  getRegionLatencyMap: (selectedRegions: Region[]) => Promise<Map<string, RegionLatencyModel>>
 }
 
 const TimeLineChart = (props: propsModel) => {
   // const { getLatencyMap } = props
-  const { selectedRegions } = props
+  const { selectedRegions, getRegionLatencyMap } = props
   const [timerIndex, setTimerIndex] = React.useState(0)
   const [regions, setRegions] = useState<Region[]>([])
   const [series, setSeries] = useState<Sery[]>([])
@@ -51,38 +51,6 @@ const TimeLineChart = (props: propsModel) => {
     setRegions(selectedRegions)
   }, [selectedRegions])
 
-  // Loop ping test for selected region.
-  const GetRegionLatencyMap = async () => {
-    // Run ping test parallel, save results to map <region, latency>
-    const regionLatencyMap = new Map<string, RegionLatencyModel>()
-    const promises = regions.map((region) =>
-      getLatency(region)
-        .then((response) => Promise.resolve([region, response]))
-        .catch(() => Promise.resolve([region, null]))
-    )
-    await Promise.all(promises)
-      .then((items) => {
-        return items.map((resolved) => {
-          const [region, regionLatency] = resolved
-          const { latency } = regionLatency as any
-
-          regionLatencyMap.set((region as Region).regionName, {
-            ...region,
-            latencySnapshot: latency
-          } as RegionLatencyModel)
-
-          return {
-            ...region,
-            latencySnapshot: latency
-          } as RegionLatencyModel
-        })
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-    return regionLatencyMap
-  }
-
   // Use setTimeout instead of setInterval here as setInterval can not access the latest region in state.
   useEffect(() => {
     // console.log('1420======================useEffect1 fired', series)
@@ -91,7 +59,7 @@ const TimeLineChart = (props: propsModel) => {
       console.log('1556==================setTimeout start')
       setTimerIndex(timerIndex + 1)
 
-      const regionLatencyMap = await GetRegionLatencyMap()
+      const regionLatencyMap = await getRegionLatencyMap(regions)
       // const validResults = results.filter((result: any) => !(result instanceof Error))
       // validResults.forEach((_) => {
       //   regionLatencyMap.set(_.regionName, _)
