@@ -68,7 +68,7 @@ const LatencyTest = () => {
       <div className="mt-4">
         <div className="mt-2 border bg-light px-2 pt-4">
           <div style={{ width: '100%', height: '280px' }}>
-            <TimeLineChart selectedRegions={selectedRegions} onTimer={onTimer} />
+            <TimeLineChart selectedRegions={selectedRegions} />
           </div>
         </div>
       </div>
