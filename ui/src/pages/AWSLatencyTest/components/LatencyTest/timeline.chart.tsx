@@ -36,11 +36,10 @@ interface Sery {
 
 type propsModel = {
   selectedRegions: Region[]
-  getRegionLatencyMap: (selectedRegions: Region[]) => Promise<Map<string, RegionLatencyModel>>
+  getRegionLatencyMap: () => Promise<Map<string, RegionLatencyModel>>
 }
 
 const TimeLineChart = (props: propsModel) => {
-  // const { getLatencyMap } = props
   const { selectedRegions, getRegionLatencyMap } = props
   const [timerIndex, setTimerIndex] = React.useState(0)
   const [regions, setRegions] = useState<Region[]>([])
@@ -59,7 +58,7 @@ const TimeLineChart = (props: propsModel) => {
       console.log('1556==================setTimeout start')
       setTimerIndex(timerIndex + 1)
 
-      const regionLatencyMap = await getRegionLatencyMap(regions)
+      const regionLatencyMap = await getRegionLatencyMap()
       // const validResults = results.filter((result: any) => !(result instanceof Error))
       // validResults.forEach((_) => {
       //   regionLatencyMap.set(_.regionName, _)
