@@ -69,8 +69,8 @@ const TimeLineChart = (props: propsModel) => {
         getLatency(region).then((response) => Promise.resolve([region, response]))
       )
       await Promise.all(promises).then((items) => {
-        return items.map((_ele) => {
-          const [region, regionLatency] = _ele
+        return items.map((resolved) => {
+          const [region, regionLatency] = resolved
           const { latency } = regionLatency as any
           regionLatencyMap.set((region as Region).regionName, {
             ...region,

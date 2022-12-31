@@ -1,7 +1,7 @@
 import axios from 'axios'
 import type { AxiosRequestConfig, AxiosResponse } from 'axios'
 
-export type AxiosResponseWithLatency = AxiosResponse<any, any> & {
+export interface AxiosResponseWithLatency extends AxiosResponse<any, any> {
   region: string
   latency: number
   incomeTime: number
