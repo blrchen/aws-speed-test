@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 
 import { RegionGroupModel, RegionLatencyModel, Region } from '@/models'
-import Intro from '@/pages/Latency/components/LatencyTest/intro'
-import RegionGroup from '@/pages/Latency/components/LatencyTest/region.group'
-import TimeLineChart from '@/pages/Latency/components/LatencyTest/timeline.chart'
+import Intro from '@/pages/AWSLatencyTest/components/LatencyTest/intro'
+import RegionGroup from '@/pages/AWSLatencyTest/components/LatencyTest/region.group'
+import TimeLineChart from '@/pages/AWSLatencyTest/components/LatencyTest/timeline.chart'
 
 import FullLatencyCenter from './latency.table.full'
 import ShortLatencyCenter from './latency.table.short'

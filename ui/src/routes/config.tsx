@@ -9,7 +9,7 @@ const Home = lazy(() => import('@/pages/Home'))
 
 const About = lazy(() => import('@/pages/About'))
 
-const LatencyTest = lazy(() => import('@/pages/Latency'))
+const LatencyTest = lazy(() => import('@/pages/AWSLatencyTest'))
 
 const AWSRegions = lazy(() => import('@/pages/AWSRegions'))
 

@@ -7,7 +7,6 @@ export interface Region {
 }
 
 interface RegionStorageAccount {
-  checked?: boolean
   storageAccountName: string
   url?: string
 }

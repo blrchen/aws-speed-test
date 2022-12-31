@@ -8,23 +8,7 @@ export type AxiosResponseWithLatency = AxiosResponse<any, any> & {
   sentTime: number
 }
 
-const CleanAxiosInstance = axios.create({
-  xsrfCookieName: 'xsrf-token',
-  // baseURL: process.env.REACT_APP_API_URL,
-  timeout: 10000
-})
-
-const CancelTokenSource = () => {
-  return axios.CancelToken.source()
-}
-
-const IsCancel = (error: any) => {
-  return axios.isCancel(error)
-}
-
 const AxiosInstanceWithLatency = axios.create({
-  // xsrfCookieName: 'xsrf-token',
-  // baseURL: process.env.REACT_APP_API_URL,
   timeout: 5 * 1000
 })
 
@@ -59,4 +43,4 @@ AxiosInstanceWithLatency.interceptors.response.use(
   }
 )
 
-export { CleanAxiosInstance, AxiosInstanceWithLatency, CancelTokenSource, IsCancel }
+export { AxiosInstanceWithLatency }

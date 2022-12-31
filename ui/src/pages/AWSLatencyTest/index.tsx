@@ -4,7 +4,7 @@ import { Card } from 'antd'
 
 import PagePanel from '@/components/PagePanel'
 import { observer } from '@/hooks'
-import LatencyTest from '@/pages/Latency/components/LatencyTest'
+import LatencyTest from '@/pages/AWSLatencyTest/components/LatencyTest'
 const Latency = () => {
   return (
     <PagePanel title="Latency Test">

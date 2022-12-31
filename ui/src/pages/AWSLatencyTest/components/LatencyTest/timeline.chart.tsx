@@ -78,7 +78,8 @@ const TimeLineChart = (props: propsModel) => {
           } as RegionLatencyModel)
         })
       })
-
+      // eslint-disable-next-line no-debugger
+      // debugger
       series.forEach((sery: Sery) => {
         const { data } = sery
         data.push({

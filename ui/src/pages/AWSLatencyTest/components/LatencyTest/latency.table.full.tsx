@@ -11,7 +11,7 @@ export default (props: propsModel) => {
     <>
       <div className="text-primary">
         <i className="fa fa-list-alt text-primary" aria-hidden="true"></i>
-        Latency Test
+        AWS Latency Test
       </div>
       <table className="table table-sm table-bordered table-striped ft-14 mt-2">
         <thead>
