@@ -5,15 +5,10 @@ import type { RouteObject } from 'react-router-dom'
 import Loading from '@/components/Loading'
 import AppLayout from '@/layouts/AppLayout'
 
-const Home = lazy(() => import('@/pages/Home'))
-
 const About = lazy(() => import('@/pages/About'))
-
-const LatencyTest = lazy(() => import('@/pages/AWSLatencyTest'))
-
-const AWSRegions = lazy(() => import('@/pages/AWSRegions'))
-
-const AWSGeographies = lazy(() => import('@/pages/AWSGeographies'))
+const LatencyTest = lazy(() => import('@/pages/AwsLatencyTest'))
+const AwsRegions = lazy(() => import('@/pages/AwsRegions'))
+const AwsGeographies = lazy(() => import('@/pages/AwsGeographies'))
 
 const lazyLoad = (children: ReactNode): ReactNode => {
   return <Suspense fallback={<Loading />}>{children}</Suspense>
@@ -25,11 +20,6 @@ export const routers: RouteObject[] = [
     element: <AppLayout />,
     children: [
       {
-        index: true,
-        path: '/',
-        element: lazyLoad(<Home />)
-      },
-      {
         path: '/about',
         element: lazyLoad(<About />)
       },
@@ -39,15 +29,15 @@ export const routers: RouteObject[] = [
       },
       {
         path: '/regions',
-        element: lazyLoad(<AWSRegions />)
+        element: lazyLoad(<AwsRegions />)
       },
       {
         path: '/geographies',
-        element: lazyLoad(<AWSGeographies />)
+        element: lazyLoad(<AwsGeographies />)
       },
       {
         path: '*',
-        element: lazyLoad(<AWSGeographies />)
+        element: lazyLoad(<AwsGeographies />)
       }
     ]
   }

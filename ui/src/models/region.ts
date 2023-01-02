@@ -5,12 +5,6 @@ export interface Region {
   regionName: string
   checked?: boolean
 }
-
-interface RegionStorageAccount {
-  storageAccountName: string
-  url?: string
-}
-
 export interface RegionLatencyModel extends Region {
   latencySnapshot: number
 }

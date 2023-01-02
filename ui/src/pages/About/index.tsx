@@ -1,9 +1,5 @@
 import React from 'react'
 
-import { observer } from '@/hooks'
+const About = () => <div>About</div>
 
-const List = () => {
-  return <div>List</div>
-}
-
-export default observer(List)
+export default About

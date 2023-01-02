@@ -1,16 +1,8 @@
 import React, { useEffect, useState } from 'react'
 
-import {
-  HomeOutlined,
-  FormOutlined,
-  ProfileOutlined,
-  TableOutlined,
-  WarningOutlined
-} from '@ant-design/icons'
+import { FormOutlined, ProfileOutlined, TableOutlined } from '@ant-design/icons'
 import { Layout, Menu } from 'antd'
 import { Link, useLocation } from 'react-router-dom'
-
-// import VersionBar from '../FooterBar/VersionBar'
 
 import styles from './index.module.less'
 

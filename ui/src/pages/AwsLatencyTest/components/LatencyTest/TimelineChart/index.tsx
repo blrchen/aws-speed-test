@@ -1,18 +1,10 @@
 import React, { useEffect, useState } from 'react'
 
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer
-} from 'recharts'
+import { Card, Row } from 'antd'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
 
-import { getLatency } from '@/api/storage.api'
 import { RegionLatencyModel, Region } from '@/models/region'
+import LatencyTable from '@/pages/AwsLatencyTest/components/LatencyTest/LatencyTable'
 
 const COLORS = [
   '#0088FE',
@@ -34,16 +26,17 @@ interface Sery {
   data: { category: string; value: any }[]
 }
 
-type propsModel = {
+interface TimelineChartProps {
   selectedRegions: Region[]
   getRegionLatencyMap: () => Promise<Map<string, RegionLatencyModel>>
 }
 
-const TimeLineChart = (props: propsModel) => {
+const TimelineChart = (props: TimelineChartProps) => {
   const { selectedRegions, getRegionLatencyMap } = props
-  const [timerIndex, setTimerIndex] = React.useState(0)
+  const [timerIndex, setTimerIndex] = useState(0)
   const [regions, setRegions] = useState<Region[]>([])
   const [series, setSeries] = useState<Sery[]>([])
+  const [tableData, setTableData] = useState<RegionLatencyModel[]>([])
 
   // Subscribe selectedRegions in region group component
   useEffect(() => {
@@ -54,17 +47,18 @@ const TimeLineChart = (props: propsModel) => {
   useEffect(() => {
     // console.log('1420======================useEffect1 fired', series)
 
+    if (timerIndex > 100) {
+      return
+    }
     setTimeout(async () => {
       console.log('1556==================setTimeout start')
       setTimerIndex(timerIndex + 1)
 
       const regionLatencyMap = await getRegionLatencyMap()
-      // const validResults = results.filter((result: any) => !(result instanceof Error))
-      // validResults.forEach((_) => {
-      //   regionLatencyMap.set(_.regionName, _)
-      // })
+      setTableData(Array.from(regionLatencyMap.values()))
 
-      // console.log('13333================results', results)
+      // eslint-disable-next-line no-debugger
+      // debugger
       // console.log('13333================validResults', validResults)
       // eslint-disable-next-line no-debugger
       // debugger
@@ -118,72 +112,71 @@ const TimeLineChart = (props: propsModel) => {
 
   return (
     <>
-      <p>
-        <strong>[Props]selectedRegions:</strong>
-      </p>
-      {selectedRegions.map((s, index) => (
-        <>
-          <span>{s.regionName} </span>
-        </>
-      ))}
-      <p>
-        <strong>[State]regions:</strong>
-      </p>
-      {regions.map((s, index) => (
-        <>
-          <span>{s.regionName} </span>
-        </>
-      ))}
-      <p>
-        <strong>[State]Series</strong>
-      </p>
-      {series.map((s, index) => (
-        <>
-          <p>{s.name}</p>
+      <Row>
+        <Card title="Chart" bodyStyle={{ padding: 0 }}>
+          {/*<ResponsiveContainer>*/}
+          <LineChart width={1000} height={300}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="category" type="category" allowDuplicatedCategory={false} />
+            <YAxis dataKey="value" />
+            <Tooltip />
+            <Legend />
+            {series.map((s, index) => (
+              <Line
+                key={s.name}
+                type="monotone"
+                dataKey="value"
+                data={s.data}
+                name={s.name}
+                stroke={COLORS[index % COLORS.length]}
+                isAnimationActive={false}
+              />
+            ))}
+          </LineChart>
+          {/*</ResponsiveContainer>*/}
+        </Card>
+      </Row>
+      <Row>
+        <LatencyTable tableData={tableData} />
+      </Row>
+      <Row>
+        <Card title="Debug" bodyStyle={{ padding: 0 }}>
           <p>
-            {s.data.map((d) => {
-              return (
-                <span>
-                  [{d.category}-{d.value}]{' '}
-                </span>
-              )
-            })}
+            <strong>[State]Series</strong>
           </p>
-        </>
-      ))}
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart width={500} height={300}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="category" type="category" allowDuplicatedCategory={false} />
-          <YAxis dataKey="value" />
-          <Tooltip />
-          <Legend />
           {series.map((s, index) => (
-            <Line
-              key={s.name}
-              type="monotone"
-              dataKey="value"
-              data={s.data}
-              name={s.name}
-              stroke={COLORS[index % COLORS.length]}
-              isAnimationActive={false}
-            />
+            <>
+              <p>{s.name}</p>
+              <p>
+                {s.data.map((d) => {
+                  return (
+                    <span>
+                      [{d.category}-{d.value}]{' '}
+                    </span>
+                  )
+                })}
+              </p>
+            </>
           ))}
-        </LineChart>
-      </ResponsiveContainer>
+          <p>
+            <strong>[Props]selectedRegions:</strong>
+          </p>
+          {selectedRegions.map((s, index) => (
+            <>
+              <span>{s.regionName} </span>
+            </>
+          ))}
+          <p>
+            <strong>[State]regions:</strong>
+          </p>
+          {regions.map((s, index) => (
+            <>
+              <span>{s.regionName} </span>
+            </>
+          ))}
+        </Card>{' '}
+      </Row>
     </>
   )
-  // }
 }
-
-function formatXAxisTick(timeStamp: number): string {
-  const date = new Date(timeStamp)
-  const second = date.getSeconds()
-  const h = date.getHours()
-  const m = date.getMinutes()
-  const hStr = h > 9 ? h : `0${h}`
-  const mStr = m > 9 ? m : `0${m}`
-  return second === 0 ? `${hStr}:${mStr}` : `:${second}`
-}
-
-export default TimeLineChart
+export default TimelineChart

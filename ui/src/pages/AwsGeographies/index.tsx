@@ -3,7 +3,7 @@ import React from 'react'
 import { Card } from 'antd'
 
 import PagePanel from '@/components/PagePanel'
-import Geographies from '@/pages/AWSGeographies/components/Geographies'
+import Geographies from '@/pages/AwsGeographies/components/Geographies'
 
 const AwsGeographies = () => {
   return (

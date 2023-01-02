@@ -12,7 +12,7 @@ const FooterBar = () => {
   return (
     <Footer className={styles.footer}>
       <VersionBar className={styles.versionBar} />
-      <div>Demo App Design ©2022</div>
+      <div>awsspeedtest.com ©2023</div>
     </Footer>
   )
 }

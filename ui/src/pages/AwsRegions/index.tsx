@@ -3,8 +3,7 @@ import React from 'react'
 import { Card } from 'antd'
 
 import PagePanel from '@/components/PagePanel'
-
-import Regions from './components/Regions'
+import Regions from '@/pages/AwsRegions/components/Regions'
 
 const AwsRegions = () => {
   return (
