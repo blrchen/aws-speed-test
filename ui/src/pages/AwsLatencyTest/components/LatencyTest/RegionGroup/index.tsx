@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react'
 
 import { RegionGroupModel, Region } from '@/models/region'
 
-interface propsModel {
+interface RegionGroupProps {
   regionsGroup: Array<RegionGroupModel>
   onRegionSelected?: (regionsGroup: RegionGroupModel[]) => void
   onRegionRemoved?: (regionsGroup: Region[]) => void
   onRegionAdded?: (regionsGroup: Region[]) => void
 }
 
-const RegionGroup = (props: propsModel) => {
+const RegionGroup = (props: RegionGroupProps) => {
   const styleVar = {
     fontSize: 'small'
   }
@@ -26,7 +26,6 @@ const RegionGroup = (props: propsModel) => {
   })
 
   const onAllSelect = (ev: RegionGroupModel) => {
-    console.log(ev)
     ev.checked = !ev.checked
     ev.regions.forEach((el) => (el.checked = ev.checked))
 
@@ -85,12 +84,14 @@ const RegionGroup = (props: propsModel) => {
         <div className="text-danger font-weight-bold">Please select regions to get started</div>
       )}
       {
+        // row
         <div className="row mx-0 mt-2" style={styleVar}>
           {regionsGroupState.map((group, index) => {
             return (
+              // column
               <div key={index} className="col-lg-4 pl-0 pr-2 mt-2">
-                <div className="ft-14 border rounded-sm">
-                  <div className="d-flex justify-content-between bg-light border-bottom p-2">
+                <div>
+                  <div>
                     <strong>{group.geography}</strong>
                     <label className="mb-0" htmlFor={group.geography}>
                       <input
@@ -99,7 +100,7 @@ const RegionGroup = (props: propsModel) => {
                         checked={group.checked}
                         onChange={(_) => onAllSelect(group)}
                       />
-                      <span className="checkbox-header">Check all</span>
+                      <span>Check all</span>
                     </label>
                   </div>
                   <div className="mt-1 px-3 py-2">
@@ -117,7 +118,7 @@ const RegionGroup = (props: propsModel) => {
                             checked={region.checked}
                             onChange={() => onPartialSelect(region, group)}
                           />
-                          <span className="checkbox-item">{region.displayName}</span>
+                          <span>{region.displayName}</span>
                         </label>
                       )
                     })}

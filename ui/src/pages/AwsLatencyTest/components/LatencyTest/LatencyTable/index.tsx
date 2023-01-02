@@ -4,11 +4,11 @@ import { Card, Table } from 'antd'
 
 import { RegionLatencyModel } from '@/models'
 
-interface propsModel {
+interface LatencyTableProps {
   tableData: RegionLatencyModel[]
 }
 
-const LatencyTable = (props: propsModel) => {
+const LatencyTable = (props: LatencyTableProps) => {
   const { tableData } = props
   const columns = [
     {
