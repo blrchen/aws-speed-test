@@ -39,7 +39,6 @@ const Regions = () => {
         console.log(error)
       })
   }, [])
-  console.log('=========[render] fired')
   return <Table dataSource={dataSource} columns={columns} pagination={{ pageSize: 15 }} />
 }
 

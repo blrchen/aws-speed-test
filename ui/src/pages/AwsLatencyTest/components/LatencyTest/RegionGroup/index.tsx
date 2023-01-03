@@ -10,10 +10,6 @@ interface RegionGroupProps {
 }
 
 const RegionGroup = (props: RegionGroupProps) => {
-  const styleVar = {
-    fontSize: 'small'
-  }
-
   const { regionsGroup, onRegionSelected, onRegionRemoved, onRegionAdded } = props
   const [regionsGroupState, setRegionsGroup] = useState(() => regionsGroup)
   const [totalCheckedRegions, setTotalCheckedRegions] = useState<number>(() => {
@@ -81,20 +77,21 @@ const RegionGroup = (props: RegionGroupProps) => {
   return (
     <>
       {totalCheckedRegions === 0 && (
-        <div className="text-danger font-weight-bold">Please select regions to get started</div>
+        <p>
+          <strong>Please select regions to get started</strong>
+        </p>
       )}
       {
-        // row
-        <div className="row mx-0 mt-2" style={styleVar}>
+        <div>
           {regionsGroupState.map((group, index) => {
             return (
-              // column
-              <div key={index} className="col-lg-4 pl-0 pr-2 mt-2">
+              <div key={index}>
                 <div>
                   <div>
                     <strong>{group.geography}</strong>
-                    <label className="mb-0" htmlFor={group.geography}>
+                    <label htmlFor={group.geography}>
                       <input
+                        style={{ marginLeft: '5px', marginRight: '5px' }}
                         type="checkbox"
                         id={group.geography}
                         checked={group.checked}
@@ -103,16 +100,12 @@ const RegionGroup = (props: RegionGroupProps) => {
                       <span>Check all</span>
                     </label>
                   </div>
-                  <div className="mt-1 px-3 py-2">
+                  <div>
                     {group?.regions.map((region, index) => {
-                      const checkedClass = region.checked ? 'text-primary' : ''
                       return (
-                        <label
-                          key={index}
-                          htmlFor={region.regionName}
-                          className={`cursor-pointer mr-3 mb-1 ${checkedClass}`}
-                        >
+                        <label key={index} htmlFor={region.regionName}>
                           <input
+                            style={{ marginLeft: '5px', marginRight: '5px' }}
                             type="checkbox"
                             id={region.regionName}
                             checked={region.checked}

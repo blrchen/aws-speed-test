@@ -25,7 +25,6 @@ const Geographies = () => {
         console.log(error)
       })
   }, [])
-  console.log('=========[render] fired')
 
   return (
     <List

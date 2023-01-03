@@ -18,7 +18,6 @@ const LatencyTest = () => {
       const filtered = current.regions.filter((e) => e.checked)
       return acc.concat(filtered)
     }, [] as Region[])
-    console.log('1115===========selectedRegions in onRegionChange', selectedRegions)
     setSelectedRegions(selectedRegions)
   }
 

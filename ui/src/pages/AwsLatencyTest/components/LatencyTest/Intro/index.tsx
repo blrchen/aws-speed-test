@@ -3,13 +3,9 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 const Intro = () => {
-  const styleVar = {
-    fontSize: 'small'
-  }
-
   return (
     <>
-      <div style={styleVar}>
+      <div>
         This tool runs latency test from your IP location to Azure datacenters around the world.
         <ul>
           <li>

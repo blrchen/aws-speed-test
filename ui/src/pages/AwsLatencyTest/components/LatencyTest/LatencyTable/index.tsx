@@ -32,7 +32,6 @@ const LatencyTable = (props: LatencyTableProps) => {
       key: 'latency'
     }
   ]
-  console.log(tableData)
   return <Table dataSource={tableData} columns={columns} pagination={false} />
 }
 
