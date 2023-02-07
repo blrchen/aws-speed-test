@@ -130,6 +130,19 @@
     "accessEnabled": true
   },
   {
+    "displayName": "Melbourne",
+    "geography": "Asia Pacific",
+    "latitude": null,
+    "longitude": null,
+    "pairedRegion": null,
+    "physicalLocation": null,
+    "regionalDisplayName": null,
+    "regionName": "ap-southeast-4",
+    "availabilityZoneCount": 3,
+    "restricted": false,
+    "accessEnabled": true
+  },
+  {
     "displayName": "Central",
     "geography": "Canada",
     "latitude": null,
