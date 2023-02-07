@@ -1,8 +1,10 @@
+import React, { ReactNode } from 'react'
+
 import { createPortal } from 'react-dom'
 
 export interface PortalProps {
   getContainer?: () => Element
-  children?: React.ReactNode
+  children?: ReactNode
 }
 
 const Portal = (props: PortalProps) => {

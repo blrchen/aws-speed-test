@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Card, Table } from 'antd'
+import { Table } from 'antd'
 
 import { RegionLatencyModel } from '@/models'
 
