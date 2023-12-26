@@ -5,7 +5,7 @@
 [![forks badge]][forks]
 [![issues badge]][issues]
 
-AWS speed test tool. Test your network latency, download and upload speed to AWS datacenters around the world.
+AWS speed test tool. Test your network latency to AWS datacenters around the world.
 
 ## Demo
 
