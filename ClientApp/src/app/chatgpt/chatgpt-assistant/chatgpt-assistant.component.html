@@ -1,0 +1,40 @@
+<main class="container">
+  <header>
+    <h1 id="title">ChatGPT Assistant</h1>
+  </header>
+  <section>
+    <p id="description">
+      Welcome to ChatGPT Assistant, your top place for discovering the amazing power of the ChatGPT
+      API. Each assistant lets you try it yourself, so you can see how ChatGPT API can change your
+      projects and work. Thanks for trying ChatGPT Assistant, and we hope you have fun!
+    </p>
+  </section>
+  <section id="text-demo-section">
+    <h2 class="text-primary">Writing Assistant</h2>
+    <div class="row">
+      <div class="col-lg-6 col-md-6 col-sm-12 mb-2" *ngFor="let card of textCards">
+        <section class="card">
+          <div class="card-body">
+            <h3 class="card-title">{{ card.title }}</h3>
+            <p class="card-text">{{ card.text }}</p>
+            <a [href]="card.link" class="btn btn-primary" role="button">Try it now</a>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+  <section id="code-demo-section">
+    <h2 class="text-primary">Code Assistant</h2>
+    <div class="row">
+      <div class="col-lg-6 col-md-6 col-sm-12 mb-2" *ngFor="let card of codeCards">
+        <section class="card">
+          <div class="card-body">
+            <h3 class="card-title">{{ card.title }}</h3>
+            <p class="card-text">{{ card.text }}</p>
+            <a [href]="card.link" class="btn btn-primary" role="button">Try it now</a>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+</main>

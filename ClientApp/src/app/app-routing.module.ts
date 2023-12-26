@@ -1,20 +1,24 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
+import { NgModule } from '@angular/core'
+import { Routes, RouterModule } from '@angular/router'
 
 const routes: Routes = [
   {
-    path: "",
-    loadChildren: () => import("./aws/aws.module").then((m) => m.AwsModule),
+    path: 'chatgpt',
+    loadChildren: () => import('./chatgpt/chatgpt.module').then((m) => m.ChatGPTModule)
   },
   {
-    path: "**",
-    redirectTo: "",
-    pathMatch: "full",
+    path: '',
+    loadChildren: () => import('./aws/aws.module').then((m) => m.AwsModule)
   },
-];
+  {
+    path: '**',
+    redirectTo: '',
+    pathMatch: 'full'
+  }
+]
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
 export class AppRoutingModule {}

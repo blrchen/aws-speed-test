@@ -5,11 +5,11 @@
 [![forks badge]][forks]
 [![issues badge]][issues]
 
-AWS speed test tool. Test your network latency, download and upload speed to AWS datacenters around the world.
+AWS speed test tool. Test your network latency to AWS datacenters around the world.
 
 ## Demo
 
-* <https://www.awsspeedtest.com>
+* <https://awsspeedtest.com>
 
 ## Local development environment setup steps
 
@@ -18,8 +18,8 @@ See README [here](ClientApp/README.md)
 ## Built on
 * [Angular](https://github.com/angular/angular)
 * [Bootstrap](https://github.com/twbs/bootstrap)
+* [Cloud Catalog](https://github.com/blrchen/cloud-catalog)
 * [d3-shape](https://github.com/d3/d3-shape)
-* [Font Awesome](https://github.com/FortAwesome/Font-Awesome)
 * [ngx-charts](https://github.com/swimlane/ngx-charts)
 * [RxJS](https://github.com/reactivex/rxjs)
 

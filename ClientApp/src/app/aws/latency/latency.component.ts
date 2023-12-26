@@ -1,252 +1,232 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Subscription, timer } from "rxjs";
-import { curveBasis } from "d3-shape";
-import { colorSets, DataItem, MultiSeries } from "@swimlane/ngx-charts";
-import { DefaultRegionsKey, RegionModel } from "../../models";
-import { APIService } from "../../services/api.service";
-import { RegionService } from "../../services/region.service";
+import { Component, OnDestroy, OnInit } from '@angular/core'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { curveBasis } from 'd3-shape'
+import { colorSets, DataItem, MultiSeries } from '@swimlane/ngx-charts'
+import { of, Subject, timer } from 'rxjs'
+import { catchError, takeUntil } from 'rxjs/operators'
+import { RegionService } from '../../services'
+import { RegionModel } from '../../models'
 
-class AverageCalculator {
-  n: number;
-  avg: number;
-
-  constructor() {
-    this.n = 0;
-    this.avg = 0;
-  }
-  addSample(new_sample: number) {
-    this.n++;
-
-    this.avg -= this.avg / this.n;
-    this.avg += new_sample / this.n;
-  }
-  getAverage(): number {
-    return Math.round(this.avg);
-  }
+interface ChartRawData {
+  name: string
+  storageAccountName: string
+  series: DataItem[]
 }
 
 @Component({
-  selector: "app-latency",
-  templateUrl: "./latency.component.html",
-  styleUrls: ["./latency.component.scss"],
+  selector: 'app-aws-latency',
+  templateUrl: './latency.component.html'
 })
 export class LatencyComponent implements OnInit, OnDestroy {
-  subs: Subscription[] = [];
-  regions: RegionModel[] = [];
+  private static readonly MAX_PING_ATTEMPTS = 180
+  private static readonly PING_INTERVAL_MS = 2000
+  private static readonly CHART_X_AXIS_LENGTH = 60
+  private static readonly CHART_UPDATE_INTERVAL_MS = 1000
 
-  pingCount = 0;
-  maxPingCount = 180;
-  updateInterval = 2000;
+  private destroy$ = new Subject<void>()
+  private regions: RegionModel[] = []
+  private pingAttemptCount = 0
+  private pingHistory: Map<string, number[]> = new Map()
+  private latestPingTime = new Map<string, number>()
+  private chartRawData: ChartRawData[] = []
 
-  startTime = new Map<string, number>();
-  latestPingTime = new Map<string, number>();
-  average = new Map<string, AverageCalculator>();
+  public tableData: RegionModel[] = []
+  public tableDataTop3: RegionModel[] = []
+  public chartDataSeries: MultiSeries = []
+  public colorScheme = colorSets.find((s) => s.name === 'picnic')
+  public curve = curveBasis
+  public xAxisTicks: string[] = []
 
-  tableData: RegionModel[] = [];
-  tableDataTop3: RegionModel[] = [];
+  constructor(
+    private httpClient: HttpClient,
+    private regionService: RegionService
+  ) {}
 
-  lineChartRawData: any = [];
-
-  pingTimer$: Subscription = null;
-  chartTimer$: Subscription = null;
-
-  // Line Chart settings
-  view: number[] = undefined; // Chart will fit to the parent container size
-  lineChartData: MultiSeries = [];
-  colorScheme = colorSets.find((s) => s.name === "picnic");
-  curve = curveBasis;
-  xAxisTicks: any[] = [];
-
-  constructor(private apiService: APIService, private regionService: RegionService) {
-    const regions = localStorage.getItem(DefaultRegionsKey);
-    this.regionService.updateRegions(regions ? JSON.parse(regions) : []);
+  ngOnInit(): void {
+    this.fetchRegionData()
+    this.startChartTimer()
   }
 
-  ngOnInit() {
-    const sub = this.regionService.getRegions().subscribe((res) => {
-      if (res.length > this.regions.length && !this.pingTimer$) {
-        this.pingCount = 0;
-        this.regions = res;
-      } else {
-        this.regions = res;
-        this.formatData();
-      }
-      if (!this.pingTimer$) {
-        this.pingTimer();
-      }
-    });
-    this.chartTimer();
-    this.subs.push(sub);
+  ngOnDestroy(): void {
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 
-  pingTimer() {
-    this.pingTimer$ = timer(0, this.updateInterval).subscribe(() => {
-      // This ping result is calculated by sending a https request a file hosted in AWS S3 storage
-      // Resource: https://www.dotcom-tools.com/website-speed-test.aspx
-      // First ping: DNS + Connection + SSL + Request + First Package + Download
-      // Repeat ping: DOM time only
-      // TODO: Consider to switch to http ping to exclude SSL time
-      if (this.pingCount < this.maxPingCount) {
-        this.sendHttpPing();
-        this.pingCount++;
-      } else {
-        if (this.pingTimer$) {
-          this.pingTimer$.unsubscribe();
-          console.log("pingTimer$ unsubscribed");
+  private fetchRegionData(): void {
+    this.regionService
+      .getRegions()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res: RegionModel[]) => {
+        this.regions = res
+        this.startPingTimer()
+      })
+  }
+
+  private startPingTimer(): void {
+    timer(0, LatencyComponent.PING_INTERVAL_MS)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        if (this.pingAttemptCount < LatencyComponent.MAX_PING_ATTEMPTS) {
+          this.pingAllRegions()
+          this.pingAttemptCount++
         }
-      }
-    });
+      })
   }
 
-  formatData() {
-    const tableDataCache: RegionModel[] = [];
-    this.regions.forEach((item, index) => {
-      const { regionName, displayName, storageAccountName, physicalLocation, geography, restricted, accessEnabled } = item;
-      if (this.latestPingTime.get(storageAccountName) > 0) {
-        tableDataCache.push({
-          regionName,
-          displayName,
-          storageAccountName,
-          physicalLocation,
-          geography,
-          averageLatency: this.average.get(storageAccountName).getAverage(),
-          restricted,
-          accessEnabled,
-        });
-      }
-
-      if (index === this.regions.length - 1 || !this.tableData.length) {
-        this.tableData = tableDataCache;
-      }
-    });
-
-    this.tableDataTop3 = this.tableData.sort((a, b) => a.averageLatency - b.averageLatency).slice(0, 3);
-  }
-
-  chartTimer() {
-    const xLength = 60;
-    this.chartTimer$ = timer(0, 1000).subscribe(() => {
-      const date = new Date();
-      const timeStamp = date.getTime() / 1000;
-      const second = timeStamp * 1000;
-      const secondArr = Array.from({ length: xLength }, (_j, i) => {
-        const t = timeStamp - i;
-        return t * 1000;
-      }).reverse();
-      this.tableData.forEach(({ storageAccountName, displayName }) => {
-        let isNew = true;
-
-        this.lineChartRawData.forEach((item: any) => {
-          if (storageAccountName === item.storageAccountName) {
-            isNew = false;
-          }
-        });
-        if (isNew) {
-          this.lineChartData.push({
-            name: displayName,
-            series: secondArr.map((i) => ({
-              name: this.formatXAxisTick(i),
-              value: 0,
-            })),
-          });
-          this.lineChartRawData.push({
-            storageAccountName,
-            name: displayName,
-            series: secondArr.map((i) => ({ name: i, value: 0 })),
-          });
-        }
-      });
-
-      this.lineChartRawData.forEach((item: any) => {
-        const { storageAccountName, series } = item;
-        const t = this.latestPingTime.get(storageAccountName) || 0;
-        let isRemove = true;
-        this.tableData.forEach((td) => {
-          if (storageAccountName === td.storageAccountName) {
-            isRemove = false;
-          }
-        });
-        if (series.length > xLength - 1) {
-          series.shift();
-        }
-
-        series.push({
-          name: second,
-          value: isRemove ? 0 : t,
-        });
-      });
-
-      const arr = this.lineChartRawData.map((item: any) => {
-        return {
-          name: item.name,
-          series: item.series.map((seriesItem: DataItem) => ({
-            name: this.formatXAxisTick(Number(seriesItem.name)),
-            value: seriesItem.value,
-          })),
-        };
-      });
-      this.lineChartData = [...arr];
-
-      this.xAxisTicks = this.lineChartRawData[0]
-        ? this.lineChartRawData[0].series
-            .filter((seriesItem: DataItem) => {
-              const timestamp = parseInt(String(seriesItem.name), 10);
-              const s = new Date(timestamp).getSeconds();
-              return s % 5 === 0;
-            })
-            .map((seriesItem: DataItem) => this.formatXAxisTick(parseInt(String(seriesItem.name), 10)))
-        : [];
-    });
-  }
-
-  sendHttpPing() {
+  private pingAllRegions(): void {
     this.regions.forEach((region) => {
-      const { storageAccountName } = region;
-      this.startTime.set(storageAccountName, new Date().getTime());
-      // TODO(blair): review all sub pattern to ensure disposal logic
-      const sub = this.apiService.ping(region).subscribe(() => {
-        const pingTime = (new Date().getTime() - this.startTime.get(storageAccountName)).toFixed(0);
-
-        let average = this.average.get(storageAccountName);
-        if (!average) {
-          average = new AverageCalculator();
-          this.average.set(storageAccountName, average);
-        }
-
-        // Drop first ping result as it includes extra DNS time
-        if (this.pingCount >= 2) {
-          console.log(`region = ${region.displayName}, ping count = ${this.pingCount}, ping time = ${pingTime}`);
-          this.latestPingTime.set(storageAccountName, Number(pingTime));
-          average.addSample(Number(pingTime));
-        }
-
-        this.formatData();
-      });
-      this.subs.push(sub);
-    });
+      this.pingRegion(region)
+    })
   }
 
-  formatXAxisTick(timeStamp: number): string {
-    const date = new Date(timeStamp);
-    const second = date.getSeconds();
-    const h = date.getHours();
-    const m = date.getMinutes();
-    const hStr = h > 9 ? h : `0${h}`;
-    const mStr = m > 9 ? m : `0${m}`;
-    return second === 0 ? `${hStr}:${mStr}` : `:${second}`;
+  private pingRegion(region: RegionModel): void {
+    const url = this.constructPingUrl(region)
+    const headers = new HttpHeaders({
+      'Cache-Control': 'no-cache',
+      Accept: '*/*'
+    })
+    const pingStartTime = performance.now()
+    this.httpClient
+      .get(url, { headers, responseType: 'text' })
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError((error) => {
+          console.error(`Error pinging region: ${region.displayName}`, error)
+          return of(null)
+        })
+      )
+      .subscribe(() => {
+        const pingEndTime = performance.now()
+        const pingDuration = pingEndTime - pingStartTime
+        this.processPing(region.storageAccountName, pingDuration)
+      })
   }
 
-  ngOnDestroy() {
-    this.subs.forEach((sub) => {
-      if (sub) {
-        sub.unsubscribe();
+  private processPing(storageAccountName: string, pingDuration: number): void {
+    const pingDurationMs = Math.round(pingDuration)
+    if (pingDurationMs <= 500) {
+      this.latestPingTime.set(storageAccountName, pingDurationMs)
+      let history = this.pingHistory.get(storageAccountName) || []
+      history.push(pingDuration)
+
+      this.pingHistory.set(storageAccountName, history)
+      this.formatData()
+    }
+  }
+
+  private constructPingUrl({ regionName, storageAccountName }: RegionModel): string {
+    return `https://${storageAccountName}.s3.${regionName}.amazonaws.com/latency-test.json`
+  }
+
+  private formatData(): void {
+    this.tableData = this.regions
+      .filter(({ storageAccountName }) => this.latestPingTime.get(storageAccountName) > 0)
+      .map((region) => {
+        const pingTimes = this.pingHistory.get(region.storageAccountName) || []
+
+        // Exclude the highest ping time which might have extra DNS look up time
+        const sortedPingTimes = [...pingTimes].sort((a, b) => a - b)
+        sortedPingTimes.pop()
+        const sum = sortedPingTimes.reduce((a, b) => a + Number(b), 0)
+        const avg = sortedPingTimes.length > 0 ? Math.floor(sum / sortedPingTimes.length) : 0
+        return { ...region, averageLatency: avg }
+      })
+
+    this.tableDataTop3 = [...this.tableData]
+      .sort((a, b) => (a.averageLatency || 0) - (b.averageLatency || 0))
+      .slice(0, 3)
+  }
+
+  private startChartTimer(): void {
+    timer(0, LatencyComponent.CHART_UPDATE_INTERVAL_MS)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.updateChart()
+      })
+  }
+
+  private updateChart(): void {
+    const now = new Date()
+    const currentSecond = now.getTime()
+    const secondArr = Array.from({ length: LatencyComponent.CHART_X_AXIS_LENGTH }, (_j, i) => {
+      return currentSecond - i * 1000
+    }).reverse()
+    this.tableData.forEach(({ storageAccountName, displayName }) => {
+      let isNew = true
+
+      this.chartRawData.forEach((item: ChartRawData) => {
+        if (storageAccountName === item.storageAccountName) {
+          isNew = false
+        }
+      })
+      if (isNew) {
+        this.chartDataSeries.push({
+          name: displayName,
+          series: secondArr.map((i) => ({
+            name: this.formatXAxisTick(i),
+            value: 0
+          }))
+        })
+        this.chartRawData.push({
+          storageAccountName,
+          name: displayName,
+          series: secondArr.map((i) => ({ name: i, value: 0 }))
+        })
       }
-    });
-    if (this.pingTimer$) {
-      this.pingTimer$.unsubscribe();
-    }
-    if (this.chartTimer$) {
-      this.chartTimer$.unsubscribe();
-    }
+    })
+
+    this.updateChartRawData(currentSecond)
+    this.updateChartData()
+    this.updateXAxisTicks()
+  }
+
+  private updateChartRawData(currentSecond: number) {
+    this.chartRawData.forEach((item: ChartRawData) => {
+      const { storageAccountName, series } = item
+      const pingTime = this.latestPingTime.get(storageAccountName) || 0
+      let isRemove = !this.tableData.some((td) => storageAccountName === td.storageAccountName)
+      if (series.length > LatencyComponent.CHART_X_AXIS_LENGTH - 1) {
+        series.shift()
+      }
+
+      series.push({
+        name: currentSecond,
+        value: isRemove ? 0 : pingTime
+      })
+    })
+  }
+
+  private updateChartData(): void {
+    const arr = this.chartRawData.map((item: ChartRawData) => {
+      return {
+        name: item.name,
+        series: item.series.map((seriesItem: DataItem) => ({
+          name: this.formatXAxisTick(Number(seriesItem.name)),
+          value: seriesItem.value
+        }))
+      }
+    })
+    this.chartDataSeries = [...arr]
+  }
+
+  private updateXAxisTicks(): void {
+    this.xAxisTicks = this.chartRawData[0]
+      ? this.chartRawData[0].series
+          .filter((seriesItem: DataItem) => {
+            const timestamp = parseInt(String(seriesItem.name), 10)
+            const s = new Date(timestamp).getSeconds()
+            return s % 5 === 0
+          })
+          .map((seriesItem: DataItem) =>
+            this.formatXAxisTick(parseInt(String(seriesItem.name), 10))
+          )
+      : []
+  }
+
+  private formatXAxisTick(timestamp: number): string {
+    const date = new Date(timestamp)
+    const minutes = date.getMinutes().toString().padStart(2, '0')
+    const seconds = date.getSeconds().toString().padStart(2, '0')
+    return `${minutes}:${seconds}`
   }
 }

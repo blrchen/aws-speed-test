@@ -8,9 +8,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "af-south-1",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "Hong Kong",
@@ -21,9 +20,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "ap-east-1",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "Tokyo",
@@ -34,9 +32,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "ap-northeast-1",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "Seoul",
@@ -48,8 +45,7 @@
     "regionalDisplayName": null,
     "regionName": "ap-northeast-2",
     "availabilityZoneCount": 4,
-    "restricted": false,
-    "accessEnabled": true
+    "restricted": false
   },
   {
     "displayName": "Osaka",
@@ -60,9 +56,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "ap-northeast-3",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "Mumbai",
@@ -73,9 +68,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "ap-south-1",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "Hyderabad",
@@ -86,9 +80,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "ap-south-2",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "Singapore",
@@ -99,9 +92,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "ap-southeast-1",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "Sydney",
@@ -112,9 +104,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "ap-southeast-2",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "Jakarta",
@@ -125,9 +116,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "ap-southeast-3",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "Melbourne",
@@ -138,9 +128,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "ap-southeast-4",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "Central",
@@ -151,9 +140,20 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "ca-central-1",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
+  },
+  {
+    "displayName": "Calgary",
+    "geography": "Canada West",
+    "latitude": null,
+    "longitude": null,
+    "pairedRegion": null,
+    "physicalLocation": null,
+    "regionalDisplayName": null,
+    "regionName": "ca-west-1",
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "Frankfurt",
@@ -164,9 +164,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "eu-central-1",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "Zurich",
@@ -177,9 +176,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "eu-central-2",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "Stockholm",
@@ -190,9 +188,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "eu-north-1",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "Milan",
@@ -203,9 +200,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "eu-south-1",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "Spain",
@@ -216,9 +212,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "eu-south-2",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "Ireland",
@@ -229,9 +224,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "eu-west-1",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "London",
@@ -242,9 +236,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "eu-west-2",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "Paris",
@@ -255,9 +248,20 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "eu-west-3",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
+  },
+  {
+    "displayName": "Tel Aviv",
+    "geography": "Israel",
+    "latitude": null,
+    "longitude": null,
+    "pairedRegion": null,
+    "physicalLocation": null,
+    "regionalDisplayName": null,
+    "regionName": "il-central-1",
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "UAE",
@@ -268,9 +272,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "me-central-1",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "Bahrain",
@@ -281,9 +284,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "me-south-1",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "Sao Paulo",
@@ -294,9 +296,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "sa-east-1",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "N. Virginia",
@@ -307,9 +308,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "us-east-1",
-    "availabilityZoneCount": 6,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "Ohio",
@@ -320,9 +320,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "us-east-2",
-    "availabilityZoneCount": 3,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "N. California",
@@ -333,9 +332,8 @@
     "physicalLocation": null,
     "regionalDisplayName": null,
     "regionName": "us-west-1",
-    "availabilityZoneCount": 2,
-    "restricted": false,
-    "accessEnabled": true
+    "availabilityZoneCount": 4,
+    "restricted": false
   },
   {
     "displayName": "Oregon",
@@ -347,7 +345,6 @@
     "regionalDisplayName": null,
     "regionName": "us-west-2",
     "availabilityZoneCount": 4,
-    "restricted": false,
-    "accessEnabled": true
+    "restricted": false
   }
 ]
