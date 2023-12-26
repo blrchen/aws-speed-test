@@ -1,10 +1,9 @@
-import { Component } from "@angular/core";
+import { Component } from '@angular/core'
 
 @Component({
-  selector: "app-aws",
-  templateUrl: "./aws.component.html",
-  styleUrls: ["./aws.component.scss"],
+  selector: 'app-aws',
+  templateUrl: './aws.component.html'
 })
 export class AwsComponent {
-  title = "";
+  title = ''
 }

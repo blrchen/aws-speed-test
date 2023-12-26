@@ -1,50 +1,14 @@
-export const DefaultRegionsKey = "currentSelectedRegions";
+export const DefaultRegionsKey = 'currentSelectedRegions'
 
-export class Region {
-  availabilityZoneCount?: number;
-  displayName: string;
-  geography: string;
-  latitude?: string;
-  longitude?: string;
-  pairedRegion?: string;
-  physicalLocation?: string;
-  regionalDisplayName?: string;
-  regionName: string;
-  restricted: boolean;
-  accessEnabled: boolean;
+export interface Region {
+  displayName: string
+  geography: string
+  regionName: string
+  availabilityZoneCount?: number
 }
 
-export class RegionModel extends Region {
-  averageLatency?: number;
-  checked?: boolean;
-  storageAccountName: string;
-  url?: string;
-
-  constructor(region: Region) {
-    super();
-    Object.assign(this, region);
-  }
-}
-
-export class RegionGroupModel {
-  geography: string;
-  regions: RegionModel[];
-  checked?: boolean;
-}
-
-export class BlobModel {
-  endpoint: string;
-  accountName: string;
-  containerName: string;
-  blobName: string;
-  sas: string;
-}
-
-export class BlobUploadSpeedModel {
-  fileName: any;
-  fileSize: string;
-  region: string;
-  thread: number;
-  blockSize: number;
-  uploadSpeed: string;
+export interface RegionModel extends Region {
+  averageLatency?: number
+  checked?: boolean
+  storageAccountName?: string
 }

@@ -1,22 +1,22 @@
 export const Menus = [
   {
-    path: "latency",
-    icon: "fa fa-cloud",
-    title: "Latency Test",
+    path: '/chatgpt/chatgpt-assistant',
+    title: 'ChatGPT Assistant'
   },
   {
-    path: "regions",
-    icon: "fa fa-book",
-    title: "AWS Regions",
+    path: '/latency',
+    title: 'Latency Test'
   },
   {
-    path: "geographies",
-    icon: "fa fa-book",
-    title: "AWS Geographies",
+    path: '/regions',
+    title: 'AWS Regions'
   },
   {
-    path: "about",
-    icon: "fa fa-book",
-    title: "About",
+    path: '/geographies',
+    title: 'AWS Geographies'
   },
-];
+  {
+    path: '/about',
+    title: 'About'
+  }
+]

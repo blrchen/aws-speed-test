@@ -1,29 +1,27 @@
-import { ErrorHandler, Injectable } from "@angular/core";
-import { HttpErrorResponse } from "@angular/common/http";
-import { AppInsightsService } from "./appInsights.service";
+import { ErrorHandler, Injectable } from '@angular/core'
+import { HttpErrorResponse } from '@angular/common/http'
 
 @Injectable()
 export class GlobalErrorHandler extends ErrorHandler {
-  constructor(private appInsights: AppInsightsService) {
-    super();
+  constructor() {
+    super()
   }
 
   override handleError(error: any) {
-    let errorMessage: string;
+    let errorMessage: string
     if (error instanceof Error) {
-      errorMessage = `${error.name} - ${error.message}, stack: ${error.stack}`;
+      errorMessage = `${error.name} - ${error.message}, stack: ${error.stack}`
     } else if (error instanceof HttpErrorResponse) {
-      errorMessage = error.message;
+      errorMessage = error.message
     } else {
-      errorMessage = error.toString();
+      errorMessage = error.toString()
     }
 
     // Skip error with message: AJAX request was cancelled
-    if (errorMessage === "AJAX request was cancelled. ") {
-      return;
+    if (errorMessage === 'AJAX request was cancelled. ') {
+      return
     }
 
-    console.error(errorMessage);
-    this.appInsights.trackException(error);
+    console.error(errorMessage)
   }
 }
