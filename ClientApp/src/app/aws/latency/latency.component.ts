@@ -114,8 +114,8 @@ export class LatencyComponent implements OnInit, OnDestroy {
     }
   }
 
-  private constructPingUrl({ regionName, storageAccountName }: RegionModel): string {
-    return `https://${storageAccountName}.s3.${regionName}.amazonaws.com/latency-test.json`
+  private constructPingUrl({ name, storageAccountName }: RegionModel): string {
+    return `https://${storageAccountName}.s3.${name}.amazonaws.com/latency-test.json`
   }
 
   private formatData(): void {

@@ -3,7 +3,7 @@ export const DefaultRegionsKey = 'currentSelectedRegions'
 export interface Region {
   displayName: string
   geography: string
-  regionName: string
+  name: string
   availabilityZoneCount?: number
 }
 

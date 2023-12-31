@@ -9,6 +9,22 @@ import data from '../../assets/data/regions.json'
 export class RegionService {
   private regionSubject = new BehaviorSubject<RegionModel[]>([])
 
+  constructor() {
+    const res = localStorage.getItem(DefaultRegionsKey)
+    // If fetched region items from local storage is not valid, clear it
+    try {
+      const defaultRegions: RegionModel[] = JSON.parse(res)
+      if (defaultRegions && defaultRegions[0]) {
+        if (!defaultRegions[0].geography || !defaultRegions[0].name) {
+          this.clearRegions()
+        }
+      }
+    } catch (e) {
+      console.log(e)
+      this.clearRegions()
+    }
+  }
+
   updateRegions(regions: RegionModel[]) {
     this.regionSubject.next(regions)
     localStorage.setItem(DefaultRegionsKey, JSON.stringify(regions))
@@ -23,7 +39,7 @@ export class RegionService {
       const prefix = 'ast'
       return {
         ...regionData,
-        storageAccountName: `${prefix}${regionData.regionName}`
+        storageAccountName: `${prefix}${regionData.name}`
       }
     })
   }

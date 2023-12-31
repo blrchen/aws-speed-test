@@ -17,10 +17,10 @@
         </thead>
         <tbody>
           <tr *ngFor="let g of tableData">
-            <td>{{ g.geography }}</td>
+            <td>{{ g.name }}</td>
             <td>
               <ng-container *ngFor="let r of g.regions">
-                <span>{{ r.displayName }} ({{ r.regionName }})</span>
+                <span>[{{ r.name }}] {{ r.displayName }}</span>
                 <br />
               </ng-container>
             </td>
