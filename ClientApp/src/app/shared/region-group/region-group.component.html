@@ -20,13 +20,13 @@
         <div class="mt-1 px-2 py-1">
           <label
             *ngFor="let region of group?.regions"
-            [attr.for]="region.regionName"
+            [attr.for]="region.name"
             class="cursor-pointer mr-2 mb-1"
             [ngClass]="{ 'text-primary': region.checked }"
           >
             <input
               type="checkbox"
-              [attr.id]="region.regionName"
+              [attr.id]="region.name"
               [(ngModel)]="region.checked"
               (change)="onChange(region, group)"
             />

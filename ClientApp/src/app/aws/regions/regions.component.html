@@ -17,16 +17,16 @@
         <thead>
           <tr>
             <th scope="col">Geography</th>
-            <th scope="col">Region Name</th>
+            <th scope="col">Region</th>
+            <th scope="col">Display Name</th>
             <th scope="col">Availability Zone #</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let r of tableData">
             <td>{{ r.geography }}</td>
-            <td>
-              <strong>{{ r.displayName }}</strong>
-            </td>
+            <td>{{ r.name }}</td>
+            <td>{{ r.displayName }}</td>
             <td>{{ r.availabilityZoneCount === 0 ? 'Not supported' : r.availabilityZoneCount }}</td>
           </tr>
         </tbody>

@@ -27,12 +27,14 @@
         <thead>
           <tr>
             <th scope="col">Region</th>
+            <th scope="col">Display Name</th>
             <th scope="col">Average Latency (ms)</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of tableDataTop3">
-            <td>{{ item.displayName }} ({{ item.geography }})</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.displayName }}</td>
             <td>{{ item.averageLatency }} ms</td>
           </tr>
         </tbody>
@@ -65,6 +67,7 @@
           <tr>
             <th scope="col">Geography</th>
             <th scope="col">Region</th>
+            <th scope="col">Display Name</th>
             <th scope="col">Average Latency (ms)</th>
           </tr>
         </thead>
@@ -79,6 +82,7 @@
             }"
           >
             <td>{{ item.geography }}</td>
+            <td>{{ item.name }}</td>
             <td>{{ item.displayName }}</td>
             <td>{{ item.averageLatency }} ms</td>
           </tr>
