@@ -132,6 +132,18 @@
     "restricted": false
   },
   {
+    "displayName": "Asia Pacific (Malaysia)",
+    "geography": "Asia Pacific",
+    "latitude": null,
+    "longitude": null,
+    "pairedRegion": null,
+    "physicalLocation": "Malaysia",
+    "regionalDisplayName": null,
+    "name": "ap-southeast-5",
+    "availabilityZoneCount": 3,
+    "restricted": false
+  },
+  {
     "displayName": "Canada (Central)",
     "geography": "Canada",
     "latitude": null,
