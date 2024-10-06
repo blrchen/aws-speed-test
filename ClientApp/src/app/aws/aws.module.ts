@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
-import { HttpClientModule } from '@angular/common/http'
 import { FormsModule } from '@angular/forms'
 import { LineChartModule } from '@swimlane/ngx-charts'
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap'
@@ -26,7 +25,6 @@ import {
     CommonModule,
     AwsRoutingModule,
     SharedModule,
-    HttpClientModule,
     LineChartModule,
     NgbModalModule,
     FormsModule

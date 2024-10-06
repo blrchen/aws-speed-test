@@ -16,9 +16,10 @@ AWS speed test tool. Test your network latency to AWS datacenters around the wor
 See README [here](ClientApp/README.md)
 
 ## Built on
+
 * [Angular](https://github.com/angular/angular)
 * [Bootstrap](https://github.com/twbs/bootstrap)
-* [Cloud Catalog](https://github.com/blrchen/cloud-catalog)
+* [AWS Catalog](https://github.com/blrchen/aws-catalog)
 * [d3-shape](https://github.com/d3/d3-shape)
 * [ngx-charts](https://github.com/swimlane/ngx-charts)
 * [RxJS](https://github.com/reactivex/rxjs)

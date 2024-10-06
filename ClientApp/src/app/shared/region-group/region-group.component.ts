@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
-import { RegionService } from 'src/app/services'
-import { DefaultRegionsKey, RegionModel } from 'src/app/models'
+import { DefaultRegionsKey, RegionModel } from '../../models'
+import { RegionService } from '../../services'
 
 interface RegionGroupModel {
   geography: string
@@ -51,7 +51,7 @@ export class RegionsComponent implements OnInit {
     }
 
     const checkedRegions = this.getCheckedRegions()
-    this.regionService.updateRegions(checkedRegions)
+    this.regionService.updateSelectedRegions(checkedRegions)
   }
 
   initRegions() {

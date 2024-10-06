@@ -20,7 +20,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 RUN rm -rf /usr/share/nginx/html/*
 
 # Copy production bundle from Stage 1
-COPY --from=ui-build /app/dist/aws-speed-test /usr/share/nginx/html
+COPY --from=ui-build /app/dist/aws-speed-test/browser /usr/share/nginx/html
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

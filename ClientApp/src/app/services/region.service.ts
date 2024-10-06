@@ -7,7 +7,8 @@ import data from '../../assets/data/regions.json'
   providedIn: 'root'
 })
 export class RegionService {
-  private regionSubject = new BehaviorSubject<RegionModel[]>([])
+  private selectedRegionsSubject = new BehaviorSubject<RegionModel[]>([])
+  selectedRegions$ = this.selectedRegionsSubject.asObservable()
 
   constructor() {
     const res = localStorage.getItem(DefaultRegionsKey)
@@ -25,27 +26,24 @@ export class RegionService {
     }
   }
 
-  updateRegions(regions: RegionModel[]) {
-    this.regionSubject.next(regions)
+  updateSelectedRegions(regions: RegionModel[]) {
+    this.selectedRegionsSubject.next(regions)
     localStorage.setItem(DefaultRegionsKey, JSON.stringify(regions))
-  }
-
-  getRegions(): Observable<RegionModel[]> {
-    return this.regionSubject.asObservable()
   }
 
   getAllRegions(): RegionModel[] {
     return data.map((regionData) => {
       const prefix = 'ast'
+      const postfix = '8a1cce82'
       return {
         ...regionData,
-        storageAccountName: `${prefix}${regionData.name}`
+        storageAccountName: `${prefix}-${regionData.name}-${postfix}`
       }
     })
   }
 
   clearRegions() {
-    this.regionSubject.next(null)
+    this.selectedRegionsSubject.next(null)
     localStorage.removeItem(DefaultRegionsKey)
   }
 }
