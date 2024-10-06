@@ -1,45 +1,34 @@
-<main class="container">
-  <header>
-    <h1 id="title">AWS Geographies</h1>
-    <p id="description">
-      A geography is a discrete market, typically containing two or more regions, that preserves
-      data residency and compliance boundaries
-    </p>
-  </header>
-  <section>
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col">Geography</th>
-            <th scope="col">Regions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let g of tableData">
-            <td>{{ g.name }}</td>
-            <td>
-              <ng-container *ngFor="let r of g.regions">
-                <span>[{{ r.name }}] {{ r.displayName }}</span>
-                <br />
-              </ng-container>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-  <section>
-    <h2>Resources</h2>
-    <ul>
-      <li>
-        <a
-          href="https://github.com/blrchen/cloud-catalog/blob/main/src/assets/aws/geographies.json"
-          target="_blank"
-        >
-          geographies.json
-        </a>
-      </li>
-    </ul>
-  </section>
-</main>
+<h1>AWS Geographies</h1>
+<p class="lead">
+  A geography is a discrete market, typically containing two or more regions, that preserves data
+  residency and compliance boundaries
+</p>
+
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Geography</th>
+        <th scope="col">Regions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let g of tableData">
+        <td>{{ g.name }}</td>
+        <td>
+          <ng-container *ngFor="let r of g.regions">
+            <span>[{{ r.name }}] {{ r.displayName }}</span>
+            <br />
+          </ng-container>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://github.com/blrchen/aws-catalog" target="_blank">AWS Catalog</a>
+  </li>
+</ul>

@@ -1,47 +1,119 @@
-<header class="navbar navbar-expand navbar-light bg-light shadow-sm flex-md-row bd-navbar">
-  <a class="navbar-brand mr-0 mr-md-2" href="/" aria-label="AWSSpeedTest">AWSSpeedTest.com</a>
-  <button class="btn btn-link bd-search-docs-toggle d-md-none p-0 ml-auto" type="button">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="30"
-      height="30"
-      viewBox="0 0 30 30"
-      role="img"
-      focusable="false"
-      (click)="collapse = !collapse"
-    >
-      <title>Menu</title>
-      <path
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-miterlimit="10"
-        stroke-width="2"
-        d="M4 7h22M4 15h22M4 23h22"
-      ></path>
-    </svg>
-  </button>
+<style>
+  .bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+
+  @media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+      font-size: 3.5rem;
+    }
+  }
+
+  .nav-scroller {
+    position: relative;
+    z-index: 2;
+    height: 2.75rem;
+    overflow-y: hidden;
+  }
+
+  .nav-scroller .nav {
+    display: flex;
+    flex-wrap: nowrap;
+    padding-bottom: 1rem;
+    margin-top: -1px;
+    overflow-x: auto;
+    text-align: center;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+</style>
+
+<header class="navbar sticky-top bg-dark flex-md-nowrap p-0 shadow" data-bs-theme="dark">
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#">AWS Speed Test</a>
+  <ul class="navbar-nav flex-row d-md-none">
+    <li class="nav-item text-nowrap">
+      <button
+        class="nav-link px-3 text-white"
+        type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#sidebarMenu"
+        aria-controls="sidebarMenu"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <fa-icon [icon]="['fas', 'list']"></fa-icon>
+      </button>
+    </li>
+  </ul>
 </header>
 
-<div class="container-fluid p-0 bd-main">
-  <div class="d-flex flex-column flex-md-row flex-xl-nowrap">
-    <div class="bd-sidebar">
-      <nav class="collapse bd-links" id="bd-nav" [ngClass]="{ show: collapse }">
-        <ul class="nav flex-column bd-sidenav">
-          <ng-container *ngFor="let item of menus">
-            <li class="nav-item" routerLinkActive="active">
-              <a class="nav-link" [routerLink]="item.path" routerLinkActive="active">
-                <span class="ml-2">{{ item.title }}</span>
+<div class="container-fluid">
+  <div class="row">
+    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+      <div
+        class="offcanvas-md offcanvas-end bg-body-tertiary"
+        tabindex="-1"
+        id="sidebarMenu"
+        aria-labelledby="sidebarMenuLabel"
+      >
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="sidebarMenuLabel">AWS Speed Test</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="offcanvas"
+            data-bs-target="#sidebarMenu"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a
+                class="nav-link d-flex align-items-center gap-2 active"
+                aria-current="page"
+                href="/chatgpt/chatgpt-assistant"
+              >
+                <fa-icon [icon]="['fas', 'robot']"></fa-icon>
+                ChatGPT Assistant
               </a>
             </li>
-          </ng-container>
-        </ul>
-      </nav>
-    </div>
-
-    <main class="bd-content">
-      <div class="px-3 py-3">
-        <ng-content></ng-content>
+            <hr class="my-3" />
+            <li class="nav-item">
+              <a class="nav-link d-flex align-items-center gap-2" href="/latency">
+                <fa-icon [icon]="['fas', 'tachometer-alt']"></fa-icon>
+                AWS Latency Test
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link d-flex align-items-center gap-2" href="/regions">
+                <fa-icon [icon]="['fas', 'globe-americas']"></fa-icon>
+                AWS Regions
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link d-flex align-items-center gap-2" href="/geographies">
+                <fa-icon [icon]="['fas', 'map-marked-alt']"></fa-icon>
+                AWS Geographies
+              </a>
+            </li>
+            <hr class="my-3" />
+            <li class="nav-item">
+              <a class="nav-link d-flex align-items-center gap-2" href="/about">
+                <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                About
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
+    </div>
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <router-outlet />
     </main>
   </div>
 </div>

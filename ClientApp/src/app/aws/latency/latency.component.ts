@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { HttpClient, HttpHeaders } from '@angular/common/http'
+import axios from 'axios'
 import { curveBasis } from 'd3-shape'
 import { colorSets, DataItem, MultiSeries } from '@swimlane/ngx-charts'
-import { of, Subject, timer } from 'rxjs'
-import { catchError, takeUntil } from 'rxjs/operators'
+import { Subject, timer } from 'rxjs'
+import { takeUntil } from 'rxjs/operators'
 import { RegionService } from '../../services'
 import { RegionModel } from '../../models'
 
@@ -37,13 +37,10 @@ export class LatencyComponent implements OnInit, OnDestroy {
   public curve = curveBasis
   public xAxisTicks: string[] = []
 
-  constructor(
-    private httpClient: HttpClient,
-    private regionService: RegionService
-  ) {}
+  constructor(private regionService: RegionService) {}
 
   ngOnInit(): void {
-    this.fetchRegionData()
+    this.subscribeToSelectedRegions()
     this.startChartTimer()
   }
 
@@ -52,14 +49,24 @@ export class LatencyComponent implements OnInit, OnDestroy {
     this.destroy$.complete()
   }
 
-  private fetchRegionData(): void {
-    this.regionService
-      .getRegions()
+  private subscribeToSelectedRegions(): void {
+    this.regionService.selectedRegions$
       .pipe(takeUntil(this.destroy$))
-      .subscribe((res: RegionModel[]) => {
-        this.regions = res
+      .subscribe((regions: RegionModel[]) => {
+        this.regions = regions
+        this.resetPingData()
         this.startPingTimer()
       })
+  }
+
+  private resetPingData(): void {
+    this.pingAttemptCount = 0
+    this.pingHistory.clear()
+    this.latestPingTime.clear()
+    this.chartRawData = []
+    this.tableData = []
+    this.tableDataTop3 = []
+    this.chartDataSeries = []
   }
 
   private startPingTimer(): void {
@@ -79,34 +86,28 @@ export class LatencyComponent implements OnInit, OnDestroy {
     })
   }
 
-  private pingRegion(region: RegionModel): void {
+  private async pingRegion(region: RegionModel): Promise<void> {
     const url = this.constructPingUrl(region)
-    const headers = new HttpHeaders({
+    const headers = {
       'Cache-Control': 'no-cache',
       Accept: '*/*'
-    })
+    }
     const pingStartTime = performance.now()
-    this.httpClient
-      .get(url, { headers, responseType: 'text' })
-      .pipe(
-        takeUntil(this.destroy$),
-        catchError((error) => {
-          console.error(`Error pinging region: ${region.displayName}`, error)
-          return of(null)
-        })
-      )
-      .subscribe(() => {
-        const pingEndTime = performance.now()
-        const pingDuration = pingEndTime - pingStartTime
-        this.processPing(region.storageAccountName, pingDuration)
-      })
+    try {
+      await axios.get(url, { headers, responseType: 'json' })
+      const pingEndTime = performance.now()
+      const pingDuration = pingEndTime - pingStartTime
+      this.processPing(region.storageAccountName, pingDuration)
+    } catch (error) {
+      console.error(`Error pinging region: ${region.displayName}`, error)
+    }
   }
 
   private processPing(storageAccountName: string, pingDuration: number): void {
     const pingDurationMs = Math.round(pingDuration)
     if (pingDurationMs <= 500) {
       this.latestPingTime.set(storageAccountName, pingDurationMs)
-      let history = this.pingHistory.get(storageAccountName) || []
+      const history = this.pingHistory.get(storageAccountName) || []
       history.push(pingDuration)
 
       this.pingHistory.set(storageAccountName, history)
@@ -184,7 +185,7 @@ export class LatencyComponent implements OnInit, OnDestroy {
     this.chartRawData.forEach((item: ChartRawData) => {
       const { storageAccountName, series } = item
       const pingTime = this.latestPingTime.get(storageAccountName) || 0
-      let isRemove = !this.tableData.some((td) => storageAccountName === td.storageAccountName)
+      const isRemove = !this.tableData.some((td) => storageAccountName === td.storageAccountName)
       if (series.length > LatencyComponent.CHART_X_AXIS_LENGTH - 1) {
         series.shift()
       }

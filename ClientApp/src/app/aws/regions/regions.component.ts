@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { Region } from 'src/app/models'
+import { Region } from '../../models'
 import data from '../../../assets/data/regions.json'
 
 @Component({

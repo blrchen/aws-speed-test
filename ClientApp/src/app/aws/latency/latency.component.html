@@ -1,93 +1,77 @@
-<main class="container">
-  <header>
-    <h1 id="title">AWS Latency Test</h1>
-  </header>
-  <section>
-    <p id="description">
-      This tool runs latency test from your IP location to AWS datacenters around the world.
-    </p>
-    <ul>
-      <li>
-        If you find any bugs or have a feature request, please create an issue on
-        <a href="https://github.com/blrchen/aws-speed-test/issues" target="_blank">Github</a>
-      </li>
-      <li>
-        For Azure region latency test, please checkout
-        <a href="https://www.azurespeed.com" target="_blank">Azure Speed Test</a>
-      </li>
-    </ul>
-  </section>
-  <section>
-    <app-region-group></app-region-group>
-  </section>
-  <section class="mt-2">
-    <h2 id="closest-datacenters" class="text-primary">Closest Datacenters</h2>
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col">Region</th>
-            <th scope="col">Display Name</th>
-            <th scope="col">Average Latency (ms)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of tableDataTop3">
-            <td>{{ item.name }}</td>
-            <td>{{ item.displayName }}</td>
-            <td>{{ item.averageLatency }} ms</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-  <section>
-    <div class="latency-chart-container">
-      <ngx-charts-line-chart
-        [results]="chartDataSeries"
-        [scheme]="colorScheme"
-        [animations]="false"
-        [rangeFillOpacity]="1"
-        [xAxis]="true"
-        [yAxis]="true"
-        [roundDomains]="true"
-        [showXAxisLabel]="true"
-        [showYAxisLabel]="true"
-        [curve]="curve"
-        [xAxisTicks]="xAxisTicks"
-        [yScaleMin]="0"
-      ></ngx-charts-line-chart>
-    </div>
-  </section>
-  <section>
-    <h2 id="latency-test-result" class="text-primary">Latency Test Result</h2>
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col">Geography</th>
-            <th scope="col">Region</th>
-            <th scope="col">Display Name</th>
-            <th scope="col">Average Latency (ms)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            *ngFor="let item of tableData"
-            [ngStyle]="{
-              'background-color':
-                (item?.averageLatency ?? 0) > 0 && (item?.averageLatency ?? 0) < 100
-                  ? 'lightgreen'
-                  : ''
-            }"
-          >
-            <td>{{ item.geography }}</td>
-            <td>{{ item.name }}</td>
-            <td>{{ item.displayName }}</td>
-            <td>{{ item.averageLatency }} ms</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-</main>
+<h1>AWS Latency Test</h1>
+<p class="lead">
+  This tool runs latency test from your IP location to AWS datacenters around the world.
+</p>
+<ul>
+  <li>
+    If you find any bugs or have a feature request, please create an issue on
+    <a href="https://github.com/blrchen/aws-speed-test/issues" target="_blank">Github</a>
+  </li>
+  <li>
+    For Azure region latency test, please checkout
+    <a href="https://www.azurespeed.com" target="_blank">Azure Speed Test</a>
+  </li>
+</ul>
+<app-region-group></app-region-group>
+<h2 class="mt-4">Closest Datacenters</h2>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Region</th>
+        <th scope="col">Display Name</th>
+        <th scope="col">Average Latency (ms)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of tableDataTop3">
+        <td>{{ item.name }}</td>
+        <td>{{ item.displayName }}</td>
+        <td>{{ item.averageLatency }} ms</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="latency-chart-container">
+  <ngx-charts-line-chart
+    [results]="chartDataSeries"
+    [scheme]="colorScheme"
+    [animations]="false"
+    [rangeFillOpacity]="1"
+    [xAxis]="true"
+    [yAxis]="true"
+    [roundDomains]="true"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+    [curve]="curve"
+    [xAxisTicks]="xAxisTicks"
+    [yScaleMin]="0"
+  ></ngx-charts-line-chart>
+</div>
+<h2 class="mt-4">Latency Test Result</h2>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Geography</th>
+        <th scope="col">Region</th>
+        <th scope="col">Display Name</th>
+        <th scope="col">Average Latency (ms)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let item of tableData"
+        [ngStyle]="{
+          'background-color':
+            (item?.averageLatency ?? 0) > 0 && (item?.averageLatency ?? 0) < 100 ? 'lightgreen' : ''
+        }"
+      >
+        <td>{{ item.geography }}</td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.displayName }}</td>
+        <td>{{ item.averageLatency }} ms</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
     private regionService: RegionService
   ) {
     const regions = localStorage.getItem(DefaultRegionsKey)
-    this.regionService.updateRegions(regions ? JSON.parse(regions) : [])
+    this.regionService.updateSelectedRegions(regions ? JSON.parse(regions) : [])
   }
 
   ngOnInit() {
