@@ -1,7 +1,7 @@
 [
   {
     "displayName": "Africa (Cape Town)",
-    "geography": "Africa",
+    "geographyGroup": "Africa",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -13,7 +13,7 @@
   },
   {
     "displayName": "Asia Pacific (Hong Kong)",
-    "geography": "Asia Pacific",
+    "geographyGroup": "Asia Pacific",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -25,7 +25,7 @@
   },
   {
     "displayName": "Asia Pacific (Tokyo)",
-    "geography": "Asia Pacific",
+    "geographyGroup": "Asia Pacific",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -37,7 +37,7 @@
   },
   {
     "displayName": "Asia Pacific (Seoul)",
-    "geography": "Asia Pacific",
+    "geographyGroup": "Asia Pacific",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -49,7 +49,7 @@
   },
   {
     "displayName": "Asia Pacific (Osaka)",
-    "geography": "Asia Pacific",
+    "geographyGroup": "Asia Pacific",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -61,7 +61,7 @@
   },
   {
     "displayName": "Asia Pacific (Mumbai)",
-    "geography": "Asia Pacific",
+    "geographyGroup": "Asia Pacific",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -73,7 +73,7 @@
   },
   {
     "displayName": "Asia Pacific (Hyderabad)",
-    "geography": "Asia Pacific",
+    "geographyGroup": "Asia Pacific",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -85,7 +85,7 @@
   },
   {
     "displayName": "Asia Pacific (Singapore)",
-    "geography": "Asia Pacific",
+    "geographyGroup": "Asia Pacific",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -97,7 +97,7 @@
   },
   {
     "displayName": "Asia Pacific (Sydney)",
-    "geography": "Asia Pacific",
+    "geographyGroup": "Asia Pacific",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -109,7 +109,7 @@
   },
   {
     "displayName": "Asia Pacific (Jakarta)",
-    "geography": "Asia Pacific",
+    "geographyGroup": "Asia Pacific",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -121,7 +121,7 @@
   },
   {
     "displayName": "Asia Pacific (Melbourne)",
-    "geography": "Asia Pacific",
+    "geographyGroup": "Asia Pacific",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -133,7 +133,7 @@
   },
   {
     "displayName": "Asia Pacific (Malaysia)",
-    "geography": "Asia Pacific",
+    "geographyGroup": "Asia Pacific",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -144,8 +144,20 @@
     "restricted": false
   },
   {
+    "displayName": "Asia Pacific (Thailand)",
+    "geographyGroup": "Asia Pacific",
+    "latitude": null,
+    "longitude": null,
+    "pairedRegion": null,
+    "physicalLocation": "Thailand",
+    "regionalDisplayName": null,
+    "name": "ap-southeast-7",
+    "availabilityZoneCount": 4,
+    "restricted": false
+  },
+  {
     "displayName": "Canada (Central)",
-    "geography": "Canada",
+    "geographyGroup": "Canada",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -157,7 +169,7 @@
   },
   {
     "displayName": "Canada West (Calgary)",
-    "geography": "Canada West",
+    "geographyGroup": "Canada West",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -169,7 +181,7 @@
   },
   {
     "displayName": "Europe (Frankfurt)",
-    "geography": "Europe",
+    "geographyGroup": "Europe",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -181,7 +193,7 @@
   },
   {
     "displayName": "Europe (Zurich)",
-    "geography": "Europe",
+    "geographyGroup": "Europe",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -193,7 +205,7 @@
   },
   {
     "displayName": "Europe (Stockholm)",
-    "geography": "Europe",
+    "geographyGroup": "Europe",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -205,7 +217,7 @@
   },
   {
     "displayName": "Europe (Milan)",
-    "geography": "Europe",
+    "geographyGroup": "Europe",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -217,7 +229,7 @@
   },
   {
     "displayName": "Europe (Spain)",
-    "geography": "Europe",
+    "geographyGroup": "Europe",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -229,7 +241,7 @@
   },
   {
     "displayName": "Europe (Ireland)",
-    "geography": "Europe",
+    "geographyGroup": "Europe",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -241,7 +253,7 @@
   },
   {
     "displayName": "Europe (London)",
-    "geography": "Europe",
+    "geographyGroup": "Europe",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -253,7 +265,7 @@
   },
   {
     "displayName": "Europe (Paris)",
-    "geography": "Europe",
+    "geographyGroup": "Europe",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -265,7 +277,7 @@
   },
   {
     "displayName": "Israel (Tel Aviv)",
-    "geography": "Israel",
+    "geographyGroup": "Israel",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -277,7 +289,7 @@
   },
   {
     "displayName": "Middle East (UAE)",
-    "geography": "Middle East",
+    "geographyGroup": "Middle East",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -289,7 +301,7 @@
   },
   {
     "displayName": "Middle East (Bahrain)",
-    "geography": "Middle East",
+    "geographyGroup": "Middle East",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -300,8 +312,20 @@
     "restricted": false
   },
   {
+    "displayName": "Mexico (Central)",
+    "geographyGroup": "Mexico",
+    "latitude": null,
+    "longitude": null,
+    "pairedRegion": null,
+    "physicalLocation": "Central",
+    "regionalDisplayName": null,
+    "name": "mx-central-1",
+    "availabilityZoneCount": 4,
+    "restricted": false
+  },
+  {
     "displayName": "South America (Sao Paulo)",
-    "geography": "South America",
+    "geographyGroup": "South America",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -313,7 +337,7 @@
   },
   {
     "displayName": "US East (N. Virginia)",
-    "geography": "US East",
+    "geographyGroup": "US East",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -325,7 +349,7 @@
   },
   {
     "displayName": "US East (Ohio)",
-    "geography": "US East",
+    "geographyGroup": "US East",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -337,7 +361,7 @@
   },
   {
     "displayName": "US West (N. California)",
-    "geography": "US West",
+    "geographyGroup": "US West",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,
@@ -349,7 +373,7 @@
   },
   {
     "displayName": "US West (Oregon)",
-    "geography": "US West",
+    "geographyGroup": "US West",
     "latitude": null,
     "longitude": null,
     "pairedRegion": null,

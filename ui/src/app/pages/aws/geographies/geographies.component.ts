@@ -29,7 +29,6 @@ export class GeographiesComponent implements OnInit {
     this.seoService.setMetaDescription(
       'Explore AWS geographies, each containing multiple regions, to maintain data residency and compliance.'
     )
-    this.seoService.setMetaKeywords('AWS, geographies, regions, data residency, compliance')
     this.seoService.setCanonicalUrl('https://awsspeedtest.com/geographies')
   }
 }

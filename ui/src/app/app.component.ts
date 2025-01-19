@@ -1,23 +1,15 @@
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core'
-import { isPlatformBrowser } from '@angular/common'
-import { RegionService } from './services'
-import { DefaultRegionsKey } from './models'
+import { Component } from '@angular/core'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
-  constructor(
-    private regionService: RegionService,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+export class AppComponent {
+  constructor(private router: Router) {}
 
-  ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      const regions = localStorage.getItem(DefaultRegionsKey)
-      this.regionService.updateSelectedRegions(regions ? JSON.parse(regions) : [])
-    }
+  isCurrentPath(path: string): boolean {
+    return this.router.url === path
   }
 }

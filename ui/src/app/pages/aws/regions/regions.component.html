@@ -1,43 +1,44 @@
-<h1 class="h2">AWS Regions</h1>
-
-<p>
-  A region is a set of data centers deployed within a latency-defined perimeter and connected
-  through a dedicated regional low-latency network.
-  <a href="https://aws.amazon.com/about-aws/global-infrastructure/regions_az/" target="_blank">
-    Learn more
-  </a>
-</p>
-
-<h2 class="h4">AWS Regions</h2>
-<div class="table-responsive">
-  <table class="table table-bordered table-striped table-hover">
-    <thead>
-      <tr>
-        <th scope="col">Geography</th>
-        <th scope="col">Region</th>
-        <th scope="col">Display Name</th>
-        <th scope="col">Availability Zone #</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let r of tableData">
-        <td>{{ r.geography }}</td>
-        <td>{{ r.name }}</td>
-        <td>{{ r.displayName }}</td>
-        <td>{{ r.availabilityZoneCount === 0 ? 'Not supported' : r.availabilityZoneCount }}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<h2 class="h4">Resources</h2>
-<ul>
-  <li>
-    <a href="https://github.com/blrchen/aws-catalog" target="_blank">AWS Catalog</a>
-  </li>
-  <li>
+<div class="container-fluid py-3">
+  <h1 class="h2 fw-bold">AWS Regions</h1>
+  <p>
+    A region is a set of data centers deployed within a latency-defined perimeter and connected
+    through a dedicated regional low-latency network.
     <a href="https://aws.amazon.com/about-aws/global-infrastructure/regions_az/" target="_blank">
-      AWS Regions and Availability Zones
+      Learn more
     </a>
-  </li>
-</ul>
+  </p>
+
+  <h2 class="h4 fw-bold">AWS Regions</h2>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Geography</th>
+          <th scope="col">Region</th>
+          <th scope="col">Display Name</th>
+          <th scope="col">Availability Zone #</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of tableData">
+          <td>{{ r.geographyGroup }}</td>
+          <td>{{ r.name }}</td>
+          <td>{{ r.displayName }}</td>
+          <td>{{ r.availabilityZoneCount === 0 ? 'Not supported' : r.availabilityZoneCount }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="h4 fw-bold">Resources</h2>
+  <ul>
+    <li>
+      <a href="https://github.com/blrchen/aws-catalog" target="_blank">AWS Catalog</a>
+    </li>
+    <li>
+      <a href="https://aws.amazon.com/about-aws/global-infrastructure/regions_az/" target="_blank">
+        AWS Regions and Availability Zones
+      </a>
+    </li>
+  </ul>
+</div>

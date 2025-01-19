@@ -1,12 +1,12 @@
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core'
 import { isPlatformBrowser } from '@angular/common'
-import { DefaultRegionsKey, RegionModel } from '../../../models'
+import { RegionModel } from '../../../models'
 import { RegionService } from '../../../services'
 
 interface RegionGroupModel {
-  geography: string
+  geographyGroup: string
   regions: RegionModel[]
-  checked?: boolean
+  checked: boolean
 }
 
 @Component({
@@ -15,102 +15,78 @@ interface RegionGroupModel {
 })
 export class RegionGroupComponent implements OnInit {
   regionGroups: RegionGroupModel[] = []
-  totalCheckedRegions = 0
+  selectedRegionCount = 0
+  isInitialized = false
 
   constructor(
     private regionService: RegionService,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {
-    const distinctGeographies = this.regionService
-      .getAllRegions()
-      .reduce((geographies: string[], region: RegionModel) => {
-        if (!geographies.includes(region.geography)) {
-          geographies.push(region.geography)
-        }
-        return geographies
-      }, [])
-
-    this.regionGroups = distinctGeographies
-      .reduce((arr: RegionGroupModel[], geography: string) => {
-        const regions = this.regionService
-          .getAllRegions()
-          .filter((_) => _.geography === geography)
-          .map((_) => ({ ..._, checked: false }))
-
-        arr.push({ geography, checked: false, regions })
-        return arr
-      }, [])
-      .sort((a, b) => {
-        return b.regions.length - a.regions.length
-      })
-  }
+    @Inject(PLATFORM_ID) private platformId: object
+  ) {}
 
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.initializeRegions()
+    try {
+      this.initializeRegionGroups()
+      this.isInitialized = true
+      this.selectedRegionCount = 0
+      this.regionService.updateSelectedRegions([])
+    } catch (error) {
+      console.error('Failed to initialize regions:', error)
     }
   }
 
-  onChange(region: RegionModel | null, group: RegionGroupModel) {
-    if (region) {
-      this.updateRegionCheckStatus(region, group)
-    } else {
-      this.updateGroupCheckStatus(group)
+  private initializeRegionGroups(): void {
+    const allRegions = this.regionService.getAllRegions()
+
+    if (!allRegions?.length) {
+      console.warn('No regions available during initialization')
+      return
     }
 
-    const checkedRegions = this.getCheckedRegions()
-    this.regionService.updateSelectedRegions(checkedRegions)
+    // Create a safe copy of regions
+    const safeRegions = allRegions.map((region) => ({
+      ...region,
+      checked: false
+    }))
+
+    // Get distinct geography groups safely
+    const distinctGeographyGroups = Array.from(
+      new Set(safeRegions.map((r) => r.geographyGroup || '').filter(Boolean))
+    )
+
+    this.regionGroups = distinctGeographyGroups
+      .map((geographyGroup) => ({
+        geographyGroup,
+        checked: false,
+        regions: safeRegions.filter((r) => r.geographyGroup === geographyGroup)
+      }))
+      .filter((group) => group.regions.length > 0)
+      .sort((a, b) => b.regions.length - a.regions.length)
   }
 
-  private initializeRegions() {
-    const storedRegions = localStorage.getItem(DefaultRegionsKey)
-    const defaultRegions: RegionModel[] = storedRegions ? JSON.parse(storedRegions) : []
-    if (Array.isArray(defaultRegions)) {
-      this.regionGroups.forEach((group) => {
-        let isGroupChecked = true
+  onChange(region: RegionModel | null, group: RegionGroupModel): void {
+    if (!group) return
 
-        group.regions.forEach((region) => {
-          const isDefault = defaultRegions.some(
-            (_) => _.storageAccountName === region.storageAccountName
-          )
-          if (isDefault) {
-            region.checked = true
-            this.totalCheckedRegions++
-          }
-          if (!region.checked) {
-            isGroupChecked = false
-          }
-        })
-        group.checked = isGroupChecked
-      })
+    try {
+      if (region) {
+        // Handle individual region selection
+        region.checked = !region.checked
+        group.checked = group.regions.every((r) => r.checked)
+      } else {
+        // Handle group selection
+        const newState = !group.checked
+        group.checked = newState
+        group.regions.forEach((r) => (r.checked = newState))
+      }
+
+      const checkedRegions = this.getCheckedRegions()
+      this.selectedRegionCount = checkedRegions.length
+      this.regionService.updateSelectedRegions(checkedRegions)
+    } catch (error) {
+      console.error('Error in onChange:', error)
     }
   }
 
-  private updateRegionCheckStatus(region: RegionModel, group: RegionGroupModel) {
-    const { checked } = region
-    if (checked) {
-      group.checked = group.regions.every((_) => _.checked)
-    } else {
-      group.checked = false
-    }
-  }
-
-  private updateGroupCheckStatus(group: RegionGroupModel) {
-    const { checked, regions } = group
-    regions.forEach((_) => {
-      _.checked = checked
-    })
-  }
-
-  private getCheckedRegions() {
-    return this.regionGroups.reduce((checkedRegions: RegionModel[], group: RegionGroupModel) => {
-      group.regions.forEach((region) => {
-        if (region.checked) {
-          checkedRegions.push(region)
-        }
-      })
-      this.totalCheckedRegions = checkedRegions.length
-      return checkedRegions
-    }, [])
+  private getCheckedRegions(): RegionModel[] {
+    return this.regionGroups.flatMap((group) => group.regions).filter((region) => region.checked)
   }
 }

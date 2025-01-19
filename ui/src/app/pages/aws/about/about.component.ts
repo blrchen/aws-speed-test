@@ -15,7 +15,6 @@ export class AboutComponent {
     this.seoService.setMetaDescription(
       'Explore AWS Speed Test tool for checking your network latency across multiple global AWS regions'
     )
-    this.seoService.setMetaKeywords('AWS, speed test, network latency, Blair Chen, open-source')
     this.seoService.setCanonicalUrl('https://awsspeedtest.com/about')
   }
 }

@@ -1,32 +1,48 @@
-<h1 class="h2">AWS Geographies</h1>
-<p>
-  A geography is a discrete market, typically containing two or more regions, that preserves data
-  residency and compliance boundaries
-</p>
-<div class="table-responsive">
-  <table class="table table-bordered table-striped table-hover">
-    <thead>
-      <tr>
-        <th scope="col">Geography</th>
-        <th scope="col">Regions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let g of tableData">
-        <td>{{ g.name }}</td>
-        <td>
-          <ng-container *ngFor="let r of g.regions">
-            <span>[{{ r.name }}] {{ r.displayName }}</span>
-            <br />
-          </ng-container>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<div class="container-fluid py-3">
+  <h1 class="h2 fw-bold mb-3">AWS Geographic Infrastructure</h1>
+  <p>
+    A geography is a discrete market, typically containing two or more regions, that preserves data
+    residency and compliance boundaries
+  </p>
+
+  <div class="table-responsive">
+    <table class="table table-hover align-middle border-top">
+      <thead class="table-light">
+        <tr>
+          <th scope="col" class="fw-semibold w-25">Geography</th>
+          <th scope="col" class="fw-semibold">Regions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let g of tableData">
+          <td class="fw-bold">{{ g.name }}</td>
+          <td>
+            <div class="d-flex flex-column gap-1">
+              <div *ngFor="let r of g.regions">
+                <span class="badge bg-secondary me-2">{{ r.name }}</span>
+                <span class="text-body">{{ r.displayName }}</span>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-4">
+    <h2 class="h5 fw-bold mb-3">Additional Resources</h2>
+    <ul class="list-unstyled">
+      <li>
+        <a
+          href="https://github.com/blrchen/aws-catalog"
+          target="_blank"
+          class="text-decoration-none d-inline-flex align-items-center"
+        >
+          <i class="bi bi-github me-2"></i>
+          AWS Catalog
+          <i class="bi bi-box-arrow-up-right ms-2 small"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
 </div>
-<h2 class="h4">Additional Resources</h2>
-<ul>
-  <li>
-    <a href="https://github.com/blrchen/aws-catalog" target="_blank">AWS Catalog</a>
-  </li>
-</ul>

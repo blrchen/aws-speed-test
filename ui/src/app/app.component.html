@@ -1,48 +1,21 @@
-<style>
-  .bd-placeholder-img {
-    font-size: 1.125rem;
-    text-anchor: middle;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
-  }
-  @media (min-width: 768px) {
-    .bd-placeholder-img-lg {
-      font-size: 3.5rem;
-    }
-  }
-  .nav-scroller {
-    position: relative;
-    z-index: 2;
-    height: 2.75rem;
-    overflow-y: hidden;
-  }
-  .nav-scroller .nav {
-    display: flex;
-    flex-wrap: nowrap;
-    padding-bottom: 1rem;
-    margin-top: -1px;
-    overflow-x: auto;
-    text-align: center;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-  }
-</style>
-<header class="navbar sticky-top bg-dark flex-md-nowrap p-0 shadow" data-bs-theme="dark">
-  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#">AWS Speed Test</a>
-  <ul class="navbar-nav flex-row ms-auto">
-    <li class="nav-item">
+<header class="navbar navbar-dark bg-dark fixed-top shadow-sm" data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-semibold" href="/" aria-label="AWS Speed Test">
+      <i class="fas fa-cloud me-2"></i>
+      AWS Speed Test
+    </a>
+    <div class="navbar-nav flex-row">
       <a
-        class="nav-link px-3 text-white"
+        class="px-3 text-white text-decoration-none d-flex align-items-center"
         href="https://github.com/blrchen/aws-speed-test"
         target="_blank"
+        rel="noopener"
+        aria-label="GitHub Repository"
       >
         <i class="fab fa-github"></i>
       </a>
-    </li>
-    <li class="nav-item text-nowrap d-md-none">
       <button
-        class="nav-link px-3 text-white"
+        class="navbar-toggler d-md-none"
         type="button"
         data-bs-toggle="offcanvas"
         data-bs-target="#sidebarMenu"
@@ -52,20 +25,23 @@
       >
         <i class="fas fa-bars"></i>
       </button>
-    </li>
-  </ul>
+    </div>
+  </div>
 </header>
 <div class="container-fluid">
   <div class="row">
-    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+    <aside
+      class="col-md-3 col-lg-2 p-0 bg-light border-end mt-4 mt-md-5 pt-2 pt-md-3"
+      role="navigation"
+    >
       <div
-        class="offcanvas-md offcanvas-end bg-body-tertiary"
+        class="offcanvas-md offcanvas-end bg-light"
         tabindex="-1"
         id="sidebarMenu"
         aria-labelledby="sidebarMenuLabel"
       >
-        <div class="offcanvas-header">
-          <div class="offcanvas-title" id="sidebarMenuLabel">AWS Speed Test</div>
+        <div class="offcanvas-header border-bottom">
+          <div class="offcanvas-title fw-semibold" id="sidebarMenuLabel">AWS Speed Test</div>
           <button
             type="button"
             class="btn-close"
@@ -74,50 +50,66 @@
             aria-label="Close"
           ></button>
         </div>
-        <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
-          <ul class="nav flex-column">
+        <nav class="offcanvas-body d-md-flex flex-column p-0">
+          <ul class="nav flex-column py-2">
             <li class="nav-item">
               <a
-                class="nav-link d-flex align-items-center gap-2 active"
-                aria-current="page"
+                class="nav-link d-flex align-items-center gap-2 px-3 py-2"
+                [class.active]="isCurrentPath('/chatgpt/chatgpt-assistant')"
                 href="/chatgpt/chatgpt-assistant"
               >
                 <i class="fas fa-robot"></i>
                 ChatGPT Assistant
               </a>
             </li>
-            <hr class="my-3" />
+            <li><hr class="dropdown-divider mx-3" /></li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="/latency">
+              <a
+                class="nav-link d-flex align-items-center gap-2 px-3 py-2"
+                [class.active]="isCurrentPath('/latency')"
+                href="/latency"
+              >
                 <i class="fas fa-tachometer-alt"></i>
                 AWS Latency Test
               </a>
             </li>
-            <hr class="my-3" />
+            <li><hr class="dropdown-divider mx-3" /></li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="/regions">
+              <a
+                class="nav-link d-flex align-items-center gap-2 px-3 py-2"
+                [class.active]="isCurrentPath('/regions')"
+                href="/regions"
+              >
                 <i class="fas fa-globe"></i>
                 AWS Regions
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="/geographies">
+              <a
+                class="nav-link d-flex align-items-center gap-2 px-3 py-2"
+                [class.active]="isCurrentPath('/geographies')"
+                href="/geographies"
+              >
                 <i class="fas fa-globe-americas"></i>
                 AWS Geographies
               </a>
             </li>
-            <hr class="my-3" />
+            <li><hr class="dropdown-divider mx-3" /></li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="/about">
+              <a
+                class="nav-link d-flex align-items-center gap-2 px-3 py-2"
+                [class.active]="isCurrentPath('/about')"
+                href="/about"
+              >
                 <i class="fas fa-info-circle"></i>
                 About
               </a>
             </li>
           </ul>
-        </div>
+        </nav>
       </div>
-    </div>
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    </aside>
+    <main class="col-md-9 col-lg-10 ms-sm-auto px-md-4 mt-4 mt-md-5 pt-2 pt-md-3" role="main">
       <router-outlet></router-outlet>
     </main>
   </div>

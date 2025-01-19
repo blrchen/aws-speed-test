@@ -62,9 +62,6 @@ export class ChatGPTAssistantComponent {
     this.seoService.setMetaDescription(
       'Discover how ChatGPT Assistant can enhance your writing and coding projects with innovative AI technology.'
     )
-    this.seoService.setMetaKeywords(
-      'ChatGPT, Writing Assistant, Code Assistant, AI Tool, Text Translation, Code Generation'
-    )
     this.seoService.setCanonicalUrl('https://awsspeedtest.com/chatgpt/chatgpt-assistant')
   }
 }
