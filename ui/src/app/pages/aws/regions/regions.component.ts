@@ -16,7 +16,7 @@ export class RegionsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.tableData = data.sort((a, b) => a.geography.localeCompare(b.geography))
+    this.tableData = data.sort((a, b) => a.geographyGroup.localeCompare(b.geographyGroup))
   }
 
   private initializeSeoProperties(): void {
@@ -24,7 +24,6 @@ export class RegionsComponent implements OnInit {
     this.seoService.setMetaDescription(
       'Explore AWS regions and their available data centers. Get insights into geography, region names, and availability zones.'
     )
-    this.seoService.setMetaKeywords('AWS Regions, Data Centers, Availability Zones')
     this.seoService.setCanonicalUrl('https://awsspeedtest.com/regions')
   }
 }
