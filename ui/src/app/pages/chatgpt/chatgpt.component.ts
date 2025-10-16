@@ -1,9 +1,11 @@
-import { Component } from '@angular/core'
+import { ChangeDetectionStrategy, Component } from '@angular/core'
+import { RouterModule } from '@angular/router'
 
 @Component({
   selector: 'app-chatgpt',
-  templateUrl: './chatgpt.component.html'
+  standalone: true,
+  imports: [RouterModule],
+  template: '<router-outlet />',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChatGPTComponent {
-  title = ''
-}
+export class ChatGPTComponent {}

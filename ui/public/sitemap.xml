@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+           http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<url>
+  <loc>https://awsspeedtest.com/latency</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/availability-zones</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/geographies</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/about</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/privacy</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/af-south-1</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/ap-east-1</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/ap-east-2</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/ap-northeast-1</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/ap-northeast-2</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/ap-northeast-3</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/ap-south-1</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/ap-south-2</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/ap-southeast-1</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/ap-southeast-2</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/ap-southeast-3</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/ap-southeast-4</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/ap-southeast-5</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/ap-southeast-6</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/ap-southeast-7</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/ca-central-1</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/ca-west-1</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/eu-central-1</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/eu-central-2</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/eu-north-1</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/eu-south-1</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/eu-south-2</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/eu-west-1</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/eu-west-2</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/eu-west-3</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/il-central-1</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/me-central-1</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/me-south-1</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/mx-central-1</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/sa-east-1</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/us-east-1</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/us-east-2</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/us-west-1</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://awsspeedtest.com/regions/us-west-2</loc>
+  <lastmod>2025-10-10T16:43:44.559Z</lastmod>
+  <priority>0.60</priority>
+</url>
+
+</urlset>

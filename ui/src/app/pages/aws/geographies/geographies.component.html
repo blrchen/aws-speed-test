@@ -1,48 +1,92 @@
-<div class="container-fluid py-3">
-  <h1 class="h2 fw-bold mb-3">AWS Geographic Infrastructure</h1>
-  <p>
-    A geography is a discrete market, typically containing two or more regions, that preserves data
-    residency and compliance boundaries
-  </p>
+<div class="page-container py-3">
+  <header class="page-intro">
+    <h1 class="page-title page-intro__title">AWS Geographic Infrastructure</h1>
+    <p class="page-intro__description">
+      AWS Geographies represent strategic market boundaries that ensure data sovereignty and
+      regulatory compliance while enabling customers to deploy resilient, low-latency applications.
+    </p>
+  </header>
 
-  <div class="table-responsive">
-    <table class="table table-hover align-middle border-top">
-      <thead class="table-light">
-        <tr>
-          <th scope="col" class="fw-semibold w-25">Geography</th>
-          <th scope="col" class="fw-semibold">Regions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let g of tableData">
-          <td class="fw-bold">{{ g.name }}</td>
-          <td>
-            <div class="d-flex flex-column gap-1">
-              <div *ngFor="let r of g.regions">
-                <span class="badge bg-secondary me-2">{{ r.name }}</span>
-                <span class="text-body">{{ r.displayName }}</span>
-              </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <div class="space-y-8">
+    <section class="space-y-4">
+      <div>
+        <h2 class="text-xl font-semibold text-slate-900">Global Geographic Distribution</h2>
+        <p class="mt-2 text-base leading-relaxed text-slate-600">
+          AWS organizes its cloud infrastructure into distinct geographies to help customers meet
+          their data residency, compliance, and latency requirements. Each geography serves a
+          specific market area and contains multiple regions for redundancy.
+        </p>
+      </div>
+      <div class="shadow-card overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+        <table class="min-w-full divide-y divide-slate-200 text-left text-sm text-slate-700">
+          <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <tr>
+              <th class="px-4 py-3">Geography</th>
+              <th class="px-4 py-3">Regions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            @for (g of tableData(); track g) {
+              <tr class="align-top transition hover:bg-slate-50">
+                <td class="w-1/4 px-4 py-4 font-semibold text-slate-900">{{ g.name }}</td>
+                <td class="px-4 py-4">
+                  <div class="flex flex-col gap-3">
+                    @for (r of g.regions; track r) {
+                      <div class="flex flex-wrap items-center gap-2 text-sm text-slate-600">
+                        <span
+                          class="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700"
+                        >
+                          {{ r.regionId }}
+                        </span>
+                        <span>{{ r.longName }}</span>
+                        @if (r.launchYear) {
+                          <span
+                            class="ml-1 inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700"
+                          >
+                            Launched {{ r.launchYear }}
+                          </span>
+                        }
+                      </div>
+                    }
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
 
-  <div class="mt-4">
-    <h2 class="h5 fw-bold mb-3">Additional Resources</h2>
-    <ul class="list-unstyled">
-      <li>
+    <section class="space-y-4 pb-6">
+      <h2 class="text-xl font-semibold text-slate-900">Additional Resources</h2>
+      <div class="grid gap-4 md:grid-cols-2">
         <a
-          href="https://github.com/blrchen/aws-catalog"
+          href="https://aws.amazon.com/about-aws/global-infrastructure/"
+          class="shadow-card group flex h-full flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-blue-400 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
           target="_blank"
-          class="text-decoration-none d-inline-flex align-items-center"
         >
-          <i class="bi bi-github me-2"></i>
-          AWS Catalog
-          <i class="bi bi-box-arrow-up-right ms-2 small"></i>
+          <div class="flex items-center gap-3">
+            <app-hero-icon name="heroGlobeAlt" class="h-7 w-7 text-blue-500" aria-hidden="true" />
+            <div>
+              <h3 class="text-base font-semibold text-slate-900">AWS Global Infrastructure</h3>
+              <p class="text-sm text-slate-500">Explore AWS's worldwide presence</p>
+            </div>
+          </div>
         </a>
-      </li>
-    </ul>
+        <a
+          href="https://aws.amazon.com/compliance/programs/"
+          class="shadow-card group flex h-full flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-blue-400 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          target="_blank"
+        >
+          <div class="flex items-center gap-3">
+            <app-hero-icon name="heroShieldCheck" class="h-7 w-7 text-blue-500" aria-hidden="true" />
+            <div>
+              <h3 class="text-base font-semibold text-slate-900">AWS Compliance Programs</h3>
+              <p class="text-sm text-slate-500">Understand regional compliance coverage</p>
+            </div>
+          </div>
+        </a>
+      </div>
+    </section>
   </div>
 </div>

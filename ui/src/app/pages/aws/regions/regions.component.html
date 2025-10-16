@@ -1,44 +1,253 @@
-<div class="container-fluid py-3">
-  <h1 class="h2 fw-bold">AWS Regions</h1>
-  <p>
-    A region is a set of data centers deployed within a latency-defined perimeter and connected
-    through a dedicated regional low-latency network.
-    <a href="https://aws.amazon.com/about-aws/global-infrastructure/regions_az/" target="_blank">
-      Learn more
-    </a>
-  </p>
+<div class="page-container py-3">
+  <header class="page-intro">
+    <h1 class="page-title page-intro__title">AWS Regions</h1>
+    <p class="page-intro__description">
+      AWS Regions are independent service deployments across strategic global locations, each
+      offering complete infrastructure and services while maintaining data residency and ensuring
+      consistent low-latency access.
+    </p>
+  </header>
 
-  <h2 class="h4 fw-bold">AWS Regions</h2>
-  <div class="table-responsive">
-    <table class="table table-bordered table-striped table-hover">
-      <thead>
-        <tr>
-          <th scope="col">Geography</th>
-          <th scope="col">Region</th>
-          <th scope="col">Display Name</th>
-          <th scope="col">Availability Zone #</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let r of tableData">
-          <td>{{ r.geographyGroup }}</td>
-          <td>{{ r.name }}</td>
-          <td>{{ r.displayName }}</td>
-          <td>{{ r.availabilityZoneCount === 0 ? 'Not supported' : r.availabilityZoneCount }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="space-y-8">
+    <section>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="shadow-card rounded-2xl border border-slate-200 bg-white p-4">
+          <div class="flex items-center gap-3">
+            <div class="rounded-2xl bg-blue-100 p-3">
+              <app-hero-icon name="heroMapPin" class="h-6 w-6 text-blue-600" aria-hidden="true" />
+            </div>
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                Total Regions
+              </p>
+              <p class="text-2xl font-bold text-slate-900">{{ totalRegions() }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="shadow-card rounded-2xl border border-slate-200 bg-white p-4">
+          <div class="flex items-center gap-3">
+            <div class="rounded-2xl bg-emerald-100 p-3">
+              <app-hero-icon
+                name="heroServerStack"
+                class="h-6 w-6 text-emerald-600"
+                aria-hidden="true"
+              />
+            </div>
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                Availability Zones
+              </p>
+              <p class="text-2xl font-bold text-slate-900">{{ totalAZs() }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="shadow-card rounded-2xl border border-slate-200 bg-white p-4">
+          <div class="flex items-center gap-3">
+            <div class="rounded-2xl bg-cyan-100 p-3">
+              <app-hero-icon
+                name="heroGlobeAmericas"
+                class="h-6 w-6 text-cyan-600"
+                aria-hidden="true"
+              />
+            </div>
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Geographies</p>
+              <p class="text-2xl font-bold text-slate-900">{{ uniqueGeographies() }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="space-y-4">
+      <div>
+        <h2 class="text-xl font-semibold text-slate-900">Global Region Distribution</h2>
+        <p class="mt-2 text-base leading-relaxed text-slate-600">
+          Overview of AWS regions grouped by geography, including availability zones and launch dates.
+        </p>
+      </div>
+
+      <form [formGroup]="filtersForm" class="grid gap-4 md:grid-cols-2">
+        <div class="relative">
+          <span
+            class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-slate-400"
+          >
+            <app-hero-icon name="heroMagnifyingGlass" class="h-4 w-4" aria-hidden="true" />
+          </span>
+          <input
+            type="text"
+            class="block w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-11 pr-3 text-sm text-slate-700 shadow-sm transition placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            placeholder="Search regions..."
+            formControlName="search"
+          />
+        </div>
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+          <label
+            for="geographyFilter"
+            class="flex items-center gap-2 text-sm font-medium text-slate-600"
+          >
+            <app-hero-icon name="heroGlobeAlt" class="h-4 w-4 text-blue-500" aria-hidden="true" />
+            Geography:
+          </label>
+          <select
+            id="geographyFilter"
+            class="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-3 pr-8 text-sm text-slate-700 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 sm:min-w-0 sm:flex-1"
+            formControlName="regionGroup"
+          >
+            <option value="all">All Regions</option>
+            @for (regionGroup of availableGeographies(); track regionGroup) {
+              <option [value]="regionGroup">{{ regionGroup }}</option>
+            }
+          </select>
+        </div>
+      </form>
+
+      <div class="shadow-card overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+        <table class="min-w-full divide-y divide-slate-200 text-left text-sm text-slate-700">
+          <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <tr>
+              <th class="px-4 py-3">Region</th>
+              <th class="px-4 py-3">Geography</th>
+              <th class="px-4 py-3">Location</th>
+              <th class="px-4 py-3 text-center">AZ Count</th>
+              <th class="px-4 py-3 text-center">Launch Date</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            @for (r of filteredData(); track trackByRegion($index, r)) {
+              <tr class="align-top transition hover:bg-slate-50">
+                <td class="px-4 py-3">
+                  <div class="flex items-baseline justify-between gap-3">
+                    <div class="min-w-0 flex-1">
+                      <strong class="text-slate-900">{{ r.regionId }}</strong>
+                      <span class="block truncate text-sm text-slate-500">{{ r.longName }}</span>
+                    </div>
+                    <button
+                      class="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-blue-600 transition hover:border-blue-300 hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+                      type="button"
+                      [routerLink]="['/regions', r.regionId]"
+                    >
+                      View region
+                      <app-hero-icon
+                        name="heroArrowTopRightOnSquare"
+                        class="h-3.5 w-3.5"
+                        aria-hidden="true"
+                      />
+                    </button>
+                  </div>
+                </td>
+                <td class="px-4 py-3 text-slate-600">{{ r.geography }}</td>
+                <td class="px-4 py-3 text-slate-600">{{ r.datacenterLocation }}</td>
+                <td class="px-4 py-3 text-center">
+                  <span
+                    class="inline-flex h-7 min-w-[2.5rem] items-center justify-center rounded-full px-3 text-xs font-semibold uppercase tracking-wide"
+                    [class.bg-emerald-100]="r.availabilityZoneCount >= 4"
+                    [class.text-emerald-700]="r.availabilityZoneCount >= 4"
+                    [class.bg-blue-100]="r.availabilityZoneCount === 3"
+                    [class.text-blue-700]="r.availabilityZoneCount === 3"
+                    [class.bg-slate-200]="r.availabilityZoneCount < 3 || !r.availabilityZoneCount"
+                    [class.text-slate-600]="r.availabilityZoneCount < 3 || !r.availabilityZoneCount"
+                  >
+                    {{ r.availabilityZoneCount || 'N/A' }}
+                  </span>
+                </td>
+                <td class="px-4 py-3 text-center">
+                  @if (r.launchYear) {
+                    <span
+                      class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700"
+                    >
+                      <app-hero-icon name="heroCalendarDays" class="h-4 w-4" aria-hidden="true" />
+                      {{ r.launchYear }}
+                    </span>
+                  } @else {
+                    <span class="text-sm text-slate-400">-</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      @if (filteredData().length === 0) {
+        <div
+          class="flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-slate-500"
+        >
+          <app-hero-icon
+            name="heroMagnifyingGlass"
+            class="h-8 w-8 text-slate-400"
+            aria-hidden="true"
+          />
+          <p>No regions found matching your search and filter criteria.</p>
+          @if (hasActiveFilters()) {
+            <button
+              type="button"
+              class="inline-flex items-center gap-2 rounded-full border border-blue-500 px-4 py-1.5 text-sm font-medium text-blue-600 transition hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+              (click)="clearFilters()"
+            >
+              <app-hero-icon name="heroXMark" class="h-3 w-3" aria-hidden="true" />
+              Clear Filters
+            </button>
+          }
+        </div>
+      }
+    </section>
+
+    <section class="space-y-4 pb-6">
+      <h2 class="text-xl font-semibold text-slate-900">Additional Resources</h2>
+      <div class="grid gap-4 md:grid-cols-3">
+        <a
+          href="https://aws.amazon.com/about-aws/global-infrastructure/"
+          class="shadow-card group flex h-full flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-blue-400 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          target="_blank"
+        >
+          <div class="flex items-start gap-3">
+            <div class="rounded-xl bg-blue-100 p-3">
+              <app-hero-icon name="heroGlobeAlt" class="h-6 w-6 text-blue-600" aria-hidden="true" />
+            </div>
+            <div>
+              <h3 class="text-base font-semibold text-slate-900">AWS Global Infrastructure</h3>
+              <p class="text-sm text-slate-500">
+                Explore AWS's worldwide presence and infrastructure capabilities.
+              </p>
+            </div>
+          </div>
+        </a>
+        <a
+          href="https://infrastructure.aws/"
+          class="shadow-card group flex h-full flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-blue-400 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          target="_blank"
+        >
+          <div class="flex items-start gap-3">
+            <div class="rounded-xl bg-emerald-100 p-3">
+              <app-hero-icon name="heroMap" class="h-6 w-6 text-emerald-600" aria-hidden="true" />
+            </div>
+            <div>
+              <h3 class="text-base font-semibold text-slate-900">Infrastructure Map</h3>
+              <p class="text-sm text-slate-500">
+                Interactive visual guide to AWS regions and edge locations.
+              </p>
+            </div>
+          </div>
+        </a>
+        <a
+          href="https://aws.amazon.com/about-aws/global-infrastructure/regions_az/"
+          class="shadow-card group flex h-full flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-blue-400 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          target="_blank"
+        >
+          <div class="flex items-start gap-3">
+            <div class="rounded-xl bg-cyan-100 p-3">
+              <app-hero-icon name="heroCpuChip" class="h-6 w-6 text-cyan-600" aria-hidden="true" />
+            </div>
+            <div>
+              <h3 class="text-base font-semibold text-slate-900">Regions &amp; Availability Zones</h3>
+              <p class="text-sm text-slate-500">
+                Detailed information about AWS regions and AZ architecture.
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    </section>
   </div>
-
-  <h2 class="h4 fw-bold">Resources</h2>
-  <ul>
-    <li>
-      <a href="https://github.com/blrchen/aws-catalog" target="_blank">AWS Catalog</a>
-    </li>
-    <li>
-      <a href="https://aws.amazon.com/about-aws/global-infrastructure/regions_az/" target="_blank">
-        AWS Regions and Availability Zones
-      </a>
-    </li>
-  </ul>
 </div>

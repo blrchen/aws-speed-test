@@ -1,13 +1,19 @@
 export interface Region {
+  regionId: string
   displayName: string
-  geographyGroup: string
-  //geography: string
-  physicalLocation: string
-  name: string
+  longName: string
+  geography: string
+  regionGroup: string
+  geographicLocation: string
+  latitude: number | null
+  longitude: number | null
+  datacenterLocation: string
   availabilityZoneCount: number
+  availabilityZones: string[]
+  launchYear: string | null
 }
 
 export interface RegionModel extends Region {
-  checked?: boolean
+  geographicGroup: string
   storageAccountName: string
 }

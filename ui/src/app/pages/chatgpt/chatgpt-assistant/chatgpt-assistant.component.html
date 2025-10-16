@@ -1,35 +1,54 @@
-<div class="container-fluid py-3">
-  <h1 class="h2 fw-bold">ChatGPT Assistant</h1>
+<div class="page-container py-3">
+  <header class="page-intro">
+    <h1 class="page-title page-intro__title">ChatGPT Assistant</h1>
+    <p class="page-intro__description">
+      Welcome to ChatGPT Assistant, your top place for discovering the amazing power of the ChatGPT
+      API. Each assistant lets you try it yourself, so you can see how the ChatGPT API can transform
+      your projects and workflows. Thanks for trying ChatGPT Assistant—we hope you have fun!
+    </p>
+  </header>
 
-  <p id="description">
-    Welcome to ChatGPT Assistant, your top place for discovering the amazing power of the ChatGPT
-    API. Each assistant lets you try it yourself, so you can see how ChatGPT API can change your
-    projects and work. Thanks for trying ChatGPT Assistant, and we hope you have fun!
-  </p>
+  <div class="space-y-8">
+    <section class="space-y-4">
+      <h2 class="text-xl font-semibold text-slate-900">Writing Assistant</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        @for (card of textCards(); track card) {
+          <section
+            class="shadow-card flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5"
+          >
+            <h3 class="text-lg font-semibold text-slate-900">{{ card.title }}</h3>
+            <p class="mt-2 flex-1 text-sm leading-relaxed text-slate-600">{{ card.text }}</p>
+            <a
+              [href]="card.link"
+              class="mt-4 inline-flex w-fit items-center justify-center rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+              role="button"
+            >
+              Try it now
+            </a>
+          </section>
+        }
+      </div>
+    </section>
 
-  <h2 class="h4 fw-bold">Writing Assistant</h2>
-  <div class="row">
-    <div class="col-lg-6 col-md-6 col-sm-12 mb-2" *ngFor="let card of textCards">
-      <section class="card">
-        <div class="card-body">
-          <h3 class="card-title h5">{{ card.title }}</h3>
-          <p class="card-text">{{ card.text }}</p>
-          <a [href]="card.link" class="btn btn-primary" role="button">Try it now</a>
-        </div>
-      </section>
-    </div>
-  </div>
-
-  <h2 class="h4 fw-bold">Code Assistant</h2>
-  <div class="row">
-    <div class="col-lg-6 col-md-6 col-sm-12 mb-2" *ngFor="let card of codeCards">
-      <section class="card">
-        <div class="card-body">
-          <h3 class="card-title h5">{{ card.title }}</h3>
-          <p class="card-text">{{ card.text }}</p>
-          <a [href]="card.link" class="btn btn-primary" role="button">Try it now</a>
-        </div>
-      </section>
-    </div>
+    <section class="space-y-4 pb-6">
+      <h2 class="text-xl font-semibold text-slate-900">Code Assistant</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        @for (card of codeCards(); track card) {
+          <section
+            class="shadow-card flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5"
+          >
+            <h3 class="text-lg font-semibold text-slate-900">{{ card.title }}</h3>
+            <p class="mt-2 flex-1 text-sm leading-relaxed text-slate-600">{{ card.text }}</p>
+            <a
+              [href]="card.link"
+              class="mt-4 inline-flex w-fit items-center justify-center rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+              role="button"
+            >
+              Try it now
+            </a>
+          </section>
+        }
+      </div>
+    </section>
   </div>
 </div>

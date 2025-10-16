@@ -1,4 +1,5 @@
-import { Component } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core'
+import { CommonModule } from '@angular/common'
 import { SeoService } from '../../../services'
 
 interface Card {
@@ -9,10 +10,15 @@ interface Card {
 
 @Component({
   selector: 'app-chatgpt-assistant',
-  templateUrl: './chatgpt-assistant.component.html'
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './chatgpt-assistant.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChatGPTAssistantComponent {
-  textCards: Card[] = [
+export class ChatGPTAssistantComponent implements OnInit {
+  private readonly seoService = inject(SeoService)
+
+  readonly textCards = signal<Card[]>([
     {
       title: 'Translate Text',
       text: 'ChatGPT-powered Text Translator that instantly translates text into 20+ languages.',
@@ -33,9 +39,9 @@ export class ChatGPTAssistantComponent {
       text: "ChatGPT's Email Generator saves time by generating medium to long-sized emails for you.",
       link: 'https://www.azurespeed.com/ChatGPT/GenerateEmail'
     }
-  ]
+  ])
 
-  codeCards: Card[] = [
+  readonly codeCards = signal<Card[]>([
     {
       title: 'Explain Code',
       text: 'ChatGPT Code Explainer is an AI assistant designed to help users understand programming code.',
@@ -51,13 +57,9 @@ export class ChatGPTAssistantComponent {
       text: 'ChatGPT Shell Command generator converts natural language descriptions into shell command that can be executed.',
       link: 'https://www.azurespeed.com/ChatGPT/ConvertToBash'
     }
-  ]
+  ])
 
-  constructor(private seoService: SeoService) {
-    this.initializeSeoProperties()
-  }
-
-  private initializeSeoProperties(): void {
+  ngOnInit(): void {
     this.seoService.setMetaTitle('Explore ChatGPT Assistant for Writing and Coding')
     this.seoService.setMetaDescription(
       'Discover how ChatGPT Assistant can enhance your writing and coding projects with innovative AI technology.'
