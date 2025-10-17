@@ -1,0 +1,93 @@
+@if (region(); as r) {
+  <div class="page-container py-3">
+    <div class="mx-auto w-full max-w-4xl space-y-6">
+      <nav class="app-breadcrumb" aria-label="Breadcrumb">
+        <ol class="app-breadcrumb__list">
+          <li class="app-breadcrumb__item">
+            <a routerLink="/">Home</a>
+          </li>
+          <li class="app-breadcrumb__item">
+            <a routerLink="/regions">Regions</a>
+          </li>
+          <li class="app-breadcrumb__item app-breadcrumb__item--active" aria-current="page">
+            {{ r.longName }}
+          </li>
+        </ol>
+      </nav>
+
+      <header class="page-intro">
+        <h1 class="page-title page-intro__title">{{ r.longName }}</h1>
+        @if (regionSummary(); as summary) {
+          <p class="page-intro__description">{{ summary }}</p>
+        }
+      </header>
+
+      <section class="space-y-4">
+        <h2 class="content-heading">Infrastructure Snapshot</h2>
+        <div class="shadow-card overflow-hidden rounded-2xl border border-slate-200 bg-white">
+          <table class="min-w-full divide-y divide-slate-200 text-sm">
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              @if (r.datacenterLocation) {
+                <tr>
+                  <th class="w-1/3 bg-slate-50 px-4 py-3 text-left text-slate-500">
+                    Datacenter Location
+                  </th>
+                  <td class="px-4 py-3 text-slate-800">{{ r.datacenterLocation }}</td>
+                </tr>
+              }
+              @if (r.geography) {
+                <tr>
+                  <th class="w-1/3 bg-slate-50 px-4 py-3 text-left text-slate-500">Geography</th>
+                  <td class="px-4 py-3 text-slate-800">{{ r.geography }}</td>
+                </tr>
+              }
+              @if (r.availabilityZones && r.availabilityZones.length > 0) {
+                <tr>
+                  <th class="w-1/3 bg-slate-50 px-4 py-3 text-left text-slate-500">
+                    Availability Zones
+                  </th>
+                  <td class="px-4 py-3 text-slate-800">{{ r.availabilityZones.join(', ') }}</td>
+                </tr>
+              }
+              @if (r.availabilityZoneCount) {
+                <tr>
+                  <th class="w-1/3 bg-slate-50 px-4 py-3 text-left text-slate-500">AZ Count</th>
+                  <td class="px-4 py-3 text-slate-800">{{ r.availabilityZoneCount }}</td>
+                </tr>
+              }
+              @if (r.latitude || r.longitude) {
+                <tr>
+                  <th class="w-1/3 bg-slate-50 px-4 py-3 text-left text-slate-500">Coordinates</th>
+                  <td class="px-4 py-3 text-slate-800">
+                    {{ r.latitude || 'N/A' }}, {{ r.longitude || 'N/A' }}
+                  </td>
+                </tr>
+              }
+              @if (r.launchYear) {
+                <tr>
+                  <th class="w-1/3 bg-slate-50 px-4 py-3 text-left text-slate-500">Launch Year</th>
+                  <td class="px-4 py-3 text-slate-800">{{ r.launchYear }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+} @else {
+  <div class="page-container py-3">
+    <div class="mx-auto w-full max-w-xl space-y-4 text-center">
+      <header class="page-intro items-center text-center">
+        <h1 class="page-title page-intro__title">Region Not Found</h1>
+        <p class="page-intro__description">Unable to find region details.</p>
+      </header>
+      <a
+        routerLink="/regions"
+        class="inline-flex items-center justify-center rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+      >
+        Back to Regions
+      </a>
+    </div>
+  </div>
+}

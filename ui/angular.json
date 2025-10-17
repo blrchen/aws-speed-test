@@ -5,17 +5,7 @@
   "projects": {
     "aws-speed-test": {
       "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "standalone": false
-        },
-        "@schematics/angular:directive": {
-          "standalone": false
-        },
-        "@schematics/angular:pipe": {
-          "standalone": false
-        }
-      },
+      "schematics": {},
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -35,16 +25,14 @@
               },
               "src/assets"
             ],
-            "styles": [
-              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/styles.css"
-            ],
-            "scripts": ["node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"],
+            "styles": ["src/styles.css"],
+            "scripts": [],
             "server": "src/main.server.ts",
-            "prerender": true,
+            "prerender": {
+              "routesFile": "prerender-routes.txt"
+            },
             "ssr": {
-              "entry": "server.ts"
+              "entry": "src/server.ts"
             }
           },
           "configurations": {
@@ -57,8 +45,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kB",
-                  "maximumError": "4kB"
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
                 }
               ],
               "outputHashing": "all"
@@ -111,6 +99,6 @@
     }
   },
   "cli": {
-    "schematicCollections": ["@angular-eslint/schematics"]
+    "schematicCollections": ["angular-eslint"]
   }
 }

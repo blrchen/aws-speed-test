@@ -1,167 +1,276 @@
 [
   {
-    "name": "Africa",
+    "name": "South Africa",
     "regions": [
       {
+        "regionId": "af-south-1",
         "displayName": "Africa (Cape Town)",
-        "geographyGroup": "Africa",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Cape Town",
-        "regionalDisplayName": null,
-        "name": "af-south-1",
-        "availabilityZoneCount": 4,
-        "restricted": false
+        "longName": "Africa (Cape Town) af-south-1",
+        "geography": "South Africa",
+        "regionGroup": "Middle East and Africa",
+        "geographicLocation": "Africa",
+        "latitude": -33.9249,
+        "longitude": 18.4241,
+        "datacenterLocation": "Cape Town",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["af-south-1a", "af-south-1b", "af-south-1c"],
+        "launchYear": "2020"
       }
     ]
   },
   {
-    "name": "Asia Pacific",
+    "name": "Hong Kong",
     "regions": [
       {
+        "regionId": "ap-east-1",
         "displayName": "Asia Pacific (Hong Kong)",
-        "geographyGroup": "Asia Pacific",
+        "longName": "Asia Pacific (Hong Kong) ap-east-1",
+        "geography": "Hong Kong",
+        "regionGroup": "Asia Pacific",
+        "geographicLocation": "Asia Pacific",
+        "latitude": 22.3193,
+        "longitude": 114.1694,
+        "datacenterLocation": "Hong Kong",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["ap-east-1a", "ap-east-1b", "ap-east-1c"],
+        "launchYear": "2019"
+      }
+    ]
+  },
+  {
+    "name": "Taiwan",
+    "regions": [
+      {
+        "regionId": "ap-east-2",
+        "displayName": "Asia Pacific (Taipei)",
+        "longName": "Asia Pacific (Taipei) ap-east-2",
+        "geography": "Taiwan",
+        "regionGroup": "Asia Pacific",
+        "geographicLocation": "Asia Pacific",
         "latitude": null,
         "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Hong Kong",
-        "regionalDisplayName": null,
-        "name": "ap-east-1",
-        "availabilityZoneCount": 4,
-        "restricted": false
-      },
+        "datacenterLocation": "Taipei",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["ap-east-2a", "ap-east-2b", "ap-east-2c"],
+        "launchYear": null
+      }
+    ]
+  },
+  {
+    "name": "Japan",
+    "regions": [
       {
+        "regionId": "ap-northeast-1",
         "displayName": "Asia Pacific (Tokyo)",
-        "geographyGroup": "Asia Pacific",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Tokyo",
-        "regionalDisplayName": null,
-        "name": "ap-northeast-1",
-        "availabilityZoneCount": 4,
-        "restricted": false
+        "longName": "Asia Pacific (Tokyo) ap-northeast-1",
+        "geography": "Japan",
+        "regionGroup": "Asia Pacific",
+        "geographicLocation": "Asia Pacific",
+        "latitude": 35.6762,
+        "longitude": 139.6503,
+        "datacenterLocation": "Tokyo",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["ap-northeast-1a", "ap-northeast-1c", "ap-northeast-1d"],
+        "launchYear": "2011"
       },
       {
-        "displayName": "Asia Pacific (Seoul)",
-        "geographyGroup": "Asia Pacific",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Seoul",
-        "regionalDisplayName": null,
-        "name": "ap-northeast-2",
-        "availabilityZoneCount": 4,
-        "restricted": false
-      },
-      {
+        "regionId": "ap-northeast-3",
         "displayName": "Asia Pacific (Osaka)",
-        "geographyGroup": "Asia Pacific",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Osaka",
-        "regionalDisplayName": null,
-        "name": "ap-northeast-3",
-        "availabilityZoneCount": 4,
-        "restricted": false
-      },
+        "longName": "Asia Pacific (Osaka) ap-northeast-3",
+        "geography": "Japan",
+        "regionGroup": "Asia Pacific",
+        "geographicLocation": "Asia Pacific",
+        "latitude": 34.6937,
+        "longitude": 135.5023,
+        "datacenterLocation": "Osaka",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["ap-northeast-3a", "ap-northeast-3b", "ap-northeast-3c"],
+        "launchYear": "2021"
+      }
+    ]
+  },
+  {
+    "name": "South Korea",
+    "regions": [
       {
+        "regionId": "ap-northeast-2",
+        "displayName": "Asia Pacific (Seoul)",
+        "longName": "Asia Pacific (Seoul) ap-northeast-2",
+        "geography": "South Korea",
+        "regionGroup": "Asia Pacific",
+        "geographicLocation": "Asia Pacific",
+        "latitude": 37.5665,
+        "longitude": 126.978,
+        "datacenterLocation": "Seoul",
+        "availabilityZoneCount": 4,
+        "availabilityZones": [
+          "ap-northeast-2a",
+          "ap-northeast-2b",
+          "ap-northeast-2c",
+          "ap-northeast-2d"
+        ],
+        "launchYear": "2016"
+      }
+    ]
+  },
+  {
+    "name": "India",
+    "regions": [
+      {
+        "regionId": "ap-south-1",
         "displayName": "Asia Pacific (Mumbai)",
-        "geographyGroup": "Asia Pacific",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Mumbai",
-        "regionalDisplayName": null,
-        "name": "ap-south-1",
-        "availabilityZoneCount": 4,
-        "restricted": false
+        "longName": "Asia Pacific (Mumbai) ap-south-1",
+        "geography": "India",
+        "regionGroup": "Asia Pacific",
+        "geographicLocation": "Asia Pacific",
+        "latitude": 19.076,
+        "longitude": 72.8777,
+        "datacenterLocation": "Mumbai",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["ap-south-1a", "ap-south-1b", "ap-south-1c"],
+        "launchYear": "2016"
       },
       {
+        "regionId": "ap-south-2",
         "displayName": "Asia Pacific (Hyderabad)",
-        "geographyGroup": "Asia Pacific",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Hyderabad",
-        "regionalDisplayName": null,
-        "name": "ap-south-2",
-        "availabilityZoneCount": 4,
-        "restricted": false
-      },
+        "longName": "Asia Pacific (Hyderabad) ap-south-2",
+        "geography": "India",
+        "regionGroup": "Asia Pacific",
+        "geographicLocation": "Asia Pacific",
+        "latitude": 17.385,
+        "longitude": 78.4867,
+        "datacenterLocation": "Hyderabad",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["ap-south-2a", "ap-south-2b", "ap-south-2c"],
+        "launchYear": "2022"
+      }
+    ]
+  },
+  {
+    "name": "Singapore",
+    "regions": [
       {
+        "regionId": "ap-southeast-1",
         "displayName": "Asia Pacific (Singapore)",
-        "geographyGroup": "Asia Pacific",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Singapore",
-        "regionalDisplayName": null,
-        "name": "ap-southeast-1",
-        "availabilityZoneCount": 4,
-        "restricted": false
-      },
+        "longName": "Asia Pacific (Singapore) ap-southeast-1",
+        "geography": "Singapore",
+        "regionGroup": "Asia Pacific",
+        "geographicLocation": "Asia Pacific",
+        "latitude": 1.3521,
+        "longitude": 103.8198,
+        "datacenterLocation": "Singapore",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"],
+        "launchYear": "2010"
+      }
+    ]
+  },
+  {
+    "name": "Australia",
+    "regions": [
       {
+        "regionId": "ap-southeast-2",
         "displayName": "Asia Pacific (Sydney)",
-        "geographyGroup": "Asia Pacific",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Sydney",
-        "regionalDisplayName": null,
-        "name": "ap-southeast-2",
-        "availabilityZoneCount": 4,
-        "restricted": false
+        "longName": "Asia Pacific (Sydney) ap-southeast-2",
+        "geography": "Australia",
+        "regionGroup": "Australia and New Zealand",
+        "geographicLocation": "Asia Pacific",
+        "latitude": -33.8688,
+        "longitude": 151.2093,
+        "datacenterLocation": "Sydney",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["ap-southeast-2a", "ap-southeast-2b", "ap-southeast-2c"],
+        "launchYear": "2012"
       },
       {
-        "displayName": "Asia Pacific (Jakarta)",
-        "geographyGroup": "Asia Pacific",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Jakarta",
-        "regionalDisplayName": null,
-        "name": "ap-southeast-3",
-        "availabilityZoneCount": 4,
-        "restricted": false
-      },
-      {
+        "regionId": "ap-southeast-4",
         "displayName": "Asia Pacific (Melbourne)",
-        "geographyGroup": "Asia Pacific",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Melbourne",
-        "regionalDisplayName": null,
-        "name": "ap-southeast-4",
-        "availabilityZoneCount": 4,
-        "restricted": false
-      },
+        "longName": "Asia Pacific (Melbourne) ap-southeast-4",
+        "geography": "Australia",
+        "regionGroup": "Australia and New Zealand",
+        "geographicLocation": "Asia Pacific",
+        "latitude": -37.8136,
+        "longitude": 144.9631,
+        "datacenterLocation": "Melbourne",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["ap-southeast-4a", "ap-southeast-4b", "ap-southeast-4c"],
+        "launchYear": "2023"
+      }
+    ]
+  },
+  {
+    "name": "Indonesia",
+    "regions": [
       {
+        "regionId": "ap-southeast-3",
+        "displayName": "Asia Pacific (Jakarta)",
+        "longName": "Asia Pacific (Jakarta) ap-southeast-3",
+        "geography": "Indonesia",
+        "regionGroup": "Asia Pacific",
+        "geographicLocation": "Asia Pacific",
+        "latitude": -6.2088,
+        "longitude": 106.8456,
+        "datacenterLocation": "Jakarta",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["ap-southeast-3a", "ap-southeast-3b", "ap-southeast-3c"],
+        "launchYear": "2021"
+      }
+    ]
+  },
+  {
+    "name": "Malaysia",
+    "regions": [
+      {
+        "regionId": "ap-southeast-5",
         "displayName": "Asia Pacific (Malaysia)",
-        "geographyGroup": "Asia Pacific",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Malaysia",
-        "regionalDisplayName": null,
-        "name": "ap-southeast-5",
-        "availabilityZoneCount": 4,
-        "restricted": false
-      },
+        "longName": "Asia Pacific (Malaysia) ap-southeast-5",
+        "geography": "Malaysia",
+        "regionGroup": "Asia Pacific",
+        "geographicLocation": "Asia Pacific",
+        "latitude": 3.139,
+        "longitude": 101.6869,
+        "datacenterLocation": "Malaysia",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["ap-southeast-5a", "ap-southeast-5b", "ap-southeast-5c"],
+        "launchYear": "2024"
+      }
+    ]
+  },
+  {
+    "name": "New Zealand",
+    "regions": [
       {
+        "regionId": "ap-southeast-6",
+        "displayName": "Asia Pacific (New Zealand)",
+        "longName": "Asia Pacific (New Zealand) ap-southeast-6",
+        "geography": "New Zealand",
+        "regionGroup": "Australia and New Zealand",
+        "geographicLocation": "Asia Pacific",
+        "latitude": -36.84599227,
+        "longitude": 174.782331,
+        "datacenterLocation": "New Zealand",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["ap-southeast-6a", "ap-southeast-6b", "ap-southeast-6c"],
+        "launchYear": "2025"
+      }
+    ]
+  },
+  {
+    "name": "Thailand",
+    "regions": [
+      {
+        "regionId": "ap-southeast-7",
         "displayName": "Asia Pacific (Thailand)",
-        "geographyGroup": "Asia Pacific",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Thailand",
-        "regionalDisplayName": null,
-        "name": "ap-southeast-7",
-        "availabilityZoneCount": 4,
-        "restricted": false
+        "longName": "Asia Pacific (Thailand) ap-southeast-7",
+        "geography": "Thailand",
+        "regionGroup": "Asia Pacific",
+        "geographicLocation": "Asia Pacific",
+        "latitude": 13.7563,
+        "longitude": 100.5018,
+        "datacenterLocation": "Thailand",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["ap-southeast-7a", "ap-southeast-7b", "ap-southeast-7c"],
+        "launchYear": "2025"
       }
     ]
   },
@@ -169,134 +278,184 @@
     "name": "Canada",
     "regions": [
       {
+        "regionId": "ca-central-1",
         "displayName": "Canada (Central)",
-        "geographyGroup": "Canada",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Central",
-        "regionalDisplayName": null,
-        "name": "ca-central-1",
-        "availabilityZoneCount": 4,
-        "restricted": false
-      }
-    ]
-  },
-  {
-    "name": "Canada West",
-    "regions": [
+        "longName": "Canada (Central) ca-central-1",
+        "geography": "Canada",
+        "regionGroup": "Americas",
+        "geographicLocation": "Canada",
+        "latitude": 45.5017,
+        "longitude": -73.5673,
+        "datacenterLocation": "Central",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["ca-central-1a", "ca-central-1b", "ca-central-1d"],
+        "launchYear": "2016"
+      },
       {
+        "regionId": "ca-west-1",
         "displayName": "Canada West (Calgary)",
-        "geographyGroup": "Canada West",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Calgary",
-        "regionalDisplayName": null,
-        "name": "ca-west-1",
-        "availabilityZoneCount": 4,
-        "restricted": false
+        "longName": "Canada West (Calgary) ca-west-1",
+        "geography": "Canada",
+        "regionGroup": "Americas",
+        "geographicLocation": "Canada",
+        "latitude": 51.0447,
+        "longitude": -114.0719,
+        "datacenterLocation": "Calgary",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["ca-west-1a", "ca-west-1b", "ca-west-1c"],
+        "launchYear": "2023"
       }
     ]
   },
   {
-    "name": "Europe",
+    "name": "Germany",
     "regions": [
       {
+        "regionId": "eu-central-1",
         "displayName": "Europe (Frankfurt)",
-        "geographyGroup": "Europe",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Frankfurt",
-        "regionalDisplayName": null,
-        "name": "eu-central-1",
-        "availabilityZoneCount": 4,
-        "restricted": false
-      },
+        "longName": "Europe (Frankfurt) eu-central-1",
+        "geography": "Germany",
+        "regionGroup": "Europe",
+        "geographicLocation": "Europe",
+        "latitude": 50.1109,
+        "longitude": 8.6821,
+        "datacenterLocation": "Frankfurt",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["eu-central-1a", "eu-central-1b", "eu-central-1c"],
+        "launchYear": "2014"
+      }
+    ]
+  },
+  {
+    "name": "Switzerland",
+    "regions": [
       {
+        "regionId": "eu-central-2",
         "displayName": "Europe (Zurich)",
-        "geographyGroup": "Europe",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Zurich",
-        "regionalDisplayName": null,
-        "name": "eu-central-2",
-        "availabilityZoneCount": 4,
-        "restricted": false
-      },
+        "longName": "Europe (Zurich) eu-central-2",
+        "geography": "Switzerland",
+        "regionGroup": "Europe",
+        "geographicLocation": "Europe",
+        "latitude": 47.3769,
+        "longitude": 8.5417,
+        "datacenterLocation": "Zurich",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["eu-central-2a", "eu-central-2b", "eu-central-2c"],
+        "launchYear": "2022"
+      }
+    ]
+  },
+  {
+    "name": "Sweden",
+    "regions": [
       {
+        "regionId": "eu-north-1",
         "displayName": "Europe (Stockholm)",
-        "geographyGroup": "Europe",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Stockholm",
-        "regionalDisplayName": null,
-        "name": "eu-north-1",
-        "availabilityZoneCount": 4,
-        "restricted": false
-      },
+        "longName": "Europe (Stockholm) eu-north-1",
+        "geography": "Sweden",
+        "regionGroup": "Europe",
+        "geographicLocation": "Europe",
+        "latitude": 59.3293,
+        "longitude": 18.0686,
+        "datacenterLocation": "Stockholm",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["eu-north-1a", "eu-north-1b", "eu-north-1c"],
+        "launchYear": "2018"
+      }
+    ]
+  },
+  {
+    "name": "Italy",
+    "regions": [
       {
+        "regionId": "eu-south-1",
         "displayName": "Europe (Milan)",
-        "geographyGroup": "Europe",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Milan",
-        "regionalDisplayName": null,
-        "name": "eu-south-1",
-        "availabilityZoneCount": 4,
-        "restricted": false
-      },
+        "longName": "Europe (Milan) eu-south-1",
+        "geography": "Italy",
+        "regionGroup": "Europe",
+        "geographicLocation": "Europe",
+        "latitude": 45.4642,
+        "longitude": 9.19,
+        "datacenterLocation": "Milan",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["eu-south-1a", "eu-south-1b", "eu-south-1c"],
+        "launchYear": "2020"
+      }
+    ]
+  },
+  {
+    "name": "Spain",
+    "regions": [
       {
+        "regionId": "eu-south-2",
         "displayName": "Europe (Spain)",
-        "geographyGroup": "Europe",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Spain",
-        "regionalDisplayName": null,
-        "name": "eu-south-2",
-        "availabilityZoneCount": 4,
-        "restricted": false
-      },
+        "longName": "Europe (Spain) eu-south-2",
+        "geography": "Spain",
+        "regionGroup": "Europe",
+        "geographicLocation": "Europe",
+        "latitude": 40.4168,
+        "longitude": -3.7038,
+        "datacenterLocation": "Spain",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["eu-south-2a", "eu-south-2b", "eu-south-2c"],
+        "launchYear": "2022"
+      }
+    ]
+  },
+  {
+    "name": "Ireland",
+    "regions": [
       {
+        "regionId": "eu-west-1",
         "displayName": "Europe (Ireland)",
-        "geographyGroup": "Europe",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Ireland",
-        "regionalDisplayName": null,
-        "name": "eu-west-1",
-        "availabilityZoneCount": 4,
-        "restricted": false
-      },
+        "longName": "Europe (Ireland) eu-west-1",
+        "geography": "Ireland",
+        "regionGroup": "Europe",
+        "geographicLocation": "Europe",
+        "latitude": 53.3498,
+        "longitude": -6.2603,
+        "datacenterLocation": "Ireland",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["eu-west-1a", "eu-west-1b", "eu-west-1c"],
+        "launchYear": "2007"
+      }
+    ]
+  },
+  {
+    "name": "United Kingdom",
+    "regions": [
       {
+        "regionId": "eu-west-2",
         "displayName": "Europe (London)",
-        "geographyGroup": "Europe",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "London",
-        "regionalDisplayName": null,
-        "name": "eu-west-2",
-        "availabilityZoneCount": 4,
-        "restricted": false
-      },
+        "longName": "Europe (London) eu-west-2",
+        "geography": "United Kingdom",
+        "regionGroup": "Europe",
+        "geographicLocation": "Europe",
+        "latitude": 51.5074,
+        "longitude": -0.1278,
+        "datacenterLocation": "London",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["eu-west-2a", "eu-west-2b", "eu-west-2c"],
+        "launchYear": "2016"
+      }
+    ]
+  },
+  {
+    "name": "France",
+    "regions": [
       {
+        "regionId": "eu-west-3",
         "displayName": "Europe (Paris)",
-        "geographyGroup": "Europe",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Paris",
-        "regionalDisplayName": null,
-        "name": "eu-west-3",
-        "availabilityZoneCount": 4,
-        "restricted": false
+        "longName": "Europe (Paris) eu-west-3",
+        "geography": "France",
+        "regionGroup": "Europe",
+        "geographicLocation": "Europe",
+        "latitude": 48.8566,
+        "longitude": 2.3522,
+        "datacenterLocation": "Paris",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["eu-west-3a", "eu-west-3b", "eu-west-3c"],
+        "launchYear": "2017"
       }
     ]
   },
@@ -304,45 +463,56 @@
     "name": "Israel",
     "regions": [
       {
+        "regionId": "il-central-1",
         "displayName": "Israel (Tel Aviv)",
-        "geographyGroup": "Israel",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Tel Aviv",
-        "regionalDisplayName": null,
-        "name": "il-central-1",
-        "availabilityZoneCount": 4,
-        "restricted": false
+        "longName": "Israel (Tel Aviv) il-central-1",
+        "geography": "Israel",
+        "regionGroup": "Middle East and Africa",
+        "geographicLocation": "Israel",
+        "latitude": 32.0853,
+        "longitude": 34.7818,
+        "datacenterLocation": "Tel Aviv",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["il-central-1a", "il-central-1b", "il-central-1c"],
+        "launchYear": "2023"
       }
     ]
   },
   {
-    "name": "Middle East",
+    "name": "United Arab Emirates",
     "regions": [
       {
+        "regionId": "me-central-1",
         "displayName": "Middle East (UAE)",
-        "geographyGroup": "Middle East",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "UAE",
-        "regionalDisplayName": null,
-        "name": "me-central-1",
-        "availabilityZoneCount": 4,
-        "restricted": false
-      },
+        "longName": "Middle East (UAE) me-central-1",
+        "geography": "United Arab Emirates",
+        "regionGroup": "Middle East and Africa",
+        "geographicLocation": "Middle East",
+        "latitude": 25.2048,
+        "longitude": 55.2708,
+        "datacenterLocation": "UAE",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["me-central-1a", "me-central-1b", "me-central-1c"],
+        "launchYear": "2022"
+      }
+    ]
+  },
+  {
+    "name": "Bahrain",
+    "regions": [
       {
+        "regionId": "me-south-1",
         "displayName": "Middle East (Bahrain)",
-        "geographyGroup": "Middle East",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Bahrain",
-        "regionalDisplayName": null,
-        "name": "me-south-1",
-        "availabilityZoneCount": 4,
-        "restricted": false
+        "longName": "Middle East (Bahrain) me-south-1",
+        "geography": "Bahrain",
+        "regionGroup": "Middle East and Africa",
+        "geographicLocation": "Middle East",
+        "latitude": 26.0667,
+        "longitude": 50.5577,
+        "datacenterLocation": "Bahrain",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["me-south-1a", "me-south-1b", "me-south-1c"],
+        "launchYear": "2019"
       }
     ]
   },
@@ -350,91 +520,105 @@
     "name": "Mexico",
     "regions": [
       {
+        "regionId": "mx-central-1",
         "displayName": "Mexico (Central)",
-        "geographyGroup": "Mexico",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Central",
-        "regionalDisplayName": null,
-        "name": "mx-central-1",
-        "availabilityZoneCount": 4,
-        "restricted": false
+        "longName": "Mexico (Central) mx-central-1",
+        "geography": "Mexico",
+        "regionGroup": "Americas",
+        "geographicLocation": "Mexico",
+        "latitude": 19.4326,
+        "longitude": -99.1332,
+        "datacenterLocation": "Central",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["mx-central-1a", "mx-central-1b", "mx-central-1c"],
+        "launchYear": "2025"
       }
     ]
   },
   {
-    "name": "South America",
+    "name": "Brazil",
     "regions": [
       {
+        "regionId": "sa-east-1",
         "displayName": "South America (Sao Paulo)",
-        "geographyGroup": "South America",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Sao Paulo",
-        "regionalDisplayName": null,
-        "name": "sa-east-1",
-        "availabilityZoneCount": 4,
-        "restricted": false
+        "longName": "South America (Sao Paulo) sa-east-1",
+        "geography": "Brazil",
+        "regionGroup": "Americas",
+        "geographicLocation": "South America",
+        "latitude": -23.5505,
+        "longitude": -46.6333,
+        "datacenterLocation": "Sao Paulo",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["sa-east-1a", "sa-east-1b", "sa-east-1c"],
+        "launchYear": "2011"
       }
     ]
   },
   {
-    "name": "US East",
+    "name": "United States",
     "regions": [
       {
+        "regionId": "us-east-1",
         "displayName": "US East (N. Virginia)",
-        "geographyGroup": "US East",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "N. Virginia",
-        "regionalDisplayName": null,
-        "name": "us-east-1",
-        "availabilityZoneCount": 4,
-        "restricted": false
+        "longName": "US East (N. Virginia) us-east-1",
+        "geography": "United States",
+        "regionGroup": "Americas",
+        "geographicLocation": "US East",
+        "latitude": 39.0438,
+        "longitude": -77.4874,
+        "datacenterLocation": "N. Virginia",
+        "availabilityZoneCount": 6,
+        "availabilityZones": [
+          "us-east-1a",
+          "us-east-1b",
+          "us-east-1c",
+          "us-east-1d",
+          "us-east-1e",
+          "us-east-1f"
+        ],
+        "launchYear": "2006"
       },
       {
+        "regionId": "us-east-2",
         "displayName": "US East (Ohio)",
-        "geographyGroup": "US East",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Ohio",
-        "regionalDisplayName": null,
-        "name": "us-east-2",
-        "availabilityZoneCount": 4,
-        "restricted": false
-      }
-    ]
-  },
-  {
-    "name": "US West",
-    "regions": [
-      {
-        "displayName": "US West (N. California)",
-        "geographyGroup": "US West",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "N. California",
-        "regionalDisplayName": null,
-        "name": "us-west-1",
-        "availabilityZoneCount": 4,
-        "restricted": false
+        "longName": "US East (Ohio) us-east-2",
+        "geography": "United States",
+        "regionGroup": "Americas",
+        "geographicLocation": "US East",
+        "latitude": 40.4173,
+        "longitude": -82.9071,
+        "datacenterLocation": "Ohio",
+        "availabilityZoneCount": 3,
+        "availabilityZones": ["us-east-2a", "us-east-2b", "us-east-2c"],
+        "launchYear": "2016"
       },
       {
+        "regionId": "us-west-1",
+        "displayName": "US West (N. California)",
+        "longName": "US West (N. California) us-west-1",
+        "geography": "United States",
+        "regionGroup": "Americas",
+        "geographicLocation": "US West",
+        "latitude": 37.7749,
+        "longitude": -122.4194,
+        "datacenterLocation": "N. California",
+        "availabilityZoneCount": 2,
+        "availabilityZones": ["us-west-1a", "us-west-1b"],
+        "launchYear": "2009"
+      },
+      {
+        "regionId": "us-west-2",
         "displayName": "US West (Oregon)",
-        "geographyGroup": "US West",
-        "latitude": null,
-        "longitude": null,
-        "pairedRegion": null,
-        "physicalLocation": "Oregon",
-        "regionalDisplayName": null,
-        "name": "us-west-2",
+        "longName": "US West (Oregon) us-west-2",
+        "geography": "United States",
+        "regionGroup": "Americas",
+        "geographicLocation": "US West",
+        "latitude": 45.5155,
+        "longitude": -122.6789,
+        "datacenterLocation": "Oregon",
         "availabilityZoneCount": 4,
-        "restricted": false
+        "availabilityZones": ["us-west-2a", "us-west-2b", "us-west-2c", "us-west-2d"],
+        "launchYear": "2011"
       }
     ]
   }

@@ -1,30 +1,22 @@
-import { Component, OnInit } from '@angular/core'
-import { Region } from '../../../models'
-import { SeoService } from '../../../services'
-
-import data from '../../../../assets/data/geographies.json'
-
-export interface Geography {
-  name: string
-  regions: Region[]
-}
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { Geography, RegionService, SeoService } from '../../../services'
+import { RouterLink } from '@angular/router'
 
 @Component({
   selector: 'app-geographies',
-  templateUrl: './geographies.component.html'
+  standalone: true,
+  imports: [CommonModule, RouterLink],
+  templateUrl: './geographies.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GeographiesComponent implements OnInit {
-  tableData: Geography[] = []
+  private readonly seoService = inject(SeoService)
+  private readonly regionService = inject(RegionService)
 
-  constructor(private seoService: SeoService) {
-    this.initializeSeoProperties()
-  }
+  readonly tableData = signal<Geography[]>(this.regionService.getAllGeographies())
 
-  ngOnInit() {
-    this.tableData = data
-  }
-
-  private initializeSeoProperties(): void {
+  ngOnInit(): void {
     this.seoService.setMetaTitle('AWS Geographies | Regions and Compliance Info')
     this.seoService.setMetaDescription(
       'Explore AWS geographies, each containing multiple regions, to maintain data residency and compliance.'
