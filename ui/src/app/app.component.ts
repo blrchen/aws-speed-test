@@ -28,16 +28,6 @@ export class AppComponent {
 
   readonly navGroups = signal<NavGroup[]>([
     {
-      heading: 'Featured',
-      items: [
-        {
-          label: 'ChatGPT Assistant',
-          icon: 'heroSparkles',
-          routerLink: '/chatgpt/chatgpt-assistant'
-        }
-      ]
-    },
-    {
       heading: 'Testing',
       items: [
         {

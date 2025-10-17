@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { Geography, RegionService, SeoService } from '../../../services'
-import { HeroIconComponent } from '../../../shared/icons/hero-icons.imports'
+import { RouterLink } from '@angular/router'
 
 @Component({
   selector: 'app-geographies',
   standalone: true,
-  imports: [CommonModule, HeroIconComponent],
+  imports: [CommonModule, RouterLink],
   templateUrl: './geographies.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })

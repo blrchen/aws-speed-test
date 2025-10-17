@@ -1,5 +1,5 @@
 <section class="region-groups">
-  <h2 class="visually-hidden">AWS region groups</h2>
+  <h2 class="sr-only">AWS region groups</h2>
   <div class="region-groups__summary">
     <div class="region-groups__summary-primary">
       <span class="region-groups__summary-count">
@@ -27,7 +27,7 @@
   </div>
 
   <div class="region-groups__list">
-    @for (group of regionGroups(); track trackByGroup($index, group)) {
+    @for (group of regionGroups; track trackByGroup($index, group)) {
       <article
         class="region-group-row"
         [attr.data-state]="isGroupChecked(group) || isGroupIndeterminate(group) ? 'active' : null"

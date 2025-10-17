@@ -1,38 +1,36 @@
 @if (region(); as r) {
   <div class="page-container py-3">
     <div class="mx-auto w-full max-w-4xl space-y-6">
-      <nav class="flex flex-wrap items-center gap-2 text-sm text-slate-500">
-        <a
-          routerLink="/"
-          class="text-blue-600 underline-offset-4 hover:text-blue-700 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-        >
-          Home
-        </a>
-        <span>&gt;</span>
-        <a
-          routerLink="/regions"
-          class="text-blue-600 underline-offset-4 hover:text-blue-700 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-        >
-          Regions
-        </a>
-        <span>&gt;</span>
-        <span class="text-slate-400">{{ r.longName }}</span>
+      <nav class="app-breadcrumb" aria-label="Breadcrumb">
+        <ol class="app-breadcrumb__list">
+          <li class="app-breadcrumb__item">
+            <a routerLink="/">Home</a>
+          </li>
+          <li class="app-breadcrumb__item">
+            <a routerLink="/regions">Regions</a>
+          </li>
+          <li class="app-breadcrumb__item app-breadcrumb__item--active" aria-current="page">
+            {{ r.longName }}
+          </li>
+        </ol>
       </nav>
 
       <header class="page-intro">
         <h1 class="page-title page-intro__title">{{ r.longName }}</h1>
-        <p class="page-intro__description">{{ r.regionId }}</p>
+        @if (regionSummary(); as summary) {
+          <p class="page-intro__description">{{ summary }}</p>
+        }
       </header>
 
       <section class="space-y-4">
-        <h2 class="text-xl font-semibold text-slate-900">Region Details</h2>
+        <h2 class="content-heading">Infrastructure Snapshot</h2>
         <div class="shadow-card overflow-hidden rounded-2xl border border-slate-200 bg-white">
           <table class="min-w-full divide-y divide-slate-200 text-sm">
             <tbody class="divide-y divide-slate-100 text-slate-700">
               @if (r.datacenterLocation) {
                 <tr>
                   <th class="w-1/3 bg-slate-50 px-4 py-3 text-left text-slate-500">
-                    Physical Location
+                    Datacenter Location
                   </th>
                   <td class="px-4 py-3 text-slate-800">{{ r.datacenterLocation }}</td>
                 </tr>

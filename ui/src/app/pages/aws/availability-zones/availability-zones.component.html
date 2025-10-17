@@ -41,7 +41,7 @@
     </section>
 
     <section class="space-y-4">
-      <h2 class="text-xl font-semibold text-slate-900">Key Characteristics</h2>
+      <h2 class="content-heading">Key Characteristics</h2>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
           <strong class="mb-2 block text-lg font-semibold text-slate-900">Isolation</strong>
@@ -73,7 +73,7 @@
 
     <section class="space-y-4">
       <div>
-        <h2 class="text-xl font-semibold text-slate-900">Global Availability Zone Distribution</h2>
+        <h2 class="content-heading">AWS Global Availability Zone Distribution</h2>
         <p class="mt-2 text-base leading-relaxed text-slate-600">
           Availability Zones are isolated locations within each AWS Region, connected through
           low-latency links. This distribution ensures high availability and fault tolerance for
@@ -164,47 +164,47 @@
     </section>
 
     <section class="space-y-4 pb-6">
-      <h2 class="text-xl font-semibold text-slate-900">Additional Resources</h2>
+      <h2 class="content-heading">Additional Resources</h2>
       <div class="grid gap-4 md:grid-cols-3">
-        <a
-          href="https://aws.amazon.com/about-aws/global-infrastructure/"
-          class="shadow-card group flex h-full flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-blue-400 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-          target="_blank"
-        >
-          <div class="flex items-center gap-3">
-            <app-hero-icon name="heroGlobeAlt" class="h-7 w-7 text-blue-500" aria-hidden="true" />
-            <div>
-              <h3 class="text-base font-semibold text-slate-900">AWS Global Infrastructure</h3>
-              <p class="text-sm text-slate-500">Explore AWS's worldwide infrastructure</p>
-            </div>
-          </div>
-        </a>
-        <a
-          href="https://aws.amazon.com/about-aws/global-infrastructure/regions_az/"
-          class="shadow-card group flex h-full flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-blue-400 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-          target="_blank"
-        >
-          <div class="flex items-center gap-3">
-            <app-hero-icon name="heroSquares2X2" class="h-7 w-7 text-blue-500" aria-hidden="true" />
-            <div>
-              <h3 class="text-base font-semibold text-slate-900">AWS AZ Documentation</h3>
-              <p class="text-sm text-slate-500">Technical details and best practices</p>
-            </div>
-          </div>
-        </a>
-        <a
-          href="https://infrastructure.aws/"
-          class="shadow-card group flex h-full flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-blue-400 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-          target="_blank"
-        >
-          <div class="flex items-center gap-3">
-            <app-hero-icon name="heroMap" class="h-7 w-7 text-blue-500" aria-hidden="true" />
-            <div>
-              <h3 class="text-base font-semibold text-slate-900">Interactive Infrastructure Map</h3>
-              <p class="text-sm text-slate-500">Visual exploration of AWS regions</p>
-            </div>
-          </div>
-        </a>
+        <article class="resource-card">
+          <h3 class="resource-card__title">AWS Global Infrastructure</h3>
+          <p class="resource-card__body">Explore AWS's worldwide infrastructure</p>
+          <a
+            href="https://aws.amazon.com/about-aws/global-infrastructure/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="resource-card__link"
+            aria-label="Learn more about AWS Global Infrastructure"
+          >
+            Learn more
+          </a>
+        </article>
+        <article class="resource-card">
+          <h3 class="resource-card__title">AWS AZ Documentation</h3>
+          <p class="resource-card__body">Technical details and best practices</p>
+          <a
+            href="https://aws.amazon.com/about-aws/global-infrastructure/regions_az/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="resource-card__link"
+            aria-label="Learn more about AWS AZ Documentation"
+          >
+            Learn more
+          </a>
+        </article>
+        <article class="resource-card">
+          <h3 class="resource-card__title">Interactive Infrastructure Map</h3>
+          <p class="resource-card__body">Visual exploration of AWS regions</p>
+          <a
+            href="https://infrastructure.aws/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="resource-card__link"
+            aria-label="Learn more about the Interactive Infrastructure Map"
+          >
+            Learn more
+          </a>
+        </article>
       </div>
     </section>
   </div>

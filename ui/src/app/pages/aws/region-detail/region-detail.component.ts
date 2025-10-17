@@ -40,6 +40,57 @@ export class RegionDetailComponent implements OnInit {
     }
     return this.regionService.getRegionByName(regionId) ?? null
   })
+  readonly regionSummary = computed(() => {
+    const region = this.region()
+    if (!region) {
+      return ''
+    }
+
+    const descriptors: string[] = []
+    if (region.datacenterLocation) {
+      descriptors.push(`based in ${region.datacenterLocation}`)
+    }
+    if (region.geography) {
+      descriptors.push(`serving customers across ${region.geography}`)
+    }
+
+    const formatList = (items: string[]): string => {
+      if (items.length <= 1) {
+        return items[0] ?? ''
+      }
+      if (items.length === 2) {
+        return `${items[0]} and ${items[1]}`
+      }
+      return `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`
+    }
+
+    let intro = `AWS ${region.longName} (${region.regionId})`
+    if (descriptors.length > 0) {
+      intro += ` is ${formatList(descriptors)}`
+    } else {
+      intro += ` delivers regional AWS infrastructure`
+    }
+    intro += '.'
+
+    const sentences = [intro]
+
+    const zoneCount =
+      region.availabilityZoneCount ?? region.availabilityZones?.length ?? 0
+    if (zoneCount > 0) {
+      const zoneLabel = zoneCount === 1 ? 'availability zone' : 'availability zones'
+      const zoneList =
+        region.availabilityZones && region.availabilityZones.length > 0
+          ? ` (${region.availabilityZones.join(', ')})`
+          : ''
+      sentences.push(`It offers ${zoneCount} ${zoneLabel}${zoneList}.`)
+    }
+
+    if (region.launchYear) {
+      sentences.push(`The region launched in ${region.launchYear}.`)
+    }
+
+    return sentences.join(' ')
+  })
 
   private navigatedToFallback = false
 
@@ -67,7 +118,7 @@ export class RegionDetailComponent implements OnInit {
     }
 
     this.navigatedToFallback = false
-    this.seoService.setMetaTitle(`${region.longName} - AWS Region Details`)
+    this.seoService.setMetaTitle(`AWS Region | ${region.longName} | `)
     this.seoService.setMetaDescription(
       `Comprehensive information about AWS ${region.longName} region including location, availability zones, coordinates, and launch details.`
     )

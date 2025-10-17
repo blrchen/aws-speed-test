@@ -1,11 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import {
-  HERO_ICON_DATA,
-  HeroIconCircle,
-  HeroIconDefinition,
-  HeroIconElement
-} from './hero-icon-data'
+import { HERO_ICON_DATA, HeroIconCircle, HeroIconDefinition, HeroIconElement } from './hero-icon-data'
 
 export type HeroIconName = keyof typeof HERO_ICON_DATA
 
@@ -16,7 +11,7 @@ export type HeroIconName = keyof typeof HERO_ICON_DATA
   template: `
     @let icon = definition();
     <svg
-      [attr.class]="svgClass() ? 'app-hero-icon__svg ' + svgClass() : 'app-hero-icon__svg'"
+      class="app-hero-icon__svg"
       [attr.viewBox]="icon.viewBox"
       fill="none"
       stroke="currentColor"
@@ -59,7 +54,6 @@ export type HeroIconName = keyof typeof HERO_ICON_DATA
 export class HeroIconComponent {
   readonly name = input.required<HeroIconName>()
   readonly strokeWidth = input('1.5')
-  readonly svgClass = input('')
   readonly ariaLabel = input<string | null>(null)
 
   readonly definition = computed<HeroIconDefinition>(() => {
@@ -71,6 +65,6 @@ export class HeroIconComponent {
   })
 
   isCircle(element: HeroIconElement): element is HeroIconCircle {
-    return (element as HeroIconCircle).type === 'circle'
+    return 'type' in element && element.type === 'circle'
   }
 }

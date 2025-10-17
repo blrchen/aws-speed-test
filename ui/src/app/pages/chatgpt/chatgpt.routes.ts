@@ -10,8 +10,7 @@ export const chatgptRoutes: Routes = [
         loadComponent: () =>
           import('./chatgpt-assistant/chatgpt-assistant.component').then(
             (m) => m.ChatGPTAssistantComponent
-          ),
-        data: { title: 'ChatGPT Assistant' }
+          )
       },
       {
         path: '**',

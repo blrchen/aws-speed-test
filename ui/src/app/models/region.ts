@@ -1,3 +1,4 @@
+// Base interface matching the structure of regions.json
 export interface Region {
   regionId: string
   displayName: string
@@ -13,6 +14,7 @@ export interface Region {
   launchYear: string | null
 }
 
+// Extended interface with additional fields for application use
 export interface RegionModel extends Region {
   geographicGroup: string
   storageAccountName: string

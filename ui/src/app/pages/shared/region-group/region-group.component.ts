@@ -33,14 +33,13 @@ export class RegionGroupComponent implements OnDestroy {
   private readonly regionService = inject(RegionService)
   private readonly allRegions: RegionModel[] = this.regionService.getAllRegions()
   private readonly selectedRegionIds = signal<Set<string>>(new Set())
-  readonly regionGroups = signal<readonly RegionGroup[]>(this.buildRegionGroups(this.allRegions))
+  readonly regionGroups: RegionGroup[] = this.buildRegionGroups(this.allRegions)
   private readonly groupSelectionLookup = computed<GroupSelectionLookup>(() => {
     const selected = this.selectedRegionIds()
     const fullySelected = new Set<string>()
     const partiallySelected = new Set<string>()
 
-    const regionGroups = this.regionGroups()
-    for (const group of regionGroups) {
+    for (const group of this.regionGroups) {
       let selectedCount = 0
       for (const region of group.regions) {
         if (selected.has(region.regionId)) {

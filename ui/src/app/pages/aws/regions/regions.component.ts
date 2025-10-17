@@ -62,6 +62,14 @@ export class RegionsComponent implements OnInit {
     })
   })
 
+  formatRegionLongName(region: Region): string {
+    if (!region.longName) {
+      return region.displayName
+    }
+
+    return region.longName.replace(` ${region.regionId}`, '').trim()
+  }
+
   ngOnInit(): void {
     this.seoService.setMetaTitle('AWS Regions and Data Centers')
     this.seoService.setMetaDescription(
