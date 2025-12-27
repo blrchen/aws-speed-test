@@ -1,211 +1,268 @@
-<div class="page-container py-3">
-  <header class="page-intro">
-    <h1 class="page-title page-intro__title">AWS Availability Zones</h1>
-    <p class="page-intro__description">
+<article class="page-shell section-stack mx-auto max-w-5xl">
+  <header class="page-header">
+    <h1 class="page-title">AWS availability zones</h1>
+
+    <p class="page-lead">
       AWS Availability Zones are interconnected data centers with independent power, networking, and
       facilities, designed to deliver continuous operations even during large-scale disruptions.
     </p>
   </header>
 
-  <div class="space-y-8">
-    <section>
-      <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-        <div
-          class="shadow-card flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4"
-        >
-          <div class="text-4xl font-bold text-blue-600">102</div>
-          <div class="leading-tight">
-            <div class="font-semibold text-slate-900">Total AZs</div>
-            <span class="text-sm text-slate-500">Worldwide</span>
-          </div>
-        </div>
-        <div
-          class="shadow-card flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4"
-        >
-          <div class="text-4xl font-bold text-blue-600">32</div>
-          <div class="leading-tight">
-            <div class="font-semibold text-slate-900">Regions</div>
-            <span class="text-sm text-slate-500">Coverage</span>
-          </div>
-        </div>
-        <div
-          class="shadow-card flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4"
-        >
-          <div class="text-4xl font-bold text-blue-600">3+</div>
-          <div class="leading-tight">
-            <div class="font-semibold text-slate-900">AZs per Region</div>
-            <span class="text-sm text-slate-500">Minimum</span>
-          </div>
+  <section class="section-block" aria-labelledby="stats-heading">
+    <h2 id="stats-heading" class="section-title">At a glance</h2>
+    <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+      <div class="card card-stat">
+        <div class="text-4xl font-bold text-primary">{{ totalAZs() }}</div>
+        <div class="leading-tight">
+          <div class="font-semibold text-text-strong">Total AZs</div>
+          <span class="text-sm text-text-muted">Worldwide</span>
         </div>
       </div>
-    </section>
-
-    <section class="space-y-4">
-      <h2 class="content-heading">Key Characteristics</h2>
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-          <strong class="mb-2 block text-lg font-semibold text-slate-900">Isolation</strong>
-          <p class="text-sm leading-relaxed text-slate-600">
-            Each AZ is physically separate with independent power, cooling, and networking
-            infrastructure.
-          </p>
-        </div>
-        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-          <strong class="mb-2 block text-lg font-semibold text-slate-900">Connectivity</strong>
-          <p class="text-sm leading-relaxed text-slate-600">
-            AZs are interconnected with high-bandwidth, low-latency networking.
-          </p>
-        </div>
-        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-          <strong class="mb-2 block text-lg font-semibold text-slate-900">Redundancy</strong>
-          <p class="text-sm leading-relaxed text-slate-600">
-            Multiple AZs enable high-availability architectures and disaster recovery solutions.
-          </p>
-        </div>
-        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-          <strong class="mb-2 block text-lg font-semibold text-slate-900">Fault Tolerance</strong>
-          <p class="text-sm leading-relaxed text-slate-600">
-            Independent failure domains protect applications from single location failures.
-          </p>
+      <div class="card card-stat">
+        <div class="text-4xl font-bold text-primary">{{ totalRegions() }}</div>
+        <div class="leading-tight">
+          <div class="font-semibold text-text-strong">Regions</div>
+          <span class="text-sm text-text-muted">Coverage</span>
         </div>
       </div>
-    </section>
+      <div class="card card-stat">
+        <div
+          class="text-4xl font-bold"
+          [class]="minAzPerRegion() === null ? 'text-text-muted' : 'text-primary'"
+        >
+          {{ minAzPerRegion() === null ? 'N/A' : minAzPerRegion() }}
+        </div>
+        <div class="leading-tight">
+          <div class="font-semibold text-text-strong">AZs per region (min)</div>
+          <span class="text-sm text-text-muted">From current dataset</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <section class="space-y-4">
-      <div>
-        <h2 class="content-heading">AWS Global Availability Zone Distribution</h2>
-        <p class="mt-2 text-base leading-relaxed text-slate-600">
-          Availability Zones are isolated locations within each AWS Region, connected through
-          low-latency links. This distribution ensures high availability and fault tolerance for
-          critical workloads across different geographic locations.
+  <section class="section-block" aria-labelledby="characteristics-heading">
+    <h2 id="characteristics-heading" class="section-title">Key characteristics</h2>
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="card card-muted">
+        <strong class="mb-2 block text-lg font-semibold text-text-strong">Isolation</strong>
+        <p class="text-sm leading-relaxed text-text-muted">
+          Each AZ is physically separate with independent power, cooling, and networking
+          infrastructure.
         </p>
       </div>
+      <div class="card card-muted">
+        <strong class="mb-2 block text-lg font-semibold text-text-strong">Connectivity</strong>
+        <p class="text-sm leading-relaxed text-text-muted">
+          AZs are interconnected with high-bandwidth, low-latency networking.
+        </p>
+      </div>
+      <div class="card card-muted">
+        <strong class="mb-2 block text-lg font-semibold text-text-strong">Redundancy</strong>
+        <p class="text-sm leading-relaxed text-text-muted">
+          Multiple AZs enable high-availability architectures and disaster recovery solutions.
+        </p>
+      </div>
+      <div class="card card-muted">
+        <strong class="mb-2 block text-lg font-semibold text-text-strong">Fault Tolerance</strong>
+        <p class="text-sm leading-relaxed text-text-muted">
+          Independent failure domains protect applications from single location failures.
+        </p>
+      </div>
+    </div>
+  </section>
 
-      <form [formGroup]="filtersForm" class="grid gap-4 md:grid-cols-2">
-        <div class="relative">
-          <span
-            class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-slate-400"
-          >
-            <app-hero-icon name="heroMagnifyingGlass" class="h-4 w-4" aria-hidden="true" />
-          </span>
+  <section class="section-block" aria-labelledby="distribution-heading">
+    <div>
+      <h2 id="distribution-heading" class="section-title">
+        AWS global availability zone distribution
+      </h2>
+      <p class="text-base leading-relaxed text-text-muted">
+        Availability Zones are isolated locations within each AWS Region, connected through
+        low-latency links. This distribution ensures high availability and fault tolerance for
+        critical workloads across different geographic locations.
+      </p>
+    </div>
+
+    <form [formGroup]="filtersForm" class="form-grid-2" role="search">
+      <div>
+        <label for="searchFilter" class="sr-only">Search</label>
+        <div class="form-icon-wrapper">
+          <app-lucide-icon
+            name="search"
+            class="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-text-muted"
+            aria-hidden="true"
+          />
           <input
+            id="searchFilter"
             type="text"
-            class="block w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-11 pr-3 text-sm text-slate-700 shadow-sm transition placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            class="form-control-icon pr-10"
             placeholder="Search regions..."
             formControlName="search"
+            autocomplete="off"
           />
+          @if (hasSearchTerm()) {
+            <button
+              type="button"
+              (click)="clearSearch()"
+              aria-label="Clear search"
+              class="form-icon-clear"
+            >
+              <app-lucide-icon name="x" class="h-4 w-4" aria-hidden="true" />
+            </button>
+          }
         </div>
-        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
-          <label
-            for="geographyFilter"
-            class="flex items-center gap-2 text-sm font-medium text-slate-600"
-          >
-            <app-hero-icon name="heroGlobeAlt" class="h-4 w-4 text-blue-500" aria-hidden="true" />
-            Geography:
-          </label>
-          <select
-            id="geographyFilter"
-            class="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-3 pr-8 text-sm text-slate-700 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 sm:min-w-0 sm:flex-1"
-            formControlName="geography"
-          >
-            <option value="all">All Geographies</option>
-            @for (geography of availableGeographies(); track geography) {
-              <option [value]="geography">{{ geography }}</option>
-            }
-          </select>
-        </div>
-      </form>
+      </div>
+      <div>
+        <label for="geographyFilter" class="sr-only">Geography</label>
+        <select id="geographyFilter" class="form-select" formControlName="geography">
+          <option value="all">All Geographies</option>
+          @for (geography of availableGeographies(); track geography) {
+            <option [value]="geography">{{ geography }}</option>
+          }
+        </select>
+      </div>
+    </form>
 
-      <div class="shadow-card overflow-x-auto rounded-2xl border border-slate-200 bg-white">
-        <table class="min-w-full divide-y divide-slate-200 text-left text-sm text-slate-700">
-          <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
-            <tr>
-              <th class="px-4 py-3">Region</th>
-              <th class="px-4 py-3">Geography</th>
-              <th class="px-4 py-3">Location</th>
-              <th class="px-4 py-3 text-center">Zones</th>
-              <th class="px-4 py-3">AZ Names</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-100">
-            @for (r of filteredData(); track r) {
-              <tr class="transition hover:bg-slate-50">
-                <td class="px-4 py-3">
-                  <strong class="block text-slate-900">{{ r.regionId }}</strong>
-                  <span class="text-xs text-slate-500">{{ r.longName }}</span>
-                </td>
-                <td class="px-4 py-3 text-slate-600">{{ r.geography }}</td>
-                <td class="px-4 py-3 text-slate-600">{{ r.datacenterLocation }}</td>
-                <td class="px-4 py-3 text-center">
-                  <span
-                    class="inline-flex h-7 min-w-[2.5rem] items-center justify-center rounded-full px-3 text-xs font-semibold uppercase tracking-wide"
-                    [class.bg-emerald-100]="r.availabilityZoneCount >= 4"
-                    [class.text-emerald-700]="r.availabilityZoneCount >= 4"
-                    [class.bg-blue-100]="r.availabilityZoneCount < 4"
-                    [class.text-blue-700]="r.availabilityZoneCount < 4"
-                  >
-                    {{ r.availabilityZoneCount }}
-                  </span>
-                </td>
-                <td class="px-4 py-3">
-                  <div class="flex flex-wrap gap-2">
-                    @for (zone of r.availabilityZones; track zone) {
-                      <code class="rounded bg-slate-100 px-2 py-1 text-xs text-slate-600">
-                        {{ zone }}
-                      </code>
-                    }
+    <!-- Desktop table view -->
+    <div class="table-shell hidden sm:block">
+      <table class="table-base">
+        <caption class="sr-only">
+          AWS availability zones by region with zone counts and names.
+        </caption>
+        <thead class="table-head">
+          <tr>
+            <th class="px-4 py-3" scope="col">Region</th>
+            <th class="px-4 py-3" scope="col">Geography</th>
+            <th class="px-4 py-3" scope="col">Datacenter Location</th>
+            <th class="px-4 py-3 text-right" scope="col">Zones</th>
+            <th class="px-4 py-3" scope="col">AZ Names</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-border-soft">
+          @for (r of filteredData(); track r.regionId) {
+            <tr class="table-row-hover">
+              <td class="px-4 py-3">
+                <div class="space-y-1 text-left">
+                  <a class="link-primary font-semibold" [routerLink]="['/regions', r.regionId]">
+                    {{ r.displayName }}
+                    <span aria-hidden="true" class="text-text-muted">></span>
+                  </a>
+                  <div class="text-xs font-semibold tracking-wide text-text-subtle uppercase">
+                    {{ r.regionId }}
                   </div>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    </section>
+                </div>
+              </td>
+              <td class="px-4 py-3 text-text-muted">{{ r.geography }}</td>
+              <td class="px-4 py-3 text-text-muted">
+                {{ r.datacenterLocation }}
+              </td>
+              <td class="px-4 py-3 text-right">
+                <span class="badge-latency badge-latency-neutral tabular-nums">
+                  {{ r.availabilityZoneCount }}
+                </span>
+              </td>
+              <td class="px-4 py-3">
+                <div class="flex flex-wrap gap-2">
+                  @for (zone of r.availabilityZones; track zone) {
+                    <code class="rounded bg-secondary px-2 py-1 text-xs text-text-body">
+                      {{ zone }}
+                    </code>
+                  }
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
 
-    <section class="space-y-4 pb-6">
-      <h2 class="content-heading">Additional Resources</h2>
-      <div class="grid gap-4 md:grid-cols-3">
-        <article class="resource-card">
-          <h3 class="resource-card__title">AWS Global Infrastructure</h3>
-          <p class="resource-card__body">Explore AWS's worldwide infrastructure</p>
-          <a
-            href="https://aws.amazon.com/about-aws/global-infrastructure/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="resource-card__link"
-            aria-label="Learn more about AWS Global Infrastructure"
-          >
-            Learn more
-          </a>
-        </article>
-        <article class="resource-card">
-          <h3 class="resource-card__title">AWS AZ Documentation</h3>
-          <p class="resource-card__body">Technical details and best practices</p>
-          <a
-            href="https://aws.amazon.com/about-aws/global-infrastructure/regions_az/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="resource-card__link"
-            aria-label="Learn more about AWS AZ Documentation"
-          >
-            Learn more
-          </a>
-        </article>
-        <article class="resource-card">
-          <h3 class="resource-card__title">Interactive Infrastructure Map</h3>
-          <p class="resource-card__body">Visual exploration of AWS regions</p>
-          <a
-            href="https://infrastructure.aws/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="resource-card__link"
-            aria-label="Learn more about the Interactive Infrastructure Map"
-          >
-            Learn more
-          </a>
-        </article>
+    <!-- Mobile card view -->
+    <div class="space-y-2 sm:hidden">
+      @for (r of filteredData(); track r.regionId) {
+        <a
+          class="block rounded-lg border border-border-soft bg-surface-raised p-3 transition-colors hover:bg-surface-muted"
+          [routerLink]="['/regions', r.regionId]"
+        >
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0 flex-1">
+              <div class="font-semibold text-text-strong">{{ r.displayName }}</div>
+              <div class="text-xs font-semibold tracking-wide text-text-subtle uppercase">
+                {{ r.regionId }}
+              </div>
+              <div class="mt-1 text-sm text-text-muted">
+                {{ r.geography }} · {{ r.datacenterLocation }}
+              </div>
+            </div>
+            <span class="badge-latency badge-latency-neutral shrink-0 tabular-nums">
+              {{ r.availabilityZoneCount }} AZs
+            </span>
+          </div>
+          @if (r.availabilityZones && r.availabilityZones.length > 0) {
+            <div class="mt-2 flex flex-wrap gap-1">
+              @for (zone of r.availabilityZones; track zone) {
+                <code class="rounded bg-secondary px-1.5 py-0.5 text-xs text-text-body">
+                  {{ zone }}
+                </code>
+              }
+            </div>
+          }
+        </a>
+      }
+    </div>
+
+    @if (filteredData().length === 0) {
+      <div class="empty-state">
+        <app-lucide-icon name="search" class="h-8 w-8" aria-hidden="true" />
+        <p>No regions found matching your search and filter criteria.</p>
+        @if (hasActiveFilters()) {
+          <button type="button" class="btn btn-outline" (click)="clearFilters()">
+            <app-lucide-icon name="x" class="h-3 w-3" aria-hidden="true" />
+            Clear Filters
+          </button>
+        }
       </div>
-    </section>
-  </div>
-</div>
+    }
+  </section>
+
+  <section class="section-block" aria-labelledby="resources-heading">
+    <h2 id="resources-heading" class="section-title">Additional resources</h2>
+    <div class="resource-grid">
+      <article class="card card-resource">
+        <h3 class="card-title">AWS Global Infrastructure</h3>
+        <p class="card-description">Explore AWS's worldwide infrastructure</p>
+        <a
+          href="https://aws.amazon.com/about-aws/global-infrastructure/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="card-cta"
+        >
+          View global infrastructure
+        </a>
+      </article>
+      <article class="card card-resource">
+        <h3 class="card-title">AWS AZ Documentation</h3>
+        <p class="card-description">Technical details and best practices</p>
+        <a
+          href="https://aws.amazon.com/about-aws/global-infrastructure/regions_az/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="card-cta"
+        >
+          Read AZ guide
+        </a>
+      </article>
+      <article class="card card-resource">
+        <h3 class="card-title">Interactive Infrastructure Map</h3>
+        <p class="card-description">Visual exploration of AWS regions</p>
+        <a
+          href="https://infrastructure.aws/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="card-cta"
+        >
+          Open interactive map
+        </a>
+      </article>
+    </div>
+  </section>
+</article>

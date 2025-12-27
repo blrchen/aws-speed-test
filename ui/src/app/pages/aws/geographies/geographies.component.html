@@ -1,89 +1,117 @@
-<div class="page-container py-3">
-  <header class="page-intro">
-    <h1 class="page-title page-intro__title">AWS Geographic Infrastructure</h1>
-    <p class="page-intro__description">
+<article class="page-shell section-stack mx-auto max-w-5xl">
+  <header class="page-header">
+    <h1 class="page-title">AWS geographic infrastructure</h1>
+
+    <p class="page-lead">
       AWS Geographies represent strategic market boundaries that ensure data sovereignty and
       regulatory compliance while enabling customers to deploy resilient, low-latency applications.
     </p>
   </header>
 
-  <div class="space-y-8">
-    <section class="space-y-4">
-      <div>
-        <h2 class="content-heading">Global Geographic Distribution</h2>
-        <p class="mt-2 text-base leading-relaxed text-slate-600">
-          AWS organizes its cloud infrastructure into distinct geographies to help customers meet
-          their data residency, compliance, and latency requirements. Each geography serves a
-          specific market area and contains multiple regions for redundancy.
-        </p>
-      </div>
-      <div class="shadow-card overflow-x-auto rounded-2xl border border-slate-200 bg-white">
-        <table class="min-w-full divide-y divide-slate-200 text-left text-sm text-slate-700">
-          <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
-            <tr>
-              <th class="px-4 py-3">Geography</th>
-              <th class="px-4 py-3">Regions</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-100">
-            @for (g of tableData(); track g.name) {
-              <tr class="align-top transition hover:bg-slate-50/60">
-                <td
-                  class="w-48 px-4 py-4 align-top text-sm font-semibold uppercase tracking-wide text-slate-500"
-                >
-                  {{ g.name }}
-                </td>
-                <td class="px-4 py-4">
-                  <div class="grid gap-x-6 gap-y-3 sm:grid-cols-2 xl:grid-cols-3">
-                    @for (r of g.regions; track r.regionId) {
-                      <div class="flex min-w-[12rem] flex-col gap-1">
-                        <a
-                          class="text-sm font-semibold text-blue-600 transition hover:text-blue-700 hover:underline"
-                          [routerLink]="['/regions', r.regionId]"
-                        >
-                          {{ r.displayName }}
-                        </a>
-                        <div class="flex flex-wrap items-center gap-x-2 text-xs text-slate-500">
-                          <span class="font-medium uppercase tracking-wide">{{ r.regionId }}</span>
-                          @if (r.datacenterLocation) {
-                            <span>({{ r.datacenterLocation }})</span>
-                          }
-                        </div>
+  <section class="section-block" aria-labelledby="distribution-heading">
+    <div>
+      <h2 id="distribution-heading" class="section-title">Global geographic distribution</h2>
+      <p class="text-base leading-relaxed text-text-muted">
+        AWS organizes its cloud infrastructure into distinct geographies to help customers meet
+        their data residency, compliance, and latency requirements. Each geography serves a specific
+        market area and contains multiple regions for redundancy.
+      </p>
+    </div>
+    <!-- Desktop table view -->
+    <div class="table-shell hidden sm:block">
+      <table class="table-base">
+        <caption class="sr-only">
+          AWS geographies with their associated regions.
+        </caption>
+        <thead class="table-head">
+          <tr>
+            <th class="px-4 py-3" scope="col">Geography</th>
+            <th class="px-4 py-3" scope="col">Regions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-border-soft">
+          @for (g of tableData(); track g.name) {
+            <tr class="table-row-hover">
+              <td
+                class="min-w-48 px-4 py-3 align-top text-sm font-semibold tracking-wide text-text-strong uppercase"
+              >
+                {{ g.name }}
+              </td>
+              <td class="px-4 py-3">
+                <ul class="grid gap-x-6 gap-y-3 sm:grid-cols-2 xl:grid-cols-3">
+                  @for (r of g.regions; track r.regionId) {
+                    <li class="min-w-[12rem] space-y-1 text-left">
+                      <a class="link-primary font-semibold" [routerLink]="['/regions', r.regionId]">
+                        {{ r.displayName }}
+                        <span aria-hidden="true" class="text-text-muted">></span>
+                      </a>
+                      <div class="text-xs font-semibold tracking-wide text-text-subtle uppercase">
+                        {{ r.regionId }}
                       </div>
-                    }
-                  </div>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    </section>
+                    </li>
+                  }
+                </ul>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
 
-    <section class="space-y-4 pb-6">
-      <h2 class="content-heading">Additional Resources</h2>
-      <div class="grid gap-4 md:grid-cols-2">
+    <!-- Mobile card view -->
+    <div class="space-y-4 sm:hidden">
+      @for (g of tableData(); track g.name) {
+        <div class="rounded-lg border border-border-soft bg-surface-raised p-4">
+          <div class="mb-3 text-sm font-semibold tracking-wide text-text-strong uppercase">
+            {{ g.name }}
+          </div>
+          <ul class="grid gap-3">
+            @for (r of g.regions; track r.regionId) {
+              <li>
+                <a
+                  class="block rounded-md bg-surface-muted px-3 py-2 transition-colors hover:bg-surface-contrast"
+                  [routerLink]="['/regions', r.regionId]"
+                >
+                  <div class="font-semibold text-text-strong">{{ r.displayName }}</div>
+                  <div class="text-xs font-semibold tracking-wide text-text-subtle uppercase">
+                    {{ r.regionId }}
+                  </div>
+                </a>
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="section-block" aria-labelledby="resources-heading">
+    <h2 id="resources-heading" class="section-title">Additional resources</h2>
+    <div class="resource-grid">
+      <article class="card card-resource">
+        <h3 class="card-title">AWS Global Infrastructure</h3>
+        <p class="card-description">Explore AWS's worldwide presence</p>
         <a
           href="https://aws.amazon.com/about-aws/global-infrastructure/"
-          class="shadow-card group flex h-full flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-blue-400 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
           target="_blank"
+          rel="noopener noreferrer"
+          class="card-cta"
         >
-          <div class="space-y-1">
-            <h3 class="text-base font-semibold text-slate-900">AWS Global Infrastructure</h3>
-            <p class="text-sm text-slate-500">Explore AWS's worldwide presence</p>
-          </div>
+          View global infrastructure
         </a>
+      </article>
+      <article class="card card-resource">
+        <h3 class="card-title">AWS Compliance Programs</h3>
+        <p class="card-description">Understand regional compliance coverage</p>
         <a
           href="https://aws.amazon.com/compliance/programs/"
-          class="shadow-card group flex h-full flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-blue-400 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
           target="_blank"
+          rel="noopener noreferrer"
+          class="card-cta"
         >
-          <div class="space-y-1">
-            <h3 class="text-base font-semibold text-slate-900">AWS Compliance Programs</h3>
-            <p class="text-sm text-slate-500">Understand regional compliance coverage</p>
-          </div>
+          See compliance programs
         </a>
-      </div>
-    </section>
-  </div>
-</div>
+      </article>
+    </div>
+  </section>
+</article>

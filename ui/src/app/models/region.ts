@@ -16,6 +16,10 @@ export interface Region {
 
 // Extended interface with additional fields for application use
 export interface RegionModel extends Region {
-  geographicGroup: string
   storageAccountName: string
+}
+
+export interface Geography {
+  name: string
+  regions: RegionModel[]
 }

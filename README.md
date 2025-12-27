@@ -17,11 +17,8 @@ See README [here](ui/README.md)
 
 ## Built on
 
-* [Angular](https://github.com/angular/angular)
-* [Bootstrap](https://github.com/twbs/bootstrap)
-* [AWS Catalog](https://github.com/blrchen/aws-catalog)
-* [d3-shape](https://github.com/d3/d3-shape)
-* [ngx-charts](https://github.com/swimlane/ngx-charts)
+- [Angular](https://github.com/angular/angular)
+- [Tailwind CSS](https://github.com/tailwindlabs/tailwindcss)
 
 ## License
 

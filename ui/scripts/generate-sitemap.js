@@ -1,57 +1,131 @@
-const fs = require('fs');
-const path = require('path');
+#!/usr/bin/env node
 
-const DOMAIN = 'https://awsspeedtest.com';
-const OUTPUT_PATH = path.join(__dirname, '../public/sitemap.xml');
-const REGIONS_PATH = path.join(__dirname, '../src/assets/data/regions.json');
+const { existsSync, readFileSync, writeFileSync } = require('node:fs')
+const { resolve } = require('node:path')
+
+const projectRoot = resolve(__dirname, '..')
+const publicDir = resolve(projectRoot, 'public')
+const outputPath = resolve(publicDir, 'sitemap.xml')
+const prerenderManifestPath = resolve(
+  projectRoot,
+  'dist',
+  'aws-speed-test',
+  'prerendered-routes.json'
+)
 
 function generateSitemap() {
-  const now = new Date().toISOString();
-  
-  // Static routes
-  const staticRoutes = [
-    { url: '/latency', priority: '1.00' },
-    { url: '/regions', priority: '0.80' },
-    { url: '/availability-zones', priority: '0.80' },
-    { url: '/geographies', priority: '0.80' },
-    { url: '/about', priority: '0.80' },
-    { url: '/privacy', priority: '0.50' }
-  ];
+  const baseUrlFromEnv = process.env.SITEMAP_BASE_URL ?? 'https://awsspeedtest.com'
+  const normalizedBaseUrl = baseUrlFromEnv.replace(/\/+$/, '')
 
-  // Dynamic region routes
-  let dynamicRoutes = [];
-  try {
-    const regionsData = JSON.parse(fs.readFileSync(REGIONS_PATH, 'utf8'));
-    dynamicRoutes = regionsData.map(region => ({
-      url: `/regions/${region.regionId}`,
-      priority: '0.60'
-    }));
-  } catch (error) {
-    console.warn('Could not read regions data:', error.message);
+  if (!/^https?:\/\//.test(normalizedBaseUrl)) {
+    console.error(
+      `Invalid base URL "${baseUrlFromEnv}". Expected value to begin with http:// or https://.`
+    )
+    process.exit(1)
   }
 
-  const allRoutes = [...staticRoutes, ...dynamicRoutes];
+  if (!existsSync(prerenderManifestPath)) {
+    console.error(
+      `Prerender manifest not found at ${prerenderManifestPath}. Run the prerender build first.`
+    )
+    process.exit(1)
+  }
 
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset
-     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-           http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-${allRoutes.map(route => `<url>
-  <loc>${DOMAIN}${route.url}</loc>
-  <lastmod>${now}</lastmod>
-  <priority>${route.priority}</priority>
-</url>`).join('\n')}
+  let prerenderManifest
 
-</urlset>`;
+  try {
+    prerenderManifest = JSON.parse(readFileSync(prerenderManifestPath, 'utf8'))
+  } catch (error) {
+    console.error(
+      `Failed to read routes from ${prerenderManifestPath}: ${(error && error.message) || error}`
+    )
+    process.exit(1)
+  }
 
-  fs.writeFileSync(OUTPUT_PATH, sitemap);
-  console.log(`Sitemap generated with ${allRoutes.length} URLs at ${OUTPUT_PATH}`);
+  const discoveredRoutes = prerenderManifest?.routes ?? {}
+  const routeKeys = Object.keys(discoveredRoutes)
+
+  if (routeKeys.length === 0) {
+    console.error(`No routes were found in ${prerenderManifestPath}.`)
+    process.exit(1)
+  }
+
+  const routes = new Set(routeKeys)
+
+  if (!routes.has('/')) {
+    routes.add('/')
+  }
+
+  const sortedRoutes = Array.from(routes).sort((a, b) => {
+    if (a === b) {
+      return 0
+    }
+
+    if (a === '/') {
+      return -1
+    }
+
+    if (b === '/') {
+      return 1
+    }
+
+    return a.localeCompare(b)
+  })
+
+  const expectedUrls = sortedRoutes.map((route) =>
+    route === '/' ? `${normalizedBaseUrl}/` : `${normalizedBaseUrl}${route}`
+  )
+  const expectedUrlSet = new Set(expectedUrls)
+
+  const urlEntries = expectedUrls
+    .map((url) => `  <url>\n    <loc>${encodeURI(url)}</loc>\n  </url>`)
+    .join('\n')
+
+  const sitemapXml = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    urlEntries,
+    '</urlset>',
+    ''
+  ].join('\n')
+
+  writeFileSync(outputPath, sitemapXml, 'utf8')
+
+  const xmlToValidate = sitemapXml
+
+  const locMatches = Array.from(xmlToValidate.matchAll(/<loc>(.*?)<\/loc>/g)).map(
+    (match) => match[1]
+  )
+
+  const sitemapUrlSet = new Set(locMatches)
+
+  const missingUrls = [...expectedUrlSet].filter((url) => !sitemapUrlSet.has(url))
+  const extraUrls = [...sitemapUrlSet].filter((url) => !expectedUrlSet.has(url))
+
+  if (missingUrls.length > 0 || extraUrls.length > 0) {
+    if (missingUrls.length > 0) {
+      console.error('Missing URLs:')
+      for (const url of missingUrls) {
+        console.error(`  ${url}`)
+      }
+    }
+
+    if (extraUrls.length > 0) {
+      console.error('Unexpected URLs:')
+      for (const url of extraUrls) {
+        console.error(`  ${url}`)
+      }
+    }
+
+    console.error('Sitemap validation failed.')
+    process.exit(1)
+  }
+
+  console.log(`Sitemap written to ${outputPath} with ${expectedUrls.length} entries`)
 }
 
 if (require.main === module) {
-  generateSitemap();
+  generateSitemap()
 }
 
-module.exports = { generateSitemap };
+module.exports = { generateSitemap }

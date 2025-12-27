@@ -7,18 +7,18 @@ import {
   OnInit,
   signal
 } from '@angular/core'
-import { CommonModule } from '@angular/common'
-import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { distinctUntilChanged, map } from 'rxjs/operators'
-import { RegionService, SeoService } from '../../../services'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
+import { distinctUntilChanged, map } from 'rxjs'
+
 import { RegionModel } from '../../../models'
+import { RegionService, SeoService } from '../../../services'
 
 @Component({
   selector: 'app-region-detail',
-  standalone: true,
   templateUrl: './region-detail.component.html',
-  imports: [CommonModule, RouterModule],
+  styleUrl: './region-detail.component.css',
+  imports: [RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegionDetailComponent implements OnInit {
@@ -74,8 +74,7 @@ export class RegionDetailComponent implements OnInit {
 
     const sentences = [intro]
 
-    const zoneCount =
-      region.availabilityZoneCount ?? region.availabilityZones?.length ?? 0
+    const zoneCount = region.availabilityZoneCount ?? region.availabilityZones?.length ?? 0
     if (zoneCount > 0) {
       const zoneLabel = zoneCount === 1 ? 'availability zone' : 'availability zones'
       const zoneList =
@@ -118,7 +117,7 @@ export class RegionDetailComponent implements OnInit {
     }
 
     this.navigatedToFallback = false
-    this.seoService.setMetaTitle(`AWS Region | ${region.longName} | `)
+    this.seoService.setMetaTitle(`AWS Region ${region.longName} - AWS Speed Test`)
     this.seoService.setMetaDescription(
       `Comprehensive information about AWS ${region.longName} region including location, availability zones, coordinates, and launch details.`
     )

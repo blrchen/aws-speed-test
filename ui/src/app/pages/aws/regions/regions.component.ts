@@ -1,17 +1,17 @@
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core'
-import { CommonModule } from '@angular/common'
-import { RouterModule } from '@angular/router'
-import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms'
 import { toSignal } from '@angular/core/rxjs-interop'
+import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms'
+import { RouterLink } from '@angular/router'
+
 import { Region } from '../../../models'
 import { RegionService, SeoService } from '../../../services'
-import { HeroIconComponent } from '../../../shared/icons/hero-icons.imports'
+import { LucideIconComponent } from '../../../shared/icons/lucide-icons.component'
 
 @Component({
   selector: 'app-regions',
-  standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, HeroIconComponent],
+  imports: [RouterLink, ReactiveFormsModule, LucideIconComponent],
   templateUrl: './regions.component.html',
+  styleUrl: './regions.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegionsComponent implements OnInit {
@@ -39,6 +39,11 @@ export class RegionsComponent implements OnInit {
   readonly availableGeographies = computed(() =>
     [...new Set(this.regions().map((region) => region.regionGroup))].sort()
   )
+  readonly hasSearchTerm = computed(() => {
+    const { search } = this.filtersValue()
+    return (search ?? '').trim().length > 0
+  })
+
   readonly filteredData = computed<Region[]>(() => {
     const { search, regionGroup } = this.filtersValue()
     const selectedRegionGroup = regionGroup ?? 'all'
@@ -78,10 +83,6 @@ export class RegionsComponent implements OnInit {
     this.seoService.setCanonicalUrl('https://awsspeedtest.com/regions')
   }
 
-  trackByRegion(index: number, region: Region): string {
-    return region.regionId || `region-${index}`
-  }
-
   hasActiveFilters(): boolean {
     const { search, regionGroup } = this.filtersValue()
     return Boolean((search ?? '').trim()) || (regionGroup ?? 'all') !== 'all'
@@ -89,5 +90,9 @@ export class RegionsComponent implements OnInit {
 
   clearFilters(): void {
     this.filtersForm.setValue({ search: '', regionGroup: 'all' })
+  }
+
+  clearSearch(): void {
+    this.filtersForm.controls.search.setValue('')
   }
 }

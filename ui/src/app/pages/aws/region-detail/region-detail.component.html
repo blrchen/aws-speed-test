@@ -1,93 +1,97 @@
 @if (region(); as r) {
-  <div class="page-container py-3">
-    <div class="mx-auto w-full max-w-4xl space-y-6">
-      <nav class="app-breadcrumb" aria-label="Breadcrumb">
-        <ol class="app-breadcrumb__list">
-          <li class="app-breadcrumb__item">
-            <a routerLink="/">Home</a>
-          </li>
-          <li class="app-breadcrumb__item">
-            <a routerLink="/regions">Regions</a>
-          </li>
-          <li class="app-breadcrumb__item app-breadcrumb__item--active" aria-current="page">
-            {{ r.longName }}
-          </li>
-        </ol>
-      </nav>
+  <article class="page-shell section-stack mx-auto max-w-5xl">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a routerLink="/" class="breadcrumb-link"> Home </a>
+      <span class="breadcrumb-separator">/</span>
+      <a routerLink="/regions" class="breadcrumb-link"> Regions </a>
+      <span class="breadcrumb-separator">/</span>
+      <span class="breadcrumb-current" aria-current="page">{{ r.longName }}</span>
+    </nav>
 
-      <header class="page-intro">
-        <h1 class="page-title page-intro__title">{{ r.longName }}</h1>
-        @if (regionSummary(); as summary) {
-          <p class="page-intro__description">{{ summary }}</p>
-        }
-      </header>
+    <header class="page-header">
+      <h1 class="page-title">{{ r.longName }}</h1>
 
-      <section class="space-y-4">
-        <h2 class="content-heading">Infrastructure Snapshot</h2>
-        <div class="shadow-card overflow-hidden rounded-2xl border border-slate-200 bg-white">
-          <table class="min-w-full divide-y divide-slate-200 text-sm">
-            <tbody class="divide-y divide-slate-100 text-slate-700">
-              @if (r.datacenterLocation) {
-                <tr>
-                  <th class="w-1/3 bg-slate-50 px-4 py-3 text-left text-slate-500">
-                    Datacenter Location
-                  </th>
-                  <td class="px-4 py-3 text-slate-800">{{ r.datacenterLocation }}</td>
-                </tr>
-              }
-              @if (r.geography) {
-                <tr>
-                  <th class="w-1/3 bg-slate-50 px-4 py-3 text-left text-slate-500">Geography</th>
-                  <td class="px-4 py-3 text-slate-800">{{ r.geography }}</td>
-                </tr>
-              }
-              @if (r.availabilityZones && r.availabilityZones.length > 0) {
-                <tr>
-                  <th class="w-1/3 bg-slate-50 px-4 py-3 text-left text-slate-500">
-                    Availability Zones
-                  </th>
-                  <td class="px-4 py-3 text-slate-800">{{ r.availabilityZones.join(', ') }}</td>
-                </tr>
-              }
-              @if (r.availabilityZoneCount) {
-                <tr>
-                  <th class="w-1/3 bg-slate-50 px-4 py-3 text-left text-slate-500">AZ Count</th>
-                  <td class="px-4 py-3 text-slate-800">{{ r.availabilityZoneCount }}</td>
-                </tr>
-              }
-              @if (r.latitude || r.longitude) {
-                <tr>
-                  <th class="w-1/3 bg-slate-50 px-4 py-3 text-left text-slate-500">Coordinates</th>
-                  <td class="px-4 py-3 text-slate-800">
-                    {{ r.latitude || 'N/A' }}, {{ r.longitude || 'N/A' }}
-                  </td>
-                </tr>
-              }
-              @if (r.launchYear) {
-                <tr>
-                  <th class="w-1/3 bg-slate-50 px-4 py-3 text-left text-slate-500">Launch Year</th>
-                  <td class="px-4 py-3 text-slate-800">{{ r.launchYear }}</td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      </section>
-    </div>
-  </div>
+      @if (regionSummary(); as summary) {
+        <p class="page-lead">{{ summary }}</p>
+      }
+    </header>
+
+    <section class="section-block" aria-labelledby="overview-heading">
+      <h2 id="overview-heading" class="section-title">Region overview</h2>
+      <div class="table-shell">
+        <table class="table-base">
+          <caption class="sr-only">
+            Infrastructure details for
+            {{
+              r.displayName
+            }}
+            region.
+          </caption>
+          <tbody class="divide-y divide-border-soft">
+            @if (r.datacenterLocation) {
+              <tr>
+                <th class="detail-th" scope="row">Datacenter location</th>
+                <td class="detail-td">{{ r.datacenterLocation }}</td>
+              </tr>
+            }
+            @if (r.geography) {
+              <tr>
+                <th class="detail-th" scope="row">Geography</th>
+                <td class="detail-td">{{ r.geography }}</td>
+              </tr>
+            }
+            @if (r.availabilityZones && r.availabilityZones.length > 0) {
+              <tr>
+                <th class="detail-th" scope="row">
+                  Availability zones
+                  <span class="ml-1 text-text-muted">({{ r.availabilityZoneCount }})</span>
+                </th>
+                <td class="detail-td">
+                  <div class="flex flex-wrap gap-2">
+                    @for (zone of r.availabilityZones; track zone) {
+                      <code class="rounded bg-secondary px-2 py-1 text-xs text-text-body">
+                        {{ zone }}
+                      </code>
+                    }
+                  </div>
+                </td>
+              </tr>
+            }
+            @if (r.latitude && r.longitude) {
+              <tr>
+                <th class="detail-th" scope="row">Coordinates</th>
+                <td class="detail-td font-mono text-sm">{{ r.latitude }}, {{ r.longitude }}</td>
+              </tr>
+            }
+            @if (r.launchYear) {
+              <tr>
+                <th class="detail-th" scope="row">Launch year</th>
+                <td class="detail-td">{{ r.launchYear }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-block" aria-labelledby="actions-heading">
+      <h2 id="actions-heading" class="section-title">Actions</h2>
+      <div class="flex flex-wrap gap-3">
+        <a routerLink="/" [queryParams]="{ regions: r.regionId }" class="btn btn-primary">
+          <span>Test latency to this region</span>
+        </a>
+        <a routerLink="/regions" class="btn btn-outline">
+          <span>View all regions</span>
+        </a>
+      </div>
+    </section>
+  </article>
 } @else {
-  <div class="page-container py-3">
-    <div class="mx-auto w-full max-w-xl space-y-4 text-center">
-      <header class="page-intro items-center text-center">
-        <h1 class="page-title page-intro__title">Region Not Found</h1>
-        <p class="page-intro__description">Unable to find region details.</p>
-      </header>
-      <a
-        routerLink="/regions"
-        class="inline-flex items-center justify-center rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-      >
-        Back to Regions
-      </a>
-    </div>
-  </div>
+  <article class="page-shell section-stack mx-auto max-w-5xl text-center">
+    <header class="page-header items-center">
+      <h1 class="page-title text-center">Region not found</h1>
+      <p class="page-lead">Unable to find region details.</p>
+    </header>
+    <a routerLink="/regions" class="btn btn-primary"> Back to Regions </a>
+  </article>
 }

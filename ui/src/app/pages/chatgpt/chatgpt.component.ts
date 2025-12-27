@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core'
-import { RouterModule } from '@angular/router'
+import { RouterOutlet } from '@angular/router'
 
 @Component({
   selector: 'app-chatgpt',
-  standalone: true,
-  imports: [RouterModule],
+  imports: [RouterOutlet],
   template: '<router-outlet />',
   changeDetection: ChangeDetectionStrategy.OnPush
 })

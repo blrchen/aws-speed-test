@@ -1,10 +1,11 @@
 import { Injectable, Signal, signal } from '@angular/core'
-import regionJson from '../../assets/data/regions.json'
-import geographyJson from '../../assets/data/geographies.json'
-import { RegionModel } from '../models'
 
-export interface Geography {
-  name: string
+import geographyJson from '../../assets/data/geographies.json'
+import regionJson from '../../assets/data/regions.json'
+import { Geography, RegionModel } from '../models'
+
+export interface RegionGroup {
+  regionGroup: string
   regions: RegionModel[]
 }
 
@@ -12,12 +13,14 @@ export interface Geography {
   providedIn: 'root'
 })
 export class RegionService {
-  private readonly selectedRegionsSignal = signal<RegionModel[]>([])
-  readonly selectedRegions: Signal<RegionModel[]> = this.selectedRegionsSignal.asReadonly()
+  private readonly selectedRegionsState = signal<RegionModel[]>([])
+  readonly selectedRegions: Signal<RegionModel[]> = this.selectedRegionsState.asReadonly()
 
   // Memoization cache
   private cachedRegions: RegionModel[] | null = null
+  private cachedRegionGroups: RegionGroup[] | null = null
   private cachedGeographies: Geography[] | null = null
+  private readonly regionCollator = new Intl.Collator('en', { sensitivity: 'base' })
 
   getRegionByName(name: string): RegionModel | undefined {
     const normalized = name.toLowerCase()
@@ -31,7 +34,7 @@ export class RegionService {
   }
 
   updateSelectedRegions(regions: RegionModel[]): void {
-    this.selectedRegionsSignal.set(regions)
+    this.selectedRegionsState.set(regions)
   }
 
   getAllRegions(): RegionModel[] {
@@ -40,16 +43,43 @@ export class RegionService {
     }
 
     this.cachedRegions = regionJson.map((regionData) => {
-      const prefix = 'ast'
-      const postfix = '693a6c0'
       return {
         ...regionData,
-        geographicGroup: regionData.regionGroup,
-        storageAccountName: `${prefix}-${regionData.regionId}-${postfix}`
+        storageAccountName: this.buildStorageAccountName(regionData.regionId)
       }
     })
 
     return this.cachedRegions
+  }
+
+  getRegionGroups(): RegionGroup[] {
+    if (this.cachedRegionGroups) {
+      return this.cachedRegionGroups
+    }
+
+    const groupsByName = new Map<string, RegionModel[]>()
+
+    for (const region of this.getAllRegions()) {
+      const key = region.regionGroup
+      if (!key) continue
+
+      const group = groupsByName.get(key)
+      if (group) {
+        group.push(region)
+      } else {
+        groupsByName.set(key, [region])
+      }
+    }
+
+    const collator = this.regionCollator
+    this.cachedRegionGroups = Array.from(groupsByName.entries())
+      .map(([regionGroup, groupedRegions]) => ({
+        regionGroup,
+        regions: [...groupedRegions].sort((a, b) => collator.compare(a.displayName, b.displayName))
+      }))
+      .sort((a, b) => b.regions.length - a.regions.length)
+
+    return this.cachedRegionGroups
   }
 
   getAllGeographies(): Geography[] {
@@ -60,16 +90,19 @@ export class RegionService {
     this.cachedGeographies = geographyJson.map((geography) => ({
       ...geography,
       regions: geography.regions.map((regionData) => {
-        const prefix = 'ast'
-        const postfix = '693a6c0'
         return {
           ...regionData,
-          geographicGroup: regionData.regionGroup,
-          storageAccountName: `${prefix}-${regionData.regionId}-${postfix}`
+          storageAccountName: this.buildStorageAccountName(regionData.regionId)
         }
       })
     }))
 
     return this.cachedGeographies
+  }
+
+  private buildStorageAccountName(regionId: string): string {
+    const prefix = 'ast'
+    const postfix = '693a6c0'
+    return `${prefix}-${regionId}-${postfix}`
   }
 }

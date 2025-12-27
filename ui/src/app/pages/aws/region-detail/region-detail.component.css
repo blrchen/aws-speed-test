@@ -1,0 +1,40 @@
+:host {
+  display: block;
+}
+
+/* Detail table styling */
+.detail-th {
+  width: 33.333%;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 500;
+  background-color: var(--color-secondary);
+  color: var(--color-text-body);
+}
+
+.detail-td {
+  padding: 0.75rem 1rem;
+}
+
+/* Mobile: stack label above value */
+@media (max-width: 639px) {
+  .detail-th,
+  .detail-td {
+    display: block;
+    width: 100%;
+  }
+
+  .detail-th {
+    padding-bottom: 0.25rem;
+    background-color: transparent;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+  }
+
+  .detail-td {
+    padding-top: 0;
+    padding-bottom: 1rem;
+  }
+}

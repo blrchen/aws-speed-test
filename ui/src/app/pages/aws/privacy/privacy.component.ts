@@ -1,11 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core'
-import { CommonModule } from '@angular/common'
+
 import { SeoService } from '../../../services'
 
 @Component({
   selector: 'app-privacy',
-  standalone: true,
-  imports: [CommonModule],
   templateUrl: './privacy.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })

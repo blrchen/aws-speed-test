@@ -1,54 +1,59 @@
-<div class="page-container py-3">
-  <header class="page-intro">
-    <h1 class="page-title page-intro__title">ChatGPT Assistant</h1>
-    <p class="page-intro__description">
+<article class="page-shell section-stack mx-auto max-w-5xl">
+  <header class="page-header">
+    <h1 class="page-title">ChatGPT assistant</h1>
+
+    <p class="page-lead">
       Welcome to ChatGPT Assistant, your top place for discovering the amazing power of the ChatGPT
       API. Each assistant lets you try it yourself, so you can see how the ChatGPT API can transform
       your projects and workflows. Thanks for trying ChatGPT Assistant—we hope you have fun!
     </p>
   </header>
 
-  <div class="space-y-8">
-    <section class="space-y-4">
-      <h2 class="content-heading">Writing Assistant</h2>
-      <div class="grid gap-4 md:grid-cols-2">
-        @for (card of textCards(); track card) {
-          <section
-            class="shadow-card flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5"
+  <section class="section-block" aria-labelledby="writing-heading">
+    <h2 id="writing-heading" class="section-title">Writing assistant</h2>
+    <div class="grid gap-4 md:grid-cols-2">
+      @for (card of textCards; track card.title) {
+        <article class="card card-resource h-full p-5">
+          <h3 class="text-lg font-semibold text-text-strong">
+            {{ card.title }}
+          </h3>
+          <p class="mt-2 flex-1 text-sm leading-relaxed text-text-muted">
+            {{ card.text }}
+          </p>
+          <a
+            [href]="card.link"
+            class="btn btn-primary mt-4"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            <h3 class="text-lg font-semibold text-slate-900">{{ card.title }}</h3>
-            <p class="mt-2 flex-1 text-sm leading-relaxed text-slate-600">{{ card.text }}</p>
-            <a
-              [href]="card.link"
-              class="mt-4 inline-flex w-fit items-center justify-center rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-              role="button"
-            >
-              Try it now
-            </a>
-          </section>
-        }
-      </div>
-    </section>
+            Try it now
+          </a>
+        </article>
+      }
+    </div>
+  </section>
 
-    <section class="space-y-4 pb-6">
-      <h2 class="content-heading">Code Assistant</h2>
-      <div class="grid gap-4 md:grid-cols-2">
-        @for (card of codeCards(); track card) {
-          <section
-            class="shadow-card flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5"
+  <section class="section-block" aria-labelledby="code-heading">
+    <h2 id="code-heading" class="section-title">Code assistant</h2>
+    <div class="grid gap-4 md:grid-cols-2">
+      @for (card of codeCards; track card.title) {
+        <article class="card card-resource h-full p-5">
+          <h3 class="text-lg font-semibold text-text-strong">
+            {{ card.title }}
+          </h3>
+          <p class="mt-2 flex-1 text-sm leading-relaxed text-text-muted">
+            {{ card.text }}
+          </p>
+          <a
+            [href]="card.link"
+            class="btn btn-primary mt-4"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            <h3 class="text-lg font-semibold text-slate-900">{{ card.title }}</h3>
-            <p class="mt-2 flex-1 text-sm leading-relaxed text-slate-600">{{ card.text }}</p>
-            <a
-              [href]="card.link"
-              class="mt-4 inline-flex w-fit items-center justify-center rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-              role="button"
-            >
-              Try it now
-            </a>
-          </section>
-        }
-      </div>
-    </section>
-  </div>
-</div>
+            Try it now
+          </a>
+        </article>
+      }
+    </div>
+  </section>
+</article>
