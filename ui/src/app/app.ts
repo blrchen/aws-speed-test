@@ -1,28 +1,30 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  DestroyRef,
-  inject,
-  signal
-} from '@angular/core'
+import { DOCUMENT } from '@angular/common'
+import { Component, inject, signal } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import {
-  NavigationCancel,
   NavigationEnd,
-  NavigationError,
-  NavigationStart,
-  RouteConfigLoadEnd,
-  RouteConfigLoadStart,
+  NavigationSkipped,
   Router,
   RouterLink,
-  RouterOutlet
+  RouterOutlet,
+  type ActivatedRouteSnapshot,
 } from '@angular/router'
+import { filter } from 'rxjs'
 
+import {
+  APP_BRAND_LABEL,
+  APP_GITHUB_ARIA_LABEL,
+  APP_GITHUB_URL,
+  APP_HOME_LINK,
+  APP_NAV_GROUPS,
+} from './app.navigation'
 import { FooterComponent } from './shared/footer/footer.component'
 import { LucideIconComponent } from './shared/icons/lucide-icons.component'
-import { NavGroup, NavGroupsComponent } from './shared/nav-groups/nav-groups.component'
-import { ThemeToggleComponent } from './shared/theme'
+import { MobileNavCloseEvent, MobileNavComponent } from './shared/mobile-nav/mobile-nav.component'
+import { NavGroupsComponent } from './shared/nav-groups/nav-groups.component'
+import { RouteLoaderComponent } from './shared/route-loader/route-loader.component'
+import { RouteLoadingService } from './shared/route-loader/route-loading.service'
+import { ThemeToggleComponent } from './shared/theme/theme-toggle.component'
 
 @Component({
   selector: 'app-root',
@@ -32,117 +34,90 @@ import { ThemeToggleComponent } from './shared/theme'
     FooterComponent,
     NavGroupsComponent,
     LucideIconComponent,
-    ThemeToggleComponent
+    MobileNavComponent,
+    RouteLoaderComponent,
+    ThemeToggleComponent,
   ],
   host: {
-    '(document:keydown.escape)': 'handleEscapeKey()'
+    class: 'block',
   },
   templateUrl: './app.html',
   styleUrl: './app.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class App {
+  private readonly document = inject(DOCUMENT)
   private readonly router = inject(Router)
-  private readonly destroyRef = inject(DestroyRef)
+  private mobileNavTrigger: HTMLElement | null = null
 
+  readonly promoBannerDismissed = signal(false)
   readonly mobileNavOpen = signal(false)
-  readonly isRouteLoading = signal(false)
-  private readonly hasCompletedInitialNavigation = signal(false)
-  readonly showRouteLoader = computed(
-    () => this.hasCompletedInitialNavigation() && this.isRouteLoading()
-  )
+  readonly fullWidthShell = signal(false)
+  readonly routeLoading = inject(RouteLoadingService)
 
-  readonly navGroups = signal<NavGroup[]>([
-    {
-      heading: 'Featured',
-      items: [
-        {
-          label: 'ChatGPT Assistant',
-          icon: 'sparkles',
-          routerLink: '/chatgpt/chatgpt-assistant'
-        }
-      ]
-    },
-    {
-      heading: 'Testing',
-      items: [
-        {
-          label: 'AWS Latency Test',
-          icon: 'zap',
-          routerLink: '/latency'
-        }
-      ]
-    },
-    {
-      heading: 'Resources',
-      items: [
-        {
-          label: 'AWS Regions',
-          icon: 'globe',
-          routerLink: '/regions'
-        },
-        {
-          label: 'AWS Availability Zones',
-          icon: 'map-pin',
-          routerLink: '/availability-zones'
-        },
-        {
-          label: 'AWS Geographies',
-          icon: 'globe',
-          routerLink: '/geographies'
-        }
-      ]
-    },
-    {
-      heading: 'Info',
-      items: [
-        {
-          label: 'About',
-          icon: 'info',
-          routerLink: '/about'
-        }
-      ]
-    }
-  ])
+  readonly brandLabel = APP_BRAND_LABEL
+  readonly homeLink = APP_HOME_LINK
+  readonly githubUrl = APP_GITHUB_URL
+  readonly githubAriaLabel = APP_GITHUB_ARIA_LABEL
+  readonly navGroups = APP_NAV_GROUPS
 
   constructor() {
-    this.router.events.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((event) => {
-      if (event instanceof NavigationStart || event instanceof RouteConfigLoadStart) {
-        if (this.hasCompletedInitialNavigation()) {
-          this.isRouteLoading.set(true)
-        }
-        return
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd || event instanceof NavigationSkipped),
+        takeUntilDestroyed()
+      )
+      .subscribe(() => {
+        this.updateShellLayout()
+        this.closeMobileNav({ restoreFocus: false })
+      })
+
+    this.updateShellLayout()
+  }
+
+  toggleMobileNav(event?: Event): void {
+    const willOpen = !this.mobileNavOpen()
+    if (willOpen) {
+      if (event?.currentTarget instanceof HTMLElement) {
+        this.mobileNavTrigger = event.currentTarget
       }
-
-      if (
-        event instanceof RouteConfigLoadEnd ||
-        event instanceof NavigationEnd ||
-        event instanceof NavigationCancel ||
-        event instanceof NavigationError
-      ) {
-        this.isRouteLoading.set(false)
-        if (!this.hasCompletedInitialNavigation()) {
-          this.hasCompletedInitialNavigation.set(true)
-        }
-      }
-    })
-  }
-
-  toggleMobileNav(): void {
-    this.mobileNavOpen.update((open) => !open)
-  }
-
-  closeMobileNav(): void {
-    this.mobileNavOpen.set(false)
-  }
-
-  handleMobileNavigate(): void {
-    this.closeMobileNav()
-  }
-
-  handleEscapeKey(): void {
-    if (this.mobileNavOpen()) {
+      this.mobileNavOpen.set(true)
+    } else {
       this.closeMobileNav()
     }
+  }
+
+  closeMobileNav(event: MobileNavCloseEvent = { restoreFocus: true }): void {
+    const trigger = this.mobileNavTrigger
+    this.mobileNavOpen.set(false)
+    this.mobileNavTrigger = null
+    if (event.restoreFocus) trigger?.focus()
+  }
+
+  focusMainContent(): void {
+    const mainContent = this.document.getElementById('main-content')
+    if (mainContent) {
+      mainContent.setAttribute('tabindex', '-1')
+      mainContent.focus()
+      return
+    }
+
+    this.document.querySelector<HTMLHeadingElement>('h1')?.focus()
+  }
+
+  private updateShellLayout(): void {
+    let useFullWidthShell = false
+
+    for (
+      let route: ActivatedRouteSnapshot | null = this.router.routerState.snapshot.root;
+      route;
+      route = route.firstChild
+    ) {
+      if (route.data['shellWidth'] === 'full') {
+        useFullWidthShell = true
+        break
+      }
+    }
+
+    this.fullWidthShell.set(useFullWidthShell)
   }
 }

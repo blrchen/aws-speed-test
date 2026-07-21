@@ -1,131 +1,137 @@
 #!/usr/bin/env node
 
-const { existsSync, readFileSync, writeFileSync } = require('node:fs')
-const { resolve } = require('node:path')
+const { existsSync, mkdirSync, readFileSync, writeFileSync } = require('node:fs')
+const { dirname, resolve } = require('node:path')
 
 const projectRoot = resolve(__dirname, '..')
-const publicDir = resolve(projectRoot, 'public')
-const outputPath = resolve(publicDir, 'sitemap.xml')
-const prerenderManifestPath = resolve(
-  projectRoot,
-  'dist',
-  'aws-speed-test',
-  'prerendered-routes.json'
-)
+const projectName = 'aws-speed-test'
+const siteOrigin = 'https://awsspeedtest.com'
+const ignoredPrerenderRoutes = ['/', '/not-found']
+const publicOutputPath = resolve(projectRoot, 'public', 'sitemap.xml')
+const browserOutputPath = resolve(projectRoot, 'dist', projectName, 'browser', 'sitemap.xml')
+const prerenderManifestPath = resolve(projectRoot, 'dist', projectName, 'prerendered-routes.json')
 
-function generateSitemap() {
-  const baseUrlFromEnv = process.env.SITEMAP_BASE_URL ?? 'https://awsspeedtest.com'
-  const normalizedBaseUrl = baseUrlFromEnv.replace(/\/+$/, '')
+function fail(message) {
+  console.error(message)
+  process.exit(1)
+}
 
-  if (!/^https?:\/\//.test(normalizedBaseUrl)) {
-    console.error(
-      `Invalid base URL "${baseUrlFromEnv}". Expected value to begin with http:// or https://.`
-    )
-    process.exit(1)
+function normalizeRoute(route) {
+  if (typeof route !== 'string' || route.length === 0) {
+    throw new Error(`Invalid route value: ${route}`)
   }
 
+  const normalized = route.startsWith('/') ? route : `/${route}`
+  return normalized.length > 1 ? normalized.replace(/\/+$/, '') : normalized
+}
+
+function uniqueSortedRoutes(routes) {
+  return Array.from(new Set(routes.map(normalizeRoute))).sort((a, b) => a.localeCompare(b))
+}
+
+function isRecord(value) {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+function normalizeBaseUrl(value) {
+  const normalized = value.replace(/\/+$/, '')
+
+  if (!/^https?:\/\//.test(normalized)) {
+    throw new Error(`Invalid base URL "${value}". Expected http:// or https://.`)
+  }
+
+  return normalized
+}
+
+function xmlEscape(value) {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}
+
+function readPrerenderManifest() {
   if (!existsSync(prerenderManifestPath)) {
-    console.error(
-      `Prerender manifest not found at ${prerenderManifestPath}. Run the prerender build first.`
-    )
-    process.exit(1)
+    fail(`Prerender manifest not found at ${prerenderManifestPath}. Run ng build first.`)
   }
-
-  let prerenderManifest
 
   try {
-    prerenderManifest = JSON.parse(readFileSync(prerenderManifestPath, 'utf8'))
+    const manifest = JSON.parse(readFileSync(prerenderManifestPath, 'utf8'))
+
+    if (!isRecord(manifest) || !isRecord(manifest.routes)) {
+      fail(`Prerender manifest at ${prerenderManifestPath} must contain routes.`)
+    }
+
+    return manifest
   } catch (error) {
-    console.error(
+    fail(
       `Failed to read routes from ${prerenderManifestPath}: ${(error && error.message) || error}`
     )
-    process.exit(1)
+  }
+}
+
+function getSitemapRoutesFromPrerenderManifest(prerenderManifest) {
+  const prerenderRoutes = uniqueSortedRoutes(Object.keys(prerenderManifest.routes))
+
+  if (prerenderRoutes.length === 0) {
+    fail(`No routes were found in ${prerenderManifestPath}.`)
   }
 
-  const discoveredRoutes = prerenderManifest?.routes ?? {}
-  const routeKeys = Object.keys(discoveredRoutes)
+  const ignoredSet = new Set(uniqueSortedRoutes(ignoredPrerenderRoutes))
+  const sitemapRoutes = prerenderRoutes.filter((route) => !ignoredSet.has(route))
 
-  if (routeKeys.length === 0) {
-    console.error(`No routes were found in ${prerenderManifestPath}.`)
-    process.exit(1)
+  if (sitemapRoutes.length === 0) {
+    fail(`No sitemap routes remain after filtering ignored routes from ${prerenderManifestPath}.`)
   }
 
-  const routes = new Set(routeKeys)
+  return sitemapRoutes
+}
 
-  if (!routes.has('/')) {
-    routes.add('/')
-  }
-
-  const sortedRoutes = Array.from(routes).sort((a, b) => {
-    if (a === b) {
-      return 0
-    }
-
-    if (a === '/') {
-      return -1
-    }
-
-    if (b === '/') {
-      return 1
-    }
-
-    return a.localeCompare(b)
-  })
-
-  const expectedUrls = sortedRoutes.map((route) =>
-    route === '/' ? `${normalizedBaseUrl}/` : `${normalizedBaseUrl}${route}`
-  )
-  const expectedUrlSet = new Set(expectedUrls)
-
-  const urlEntries = expectedUrls
-    .map((url) => `  <url>\n    <loc>${encodeURI(url)}</loc>\n  </url>`)
+function buildSitemapXml(baseUrl, routes) {
+  const urlEntries = routes
+    .map((route) => {
+      const url = new URL(route, `${baseUrl}/`).href
+      return `  <url>\n    <loc>${xmlEscape(url)}</loc>\n  </url>`
+    })
     .join('\n')
 
-  const sitemapXml = [
+  return [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     urlEntries,
     '</urlset>',
-    ''
+    '',
   ].join('\n')
+}
 
-  writeFileSync(outputPath, sitemapXml, 'utf8')
+function writeFileEnsuringDirectory(path, contents) {
+  mkdirSync(dirname(path), { recursive: true })
+  writeFileSync(path, contents, 'utf8')
+}
 
-  const xmlToValidate = sitemapXml
+function generateSitemap() {
+  const baseUrl = normalizeBaseUrl(process.env.SITEMAP_BASE_URL ?? siteOrigin)
+  const prerenderManifest = readPrerenderManifest()
+  const sitemapRoutes = getSitemapRoutesFromPrerenderManifest(prerenderManifest)
 
-  const locMatches = Array.from(xmlToValidate.matchAll(/<loc>(.*?)<\/loc>/g)).map(
-    (match) => match[1]
+  const sitemapXml = buildSitemapXml(baseUrl, sitemapRoutes)
+
+  writeFileEnsuringDirectory(publicOutputPath, sitemapXml)
+  writeFileEnsuringDirectory(browserOutputPath, sitemapXml)
+
+  console.log(
+    `Sitemap written to ${publicOutputPath} and ${browserOutputPath} with ${sitemapRoutes.length} entries`
   )
-
-  const sitemapUrlSet = new Set(locMatches)
-
-  const missingUrls = [...expectedUrlSet].filter((url) => !sitemapUrlSet.has(url))
-  const extraUrls = [...sitemapUrlSet].filter((url) => !expectedUrlSet.has(url))
-
-  if (missingUrls.length > 0 || extraUrls.length > 0) {
-    if (missingUrls.length > 0) {
-      console.error('Missing URLs:')
-      for (const url of missingUrls) {
-        console.error(`  ${url}`)
-      }
-    }
-
-    if (extraUrls.length > 0) {
-      console.error('Unexpected URLs:')
-      for (const url of extraUrls) {
-        console.error(`  ${url}`)
-      }
-    }
-
-    console.error('Sitemap validation failed.')
-    process.exit(1)
-  }
-
-  console.log(`Sitemap written to ${outputPath} with ${expectedUrls.length} entries`)
 }
 
 if (require.main === module) {
-  generateSitemap()
+  try {
+    generateSitemap()
+  } catch (error) {
+    fail((error && error.message) || String(error))
+  }
 }
 
 module.exports = { generateSitemap }

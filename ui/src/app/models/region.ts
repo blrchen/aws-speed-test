@@ -1,25 +1,25 @@
 // Base interface matching the structure of regions.json
 export interface Region {
-  regionId: string
-  displayName: string
-  longName: string
-  geography: string
-  regionGroup: string
-  geographicLocation: string
-  latitude: number | null
-  longitude: number | null
-  datacenterLocation: string
-  availabilityZoneCount: number
-  availabilityZones: string[]
-  launchYear: string | null
+  readonly regionId: string
+  readonly displayName: string
+  readonly longName: string
+  readonly geography: string
+  readonly regionGroup: string
+  readonly geographicLocation: string
+  readonly latitude: number | null
+  readonly longitude: number | null
+  readonly datacenterLocation: string
+  readonly availabilityZoneCount: number
+  readonly availabilityZones: readonly string[]
+  readonly launchYear: string | null
 }
 
 // Extended interface with additional fields for application use
 export interface RegionModel extends Region {
-  storageAccountName: string
+  readonly storageAccountName: string
 }
 
 export interface Geography {
-  name: string
-  regions: RegionModel[]
+  readonly name: string
+  readonly regions: readonly RegionModel[]
 }

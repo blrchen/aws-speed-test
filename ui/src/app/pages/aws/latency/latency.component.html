@@ -2,121 +2,92 @@
   <header class="page-header">
     <h1 class="page-title">AWS latency test</h1>
     <p class="page-lead">
-      Measure network latency from your IP location to AWS datacenters worldwide and find the best
-      region for your location. To compare with Azure regions, visit
+      Measure network latency from your IP location to AWS datacenters worldwide and compare
+      selected regions by median latency from your connection. To compare with Azure regions, visit
       <a
         href="https://www.azurespeed.com/Azure/Latency"
         target="_blank"
         rel="noopener noreferrer"
         class="link-primary inline-flex items-center gap-1"
         >Azure Latency Test
-        <app-lucide-icon name="external-link" class="size-3" aria-hidden="true" /></a
+        <app-lucide-icon name="external-link" class="ml-1 size-3" aria-hidden="true" /></a
       >.
     </p>
   </header>
 
   <section class="section-block" aria-labelledby="latency-test-heading">
     <h2 id="latency-test-heading" class="sr-only">Latency test</h2>
-    <div class="mb-4 rounded-xl bg-gradient-to-r from-primary/5 via-transparent to-primary/5 p-4">
+    <div class="mb-4 rounded-lg bg-primary/5 p-4">
       <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
-          <span class="text-xs font-bold tracking-widest text-primary uppercase">Test Steps</span>
-          <div class="flex flex-wrap items-center gap-4 text-sm">
-            <span class="flex items-center gap-2.5">
+          <h3 class="text-xs font-bold tracking-widest text-primary uppercase">Test Steps</h3>
+          <ol class="flex list-none flex-wrap items-center gap-4 text-sm">
+            <li class="flex items-center gap-2.5">
               <span class="step-number" aria-hidden="true">1</span>
               <span class="text-text-body">Select regions</span>
-            </span>
-            <span class="hidden text-border-contrast sm:inline" aria-hidden="true">|</span>
-            <span class="flex items-center gap-2.5">
+            </li>
+            <li class="flex items-center gap-2.5">
               <span class="step-number" aria-hidden="true">2</span>
               <span class="text-text-body">Wait ~15 seconds</span>
-            </span>
-            <span class="hidden text-border-contrast sm:inline" aria-hidden="true">|</span>
-            <span class="flex items-center gap-2.5">
+            </li>
+            <li class="flex items-center gap-2.5">
               <span class="step-number" aria-hidden="true">3</span>
-              <span class="text-text-body">Scroll down to review results</span>
-            </span>
-          </div>
+              <span class="text-text-body">View live results</span>
+            </li>
+          </ol>
         </div>
       </div>
     </div>
-    <app-region-group></app-region-group>
+    <app-region-group
+      #regionSelector
+      resultsTargetId="results-heading"
+      resultsLabel="View Live Results"
+      [resultsAvailable]="latencyRows().length > 0"
+      [resultsStatus]="measurementStatusText()"
+    />
   </section>
 
+  @let rows = latencyRows();
+
   <section class="section-block" aria-labelledby="recommendations-heading">
-    <div class="flex items-center justify-between gap-4">
-      <h2 id="recommendations-heading" class="section-title">Recommended AWS regions</h2>
-      @if (shareUrl()) {
-        <button
-          type="button"
-          class="inline-flex items-center gap-1.5 rounded-lg border border-border-soft bg-surface-raised px-3 py-1.5 text-xs font-medium text-text-body shadow-sm transition-all hover:border-primary/40 hover:bg-primary/5 hover:text-primary active:scale-[0.98]"
-          [class.border-success]="isCopySuccess()"
-          [class.bg-success/10]="isCopySuccess()"
-          [class.text-success]="isCopySuccess()"
-          (click)="copyShareUrl()"
-          [attr.aria-label]="isCopySuccess() ? 'Link copied' : 'Share test results'"
-        >
-          @if (isCopyIdle()) {
-            <app-lucide-icon name="share-2" class="h-3.5 w-3.5" aria-hidden="true" />
-            <span>Share</span>
-          }
-          @if (isCopySuccess()) {
-            <app-lucide-icon name="check" class="h-3.5 w-3.5" aria-hidden="true" />
-            <span>Copied!</span>
-          }
-          @if (isCopyError()) {
-            <app-lucide-icon name="x" class="h-3.5 w-3.5" aria-hidden="true" />
-            <span>Failed</span>
-          }
-        </button>
-      }
-    </div>
-    @let best = bestRegion();
-    @if (!best) {
-      <div class="card mt-4 min-h-[200px]">
-        <div class="flex flex-col items-center justify-center gap-3 text-center">
-          <app-lucide-icon name="globe" class="h-10 w-10 text-primary/70" aria-hidden="true" />
-          <div class="space-y-1">
-            <div class="text-lg font-bold text-text-strong">Which AWS region is best for you?</div>
-            <p class="text-sm text-text-muted">Select 2+ regions above to compare and find out</p>
-          </div>
-        </div>
-        <div class="mt-6 border-t border-border-soft pt-4">
-          <app-connection-details
-            [isVisible]="cloudflareMetaStore.isVisible()"
-            [isLoading]="cloudflareMetaStore.isLoading()"
-            [error]="cloudflareMetaStore.error()"
-            [networkLabel]="cloudflareMetaStore.viewerNetworkLabel()"
-            [locationLabel]="cloudflareMetaStore.viewerLocationLabel()"
-            [ipLabel]="cloudflareMetaStore.viewerIpLabel()"
-            (toggleVisibility)="cloudflareMetaStore.toggleVisibility()"
-          />
-        </div>
+    @let hasSelection = rows.length > 0;
+    <div class="flex flex-wrap items-start justify-between gap-4">
+      <h2 id="recommendations-heading" class="section-title">Lowest-latency AWS regions</h2>
+      <div class="flex max-w-sm flex-col items-start gap-2 sm:items-end sm:text-right">
+        @let testLink = testLinkUrl();
+        <app-copy-button
+          [text]="testLink"
+          label="Copy Test Link"
+          ariaLabel="Copy test link. Anyone opening this link will run a new test from their own connection."
+          [resetOn]="testLink"
+        />
+        <p class="text-xs leading-relaxed text-text-muted">
+          Anyone opening this link will run a new test from their own connection.
+        </p>
       </div>
-    }
-    @if (best) {
-      <div class="mt-4 space-y-3">
-        <div
-          class="divide-y divide-border-soft overflow-hidden rounded-xl border border-border-soft bg-surface-raised"
-        >
-          @let allRegions = [best].concat(runnerUpRegions());
-          @for (region of allRegions; track region.regionId; let i = $index) {
-            @let tone = getLatencyBadgeState(region.medianLatency);
+    </div>
+    @let recommendationRows = recommendationSlots();
+    <div class="mt-4 space-y-3">
+      <div
+        class="divide-y divide-border-soft rounded-lg border border-border-soft bg-surface-raised"
+      >
+        @for (region of recommendationRows; track $index; let i = $index) {
+          @if (region; as rankedRegion) {
             <a
-              class="flex items-center gap-4 px-4 py-3 transition-all"
               [class]="
-                i === 0
-                  ? 'relative border-l-4 border-l-success bg-gradient-to-r from-success/10 via-success/5 to-transparent hover:from-success/15'
-                  : 'hover:bg-surface-muted'
+                'flex min-h-16 items-center gap-4 border-l-4 px-4 py-3 first:rounded-t-lg last:rounded-b-lg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none focus-visible:ring-inset ' +
+                (i === 0
+                  ? 'relative border-l-success bg-success/10 hover:bg-success/15'
+                  : 'border-l-transparent hover:bg-surface-muted')
               "
-              [routerLink]="buildRegionRouterLink(region.regionId)"
+              [routerLink]="buildRegionDetailRouterLink(rankedRegion.regionId)"
             >
               <span
-                class="flex shrink-0 items-center justify-center rounded-full font-bold"
                 [class]="
-                  i === 0
-                    ? 'h-8 w-8 bg-success text-sm text-success-foreground shadow-md shadow-success/30'
-                    : 'h-7 w-7 bg-primary/15 text-xs text-text-strong'
+                  'flex shrink-0 items-center justify-center rounded-full font-bold tabular-nums ' +
+                  (i === 0
+                    ? 'size-8 bg-success text-sm text-success-foreground shadow-md shadow-success/30'
+                    : 'size-7 bg-primary/15 text-xs text-text-strong')
                 "
                 >{{ i + 1 }}</span
               >
@@ -128,255 +99,315 @@
                         ? 'text-base font-bold text-text-strong'
                         : 'font-semibold text-text-strong'
                     "
-                    >{{ region.displayName }}</span
+                    >{{ rankedRegion.displayName }}</span
                   >
                   @if (i === 0) {
-                    <span class="best-badge">Best</span>
+                    <span class="best-badge">Lowest</span>
                   }
                 </div>
-                <div [class]="i === 0 ? 'text-sm text-text-body' : 'text-sm text-text-muted'">
-                  {{ region.datacenterLocation }}
+                <div
+                  class="truncate"
+                  [class]="i === 0 ? 'text-sm text-text-body' : 'text-sm text-text-muted'"
+                >
+                  {{ rankedRegion.datacenterLocation }}
                 </div>
               </div>
               <span
                 class="badge-latency"
-                [class.badge-latency-success]="tone === 'fast'"
-                [class.badge-latency-warning]="tone === 'moderate'"
-                [class.badge-latency-danger]="tone === 'slow'"
-                [class.badge-latency-neutral]="tone === 'unknown'"
+                [class.badge-latency-success]="rankedRegion.tone === 'fast'"
+                [class.badge-latency-warning]="rankedRegion.tone === 'moderate'"
+                [class.badge-latency-danger]="rankedRegion.tone === 'slow'"
+                [class.badge-latency-neutral]="rankedRegion.tone === 'unknown'"
               >
-                {{ region.medianLatency }} ms
+                {{ rankedRegion.median.label }}
               </span>
               <app-lucide-icon
                 name="chevron-right"
-                [class]="i === 0 ? 'h-5 w-5 text-success' : 'h-4 w-4 text-text-muted'"
+                [class]="
+                  i === 0
+                    ? 'size-5 text-success-foreground dark:text-success'
+                    : 'size-4 text-text-muted'
+                "
                 aria-hidden="true"
               />
             </a>
-          }
-        </div>
-        <app-connection-details
-          [isVisible]="cloudflareMetaStore.isVisible()"
-          [isLoading]="cloudflareMetaStore.isLoading()"
-          [error]="cloudflareMetaStore.error()"
-          [networkLabel]="cloudflareMetaStore.viewerNetworkLabel()"
-          [locationLabel]="cloudflareMetaStore.viewerLocationLabel()"
-          [ipLabel]="cloudflareMetaStore.viewerIpLabel()"
-          (toggleVisibility)="cloudflareMetaStore.toggleVisibility()"
-        />
-      </div>
-    }
-  </section>
-
-  @let rows = tableData();
-  @let hasRows = rows.length > 0;
-  <!-- Always render results section when regions selected to prevent CLS -->
-  <section
-    class="section-block"
-    aria-labelledby="results-heading"
-    [class.hidden]="!hasSelectedRegions()"
-  >
-    <div class="flex items-center justify-between gap-4">
-      <h2 id="results-heading" class="section-title">AWS latency test results</h2>
-      @if (hasRows) {
-        <button
-          type="button"
-          class="inline-flex items-center gap-1.5 rounded-lg border border-border-soft bg-surface-raised px-3 py-1.5 text-xs font-medium text-text-body shadow-sm transition-all hover:border-primary/40 hover:bg-primary/5 hover:text-primary active:scale-[0.98]"
-          (click)="exportToCsv()"
-          aria-label="Export results to CSV"
-        >
-          <app-lucide-icon name="download" class="h-3.5 w-3.5" aria-hidden="true" />
-          <span>Export CSV</span>
-        </button>
-      }
-    </div>
-    @let maxLatency = hasRows ? rows[rows.length - 1].medianLatency : 300;
-    <div class="flex min-h-[420px] flex-col gap-5" aria-live="polite">
-      <div class="flex w-full flex-col gap-4">
-        @if (hasRows) {
-          <div class="table-shell hidden sm:block">
-            <table class="table-base">
-              <thead class="table-head">
-                <tr>
-                  <th class="px-4 py-3">Geography</th>
-                  <th class="px-4 py-3">Region</th>
-                  <th class="px-4 py-3">Datacenter</th>
-                  <th class="px-4 py-3 text-right">Median latency</th>
-                  <th class="px-4 py-3 text-right">Latest (ms)</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-border-soft">
-                @for (item of rows; track trackByRegionData($index, item); let idx = $index) {
-                  @let rowTone = getLatencyBadgeState(item.medianLatency);
-                  @let barWidth = maxLatency > 0 ? (item.medianLatency / maxLatency) * 100 : 0;
-                  <tr
-                    class="table-row-hover group animate-fade-slide-in"
-                    [class.best-row]="idx === 0"
-                  >
-                    <td class="px-4 py-3">
-                      <div class="flex items-center gap-2">
-                        <span class="block text-sm font-semibold text-text-strong">
-                          {{ item.geography }}
-                        </span>
-                        @if (idx === 0) {
-                          <span class="best-badge" aria-label="Best latency result">Best</span>
-                        }
-                      </div>
-                    </td>
-                    <td class="px-4 py-3">
-                      <div class="space-y-1 text-left">
-                        <a
-                          class="link-primary font-semibold"
-                          [routerLink]="buildRegionRouterLink(item.regionId)"
-                        >
-                          {{ item.displayName }}
-                          <span aria-hidden="true" class="text-text-muted">></span>
-                        </a>
-                        <div class="text-xs font-semibold tracking-wide text-text-subtle uppercase">
-                          {{ item.regionId }}
-                        </div>
-                      </div>
-                    </td>
-                    <td class="px-4 py-3 text-sm text-text-muted">
-                      {{ item.datacenterLocation }}
-                    </td>
-                    <td class="px-4 py-3">
-                      @if (item.medianLatency && item.medianLatency > 0) {
-                        <div class="flex items-center justify-end gap-3">
-                          <div
-                            class="relative h-2 w-24 overflow-hidden rounded-full border border-border-strong bg-surface-muted"
-                          >
-                            <div
-                              class="animate-bar-grow absolute inset-y-0 left-0 rounded-full transition-all duration-500"
-                              [class.bar-color-fast]="rowTone === 'fast'"
-                              [class.bar-color-moderate]="rowTone === 'moderate'"
-                              [class.bar-color-slow]="rowTone === 'slow'"
-                              [class.bar-color-default]="rowTone === 'unknown'"
-                              [style.width.%]="barWidth"
-                            ></div>
-                          </div>
-                          <span
-                            class="min-w-[3rem] font-mono text-sm font-bold tabular-nums"
-                            [class.text-success]="rowTone === 'fast'"
-                            [class.text-warning]="rowTone === 'moderate'"
-                            [class.text-danger]="rowTone === 'slow'"
-                            [class.text-text-muted]="rowTone === 'unknown'"
-                          >
-                            {{ item.medianLatency }} ms
-                          </span>
-                        </div>
-                      } @else {
-                        <span class="block text-right text-sm text-text-muted">Measuring...</span>
-                      }
-                    </td>
-                    <td class="px-4 py-3 text-right">
-                      <span class="font-mono text-sm font-semibold text-text-strong tabular-nums">
-                        {{ item.currentLatency || '-' }}
-                      </span>
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          </div>
-          <div class="space-y-2 sm:hidden">
-            @for (item of rows; track trackByRegionData($index, item); let idx = $index) {
-              @let cardTone = getLatencyBadgeState(item.medianLatency);
-              @let cardBarWidth = maxLatency > 0 ? (item.medianLatency / maxLatency) * 100 : 0;
-              <article
-                class="animate-fade-slide-in rounded-lg border border-border-soft bg-surface-raised p-3"
-                [class.border-success/40]="idx === 0"
-                [class.bg-success/5]="idx === 0"
-              >
-                <a
-                  class="flex items-center gap-3"
-                  [routerLink]="buildRegionRouterLink(item.regionId)"
-                >
-                  <div class="min-w-0 flex-1">
-                    <div class="flex items-center gap-2">
-                      @if (idx === 0) {
-                        <span class="best-badge">Best</span>
-                      }
-                      <span class="font-semibold text-text-strong">{{ item.displayName }}</span>
-                    </div>
-                    <div class="mt-0.5 text-xs text-text-muted">
-                      {{ item.geography }} · {{ item.datacenterLocation }}
-                    </div>
-                  </div>
-                  <div class="flex shrink-0 flex-col items-end gap-1">
-                    <span
-                      class="font-mono text-sm font-bold tabular-nums"
-                      [class.text-success]="cardTone === 'fast'"
-                      [class.text-warning]="cardTone === 'moderate'"
-                      [class.text-danger]="cardTone === 'slow'"
-                      [class.text-text-muted]="cardTone === 'unknown'"
-                    >
-                      {{ item.medianLatency || '-' }} ms
-                    </span>
-                    <div
-                      class="relative h-1.5 w-16 overflow-hidden rounded-full border border-border-strong bg-surface-muted"
-                    >
-                      <div
-                        class="animate-bar-grow absolute inset-y-0 left-0 rounded-full"
-                        [class.bar-color-fast]="cardTone === 'fast'"
-                        [class.bar-color-moderate]="cardTone === 'moderate'"
-                        [class.bar-color-slow]="cardTone === 'slow'"
-                        [class.bar-color-default]="cardTone === 'unknown'"
-                        [style.width.%]="cardBarWidth"
-                      ></div>
-                    </div>
-                  </div>
-                  <app-lucide-icon
-                    name="chevron-right"
-                    class="h-4 w-4 shrink-0 text-text-muted"
-                    aria-hidden="true"
-                  />
-                </a>
-              </article>
-            }
-          </div>
-        } @else if (shouldShowLatencySkeleton()) {
-          <div
-            class="min-h-[420px] animate-pulse rounded-2xl bg-gradient-to-r from-neutral-muted/70 via-surface-raised to-neutral-muted/70"
-            aria-hidden="true"
-          ></div>
-        } @else {
-          <div
-            class="flex min-h-[420px] flex-col items-center justify-center gap-4 rounded-2xl border border-border-soft bg-surface-muted/50 text-center"
-          >
-            <app-lucide-icon
-              name="signal-high"
-              class="h-12 w-12 text-text-muted/50"
+          } @else {
+            <div
+              class="flex min-h-16 items-center gap-4 border-l-4 border-l-transparent px-4 py-3"
               aria-hidden="true"
-            />
-            <div class="space-y-1">
-              <p class="text-lg font-semibold text-text-strong">No latency data yet</p>
-              <p class="text-sm text-text-muted">
-                Select regions above and wait for results to appear.
-              </p>
+            >
+              <span
+                [class]="
+                  'flex shrink-0 items-center justify-center rounded-full bg-surface-muted font-bold text-text-muted tabular-nums ' +
+                  (i === 0 ? 'size-8 text-sm' : 'size-7 text-xs')
+                "
+              >
+                {{ i + 1 }}
+              </span>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2">
+                  <span class="font-semibold text-text-muted">
+                    {{
+                      !hasSelection
+                        ? 'Select regions to compare'
+                        : i < rows.length
+                          ? 'Collecting stable samples...'
+                          : 'Select more regions to compare'
+                    }}
+                  </span>
+                  @if (i === 0) {
+                    <span class="invisible best-badge">Lowest</span>
+                  }
+                </div>
+                <div class="text-sm text-text-muted">
+                  {{
+                    !hasSelection
+                      ? 'No result yet'
+                      : i < rows.length
+                        ? 'Ranking pending'
+                        : 'Rank slot available'
+                  }}
+                </div>
+              </div>
+              <span class="badge-latency badge-latency-neutral">Pending</span>
+              <app-lucide-icon
+                name="chevron-right"
+                [class]="i === 0 ? 'invisible size-5' : 'invisible size-4'"
+                aria-hidden="true"
+              />
             </div>
-          </div>
+          }
         }
       </div>
+      <app-connection-details-container />
     </div>
   </section>
 
-  <section class="section-block" aria-labelledby="note-heading">
-    <h2 id="note-heading" class="sr-only">Important note</h2>
-    <div class="flex gap-4 rounded-xl border border-info/30 bg-info/5 p-4" role="note">
-      <app-lucide-icon name="info" class="mt-0.5 h-5 w-5 shrink-0 text-info" aria-hidden="true" />
+  <section class="section-block" aria-labelledby="results-heading">
+    <div class="flex flex-wrap items-center justify-between gap-4">
+      <h2
+        id="results-heading"
+        class="section-title scroll-mt-[calc(env(safe-area-inset-top)+5rem)]"
+        tabindex="-1"
+      >
+        AWS latency test results
+      </h2>
+      <div class="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          class="btn btn-outline btn--sm"
+          [class.invisible]="rows.length === 0"
+          [disabled]="rows.length === 0"
+          [attr.aria-hidden]="rows.length === 0 ? 'true' : null"
+          [tabIndex]="rows.length === 0 ? -1 : 0"
+          (click)="regionSelector.showSelection()"
+        >
+          Change Regions
+        </button>
+        <app-export-csv-button
+          filename="aws-latency-results"
+          [headers]="csvHeaders"
+          [rows]="csvRows()"
+        />
+      </div>
+    </div>
+    <p class="sr-only" role="status" aria-live="polite" aria-atomic="true">
+      {{ measurementStatusText() }}
+    </p>
+    <div class="flex min-h-[420px] flex-col gap-4">
+      @if (rows.length) {
+        <div class="table-shell hidden sm:block">
+          <table class="table-base">
+            <caption class="sr-only">
+              AWS regions sorted by median latency, lowest available result first. Median and latest
+              values update as samples are collected. Regions without stable results follow measured
+              regions.
+            </caption>
+            <thead class="table-head">
+              <tr>
+                <th scope="col" class="px-4 py-3">Geography</th>
+                <th scope="col" class="px-4 py-3">Region</th>
+                <th scope="col" class="px-4 py-3">Datacenter</th>
+                <th scope="col" aria-sort="ascending" class="px-4 py-3 text-right">
+                  Median latency
+                </th>
+                <th scope="col" class="px-4 py-3 text-right">Latest</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border-soft">
+              @for (item of rows; track $index) {
+                @let isBest = item.regionId === bestRegionId();
+                <tr class="table-row-hover group animate-fade-slide-in" [class.best-row]="isBest">
+                  <td class="px-4 py-3">
+                    <div class="flex items-center gap-2">
+                      <span class="block text-sm font-semibold text-text-strong">
+                        {{ item.geography }}
+                      </span>
+                      <span
+                        class="best-badge"
+                        [class.invisible]="!isBest"
+                        [attr.aria-hidden]="isBest ? null : 'true'"
+                      >
+                        <span aria-hidden="true">Lowest</span>
+                        <span class="sr-only">Lowest median latency result</span>
+                      </span>
+                    </div>
+                  </td>
+                  <td class="px-4 py-3">
+                    <div class="space-y-1 text-left">
+                      <a
+                        class="link-primary font-semibold"
+                        [routerLink]="buildRegionDetailRouterLink(item.regionId)"
+                      >
+                        {{ item.displayName }}
+                        <span aria-hidden="true" class="text-text-muted">></span>
+                      </a>
+                      <div
+                        class="text-xs font-semibold tracking-wide text-text-subtle uppercase"
+                        translate="no"
+                      >
+                        {{ item.regionId }}
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-4 py-3 text-sm text-text-muted">
+                    {{ item.datacenterLocation }}
+                  </td>
+                  <td class="px-4 py-3">
+                    <div class="flex items-center justify-end gap-3">
+                      <div
+                        class="relative h-2 w-24 overflow-hidden rounded-full border border-border-strong bg-surface-muted"
+                      >
+                        <div
+                          class="animate-bar-grow absolute inset-y-0 left-0 rounded-full"
+                          [class.bar-color-fast]="item.tone === 'fast'"
+                          [class.bar-color-moderate]="item.tone === 'moderate'"
+                          [class.bar-color-slow]="item.tone === 'slow'"
+                          [class.bar-color-default]="item.tone === 'unknown'"
+                          [appWidthPercent]="item.barWidthPercent"
+                        ></div>
+                      </div>
+                      <span
+                        [class]="
+                          'min-w-16 text-right font-mono text-sm font-bold tabular-nums ' +
+                          item.median.textClass
+                        "
+                      >
+                        {{ item.median.label }}
+                      </span>
+                    </div>
+                  </td>
+                  <td class="px-4 py-3 text-right">
+                    <span
+                      [class]="
+                        'inline-block min-w-16 font-mono text-sm font-semibold tabular-nums ' +
+                        item.latest.textClass
+                      "
+                    >
+                      {{ item.latest.label }}
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <div class="space-y-2 sm:hidden">
+          @for (item of rows; track $index) {
+            @let isBest = item.regionId === bestRegionId();
+            <article
+              class="animate-fade-slide-in rounded-lg border border-border-soft bg-surface-raised p-3"
+              [class.border-success/40]="isBest"
+              [class.bg-success/5]="isBest"
+            >
+              <a
+                class="flex items-center gap-3"
+                [routerLink]="buildRegionDetailRouterLink(item.regionId)"
+              >
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="best-badge"
+                      [class.invisible]="!isBest"
+                      [attr.aria-hidden]="isBest ? null : 'true'"
+                    >
+                      Lowest
+                    </span>
+                    <span class="font-semibold text-text-strong">{{ item.displayName }}</span>
+                  </div>
+                  <div class="mt-0.5 text-xs text-text-muted">
+                    {{ item.geography }} · {{ item.datacenterLocation }}
+                  </div>
+                </div>
+                <div class="flex shrink-0 flex-col items-end gap-1">
+                  <span
+                    [class]="
+                      'min-w-16 text-right font-mono text-sm font-bold tabular-nums ' +
+                      item.median.textClass
+                    "
+                  >
+                    {{ item.median.label }}
+                  </span>
+                  <div
+                    class="relative h-1.5 w-16 overflow-hidden rounded-full border border-border-strong bg-surface-muted"
+                  >
+                    <div
+                      class="animate-bar-grow absolute inset-y-0 left-0 rounded-full"
+                      [class.bar-color-fast]="item.tone === 'fast'"
+                      [class.bar-color-moderate]="item.tone === 'moderate'"
+                      [class.bar-color-slow]="item.tone === 'slow'"
+                      [class.bar-color-default]="item.tone === 'unknown'"
+                      [appWidthPercent]="item.barWidthPercent"
+                    ></div>
+                  </div>
+                </div>
+                <app-lucide-icon
+                  name="chevron-right"
+                  class="size-4 shrink-0 text-text-muted"
+                  aria-hidden="true"
+                />
+              </a>
+            </article>
+          }
+        </div>
+      } @else {
+        <div
+          class="flex min-h-[420px] flex-col items-center justify-center gap-4 rounded-lg border border-border-soft bg-surface-muted/50 text-center"
+        >
+          <app-lucide-icon
+            name="signal-high"
+            class="size-12 text-text-muted/50"
+            aria-hidden="true"
+          />
+          <div class="space-y-1">
+            <p class="text-lg font-semibold text-text-strong">No latency data yet</p>
+            <p class="text-sm text-text-muted">
+              Select regions above and wait for results to appear.
+            </p>
+          </div>
+        </div>
+      }
+    </div>
+    <div class="alert alert--info" role="note">
+      <app-lucide-icon
+        name="info"
+        class="mt-0.5 size-5 shrink-0 text-info-foreground dark:text-info"
+        aria-hidden="true"
+      />
       <div class="space-y-1">
-        <p class="text-sm font-semibold text-text-strong">Important note</p>
+        <p class="text-sm font-semibold text-text-strong">Latency-only ranking</p>
         <p class="text-sm leading-relaxed text-text-body">
-          This site gives a quick, indicative view of latency to AWS regions from your
-          location, use it for initial guidance, not for SLAs or final performance decisions. For
-          more accurate measurements, try
+          This ranking compares median browser-to-Amazon S3 HTTPS latency from your current
+          connection. It does not evaluate service availability, data residency, pricing, capacity,
+          or application architecture. Use it as initial guidance, not as the sole basis for
+          choosing a region. For a lower-overhead network measurement, try
           <a
             href="https://www.azurespeed.com/Azure/PsPing"
             target="_blank"
             rel="noopener noreferrer"
-            class="link-primary font-semibold"
-            >PsPing Network Latency Test</a
+            class="link-primary inline-flex items-center gap-1 font-semibold"
+            >PsPing Network Latency Test
+            <app-lucide-icon name="external-link" class="ml-1 size-3" aria-hidden="true" /></a
           >.
         </p>
       </div>
@@ -405,16 +436,16 @@
           <ul>
             <li>
               <strong class="text-text-strong">Real-time applications</strong>
-              (e.g., gaming, video conferencing): latency below 50 ms is ideal.
+              (e.g., gaming, video conferencing): latency below 50&nbsp;ms is ideal.
             </li>
             <li>
               <strong class="text-text-strong">Interactive applications</strong>
-              (e.g., web browsing, online trading): latency between 50 ms and 100 ms is usually
-              acceptable.
+              (e.g., web browsing, online trading): latency between 50&nbsp;ms and 100&nbsp;ms is
+              usually acceptable.
             </li>
             <li>
               <strong class="text-text-strong">Non-interactive applications</strong>
-              (e.g., file transfers, backups): latency above 100 ms may be acceptable.
+              (e.g., file transfers, backups): latency above 100&nbsp;ms may be acceptable.
             </li>
           </ul>
           <p>
@@ -422,7 +453,7 @@
           </p>
         </div>
       </details>
-      <details class="faq-item">
+      <details class="faq-item group">
         <summary class="faq-summary">
           <span class="faq-question">How does AWS Latency Test work?</span>
           <app-lucide-icon name="chevron-down" class="faq-icon" aria-hidden="true" />
@@ -434,24 +465,50 @@
           </p>
         </div>
       </details>
-      <details class="faq-item">
+      <details class="faq-item group">
         <summary class="faq-summary">
           <span class="faq-question"
-            >Why might my AWS Latency Test result differ from my PSPing result?</span
+            >Does the latency test reflect actual application performance?</span
           >
           <app-lucide-icon name="chevron-down" class="faq-icon" aria-hidden="true" />
         </summary>
         <div class="faq-body">
           <p>
-            The AWS Latency Test measures latency using HTTPS requests to AWS blob storage, whereas
-            PSPing measures TCP or ICMP echo requests. The two methods may yield different results
-            due to varying protocols, network paths, and the nature of the tests. HTTPS requests
-            involve more overhead compared to simple echo requests, which can lead to higher
-            latencies in the AWS Latency Test.
+            Partially. This test is a network-focused indicator, not a full application benchmark.
+          </p>
+          <ul>
+            <li>
+              <strong class="text-success-foreground dark:text-success">✓</strong> Good for
+              comparing relative latency between AWS regions
+            </li>
+            <li>
+              <strong class="text-success-foreground dark:text-success">✓</strong> Useful for
+              region-selection discussions
+            </li>
+            <li>
+              <strong class="text-danger-dark dark:text-danger">✗</strong> Not a substitute for
+              application-level load or performance testing
+            </li>
+          </ul>
+          <p>Use this test as a signal for initial guidance, not as the sole decision-maker.</p>
+        </div>
+      </details>
+      <details class="faq-item group">
+        <summary class="faq-summary">
+          <span class="faq-question">Is my speed test result private?</span>
+          <app-lucide-icon name="chevron-down" class="faq-icon" aria-hidden="true" />
+        </summary>
+        <div class="faq-body">
+          <p>
+            <strong class="text-text-strong">Yes.</strong> AWSSpeed does not require authentication
+            and does not collect personal or corporate identity information. Test results are
+            generated entirely in your browser and are only visible to you. Other users cannot view,
+            discover, or search for your results unless you explicitly share them (e.g., via
+            screenshot). Results are not published, stored, or retained on our servers.
           </p>
         </div>
       </details>
-      <details class="faq-item">
+      <details class="faq-item group">
         <summary class="faq-summary">
           <span class="faq-question"
             >Do you support upload, download tests, packet loss, and jitter?</span
@@ -460,6 +517,31 @@
         </summary>
         <div class="faq-body">
           <p>Currently not supported.</p>
+        </div>
+      </details>
+      <details class="faq-item group">
+        <summary class="faq-summary">
+          <span class="faq-question"
+            >Why might my AWS Latency Test result differ from my PSPing result?</span
+          >
+          <app-lucide-icon name="chevron-down" class="faq-icon" aria-hidden="true" />
+        </summary>
+        <div class="faq-body">
+          <p>
+            Browser-based latency tests include additional overhead that PSPing does not measure.
+            This test uses HTTPS requests which include:
+          </p>
+          <ul>
+            <li>DNS resolution time</li>
+            <li>TLS/SSL handshake negotiation</li>
+            <li>HTTP request/response header processing</li>
+            <li>Browser JavaScript execution overhead</li>
+          </ul>
+          <p>
+            PSPing measures raw TCP or ICMP echo requests with minimal overhead. Expect browser
+            results to be higher than PSPing. Both are valid — this test reflects real-world browser
+            application latency, while PSPing shows pure network latency.
+          </p>
         </div>
       </details>
     </div>

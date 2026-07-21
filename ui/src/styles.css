@@ -3,6 +3,7 @@
 @import './styles/theme.css';
 @import './styles/utilities.css';
 
+@import './styles/alerts.css';
 @import './styles/badges.css';
 @import './styles/base.css';
 @import './styles/breadcrumbs.css';
@@ -12,7 +13,9 @@
 @import './styles/forms.css';
 @import './styles/layout.css';
 @import './styles/links.css';
+@import './styles/region-selector.css';
 @import './styles/skeletons.css';
+@import './styles/spinner.css';
 @import './styles/tables.css';
 
 @custom-variant dark (&:is(.dark *));

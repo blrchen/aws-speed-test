@@ -1,98 +1,313 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core'
-import { toSignal } from '@angular/core/rxjs-interop'
-import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms'
-import { RouterLink } from '@angular/router'
+import { isPlatformBrowser, Location } from '@angular/common'
+import {
+  afterNextRender,
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  linkedSignal,
+  OnInit,
+  PLATFORM_ID,
+  signal,
+} from '@angular/core'
+import { form, FormField } from '@angular/forms/signals'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 
+import regionJson from '../../../../assets/data/regions.json'
 import { Region } from '../../../models'
-import { RegionService, SeoService } from '../../../services'
+import { SeoService } from '../../../services/seo.service'
 import { LucideIconComponent } from '../../../shared/icons/lucide-icons.component'
+import {
+  AvailabilityZoneFilter,
+  createRegionGroupCatalog,
+  normalizeSearchInput,
+  normalizeSearchValue,
+  normalizeZoneFilterInput,
+  REGION_DIRECTORY_COLLATOR as REGION_NAME_COLLATOR,
+} from '../../../shared/region-directory'
+import { buildRegionDetailRouterLink } from '../../../shared/utils'
+
+type RegionSortDirection = 'asc' | 'desc'
+type RegionSortKey = 'region' | 'code' | 'geography' | 'location' | 'zones' | 'opened'
+
+interface RegionSortColumn {
+  readonly key: RegionSortKey
+  readonly label: string
+  readonly align: 'left' | 'right'
+}
+
+interface RegionViewState {
+  readonly search: string
+  readonly regionGroup: string
+  readonly zoneSupport: AvailabilityZoneFilter
+  readonly sortKey: RegionSortKey
+  readonly sortDirection: RegionSortDirection
+}
+
+const ALL_REGIONS = regionJson as Region[]
+const REGION_GROUPS = createRegionGroupCatalog(ALL_REGIONS)
+const DEFAULT_SORT_KEY: RegionSortKey = 'region'
+const DEFAULT_SORT_DIRECTION: RegionSortDirection = 'asc'
+const SORT_KEYS = new Set<RegionSortKey>([
+  'region',
+  'code',
+  'geography',
+  'location',
+  'zones',
+  'opened',
+])
+const REGION_SORT_COLUMNS: readonly RegionSortColumn[] = [
+  { key: 'region', label: 'Region', align: 'left' },
+  { key: 'code', label: 'Region code', align: 'left' },
+  { key: 'geography', label: 'Geography', align: 'left' },
+  { key: 'location', label: 'Location', align: 'left' },
+  { key: 'zones', label: 'Availability zones', align: 'right' },
+  { key: 'opened', label: 'Launched', align: 'right' },
+]
+
+function normalizeSortKeyInput(value: string | undefined): RegionSortKey {
+  return SORT_KEYS.has(value as RegionSortKey) ? (value as RegionSortKey) : DEFAULT_SORT_KEY
+}
+
+function normalizeSortDirectionInput(value: string | undefined): RegionSortDirection {
+  return value === 'desc' ? 'desc' : DEFAULT_SORT_DIRECTION
+}
 
 @Component({
   selector: 'app-regions',
-  imports: [RouterLink, ReactiveFormsModule, LucideIconComponent],
+  imports: [FormField, RouterLink, LucideIconComponent],
   templateUrl: './regions.component.html',
   styleUrl: './regions.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  host: { class: 'block' },
 })
 export class RegionsComponent implements OnInit {
   private readonly seoService = inject(SeoService)
-  private readonly regionService = inject(RegionService)
-  private readonly formBuilder = inject(NonNullableFormBuilder)
-  private readonly regions = signal<Region[]>(
-    this.regionService.getAllRegions().sort((a, b) => a.geography.localeCompare(b.geography))
-  )
+  private readonly location = inject(Location)
+  private readonly route = inject(ActivatedRoute)
+  private readonly router = inject(Router)
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID))
+  private readonly canSyncUrl = signal(false)
 
-  readonly filtersForm = this.formBuilder.group({
-    search: [''],
-    regionGroup: ['all']
+  readonly q = input('', { transform: normalizeSearchInput })
+  readonly group = input('', { transform: REGION_GROUPS.normalizeInput })
+  readonly zones = input<AvailabilityZoneFilter, string | undefined>('', {
+    transform: normalizeZoneFilterInput,
+  })
+  readonly sort = input<RegionSortKey, string | undefined>(DEFAULT_SORT_KEY, {
+    transform: normalizeSortKeyInput,
+  })
+  readonly dir = input<RegionSortDirection, string | undefined>(DEFAULT_SORT_DIRECTION, {
+    transform: normalizeSortDirectionInput,
   })
 
-  private readonly filtersValue = toSignal(this.filtersForm.valueChanges, {
-    initialValue: this.filtersForm.getRawValue()
-  })
-
-  readonly totalRegions = computed(() => this.regions().length)
-  readonly totalAZs = computed(() =>
-    this.regions().reduce((sum, r) => sum + (r.availabilityZoneCount || 0), 0)
+  readonly availableRegionGroups = REGION_GROUPS.options
+  readonly sortColumns = REGION_SORT_COLUMNS
+  readonly totalRegionCount = ALL_REGIONS.length
+  readonly availabilityZoneRegionCount = ALL_REGIONS.filter(
+    (region) => region.availabilityZoneCount > 0
+  ).length
+  readonly totalAvailabilityZoneCount = ALL_REGIONS.reduce(
+    (total, region) => total + region.availabilityZoneCount,
+    0
   )
-  readonly uniqueGeographies = computed(() => new Set(this.regions().map((r) => r.geography)).size)
-  readonly availableGeographies = computed(() =>
-    [...new Set(this.regions().map((region) => region.regionGroup))].sort()
-  )
-  readonly hasSearchTerm = computed(() => {
-    const { search } = this.filtersValue()
-    return (search ?? '').trim().length > 0
-  })
+  readonly uniqueGeographyCount = new Set(ALL_REGIONS.map((region) => region.geography)).size
 
-  readonly filteredData = computed<Region[]>(() => {
-    const { search, regionGroup } = this.filtersValue()
-    const selectedRegionGroup = regionGroup ?? 'all'
-    const normalizedSearch = (search ?? '').trim().toLowerCase()
+  private readonly routeViewState = computed<RegionViewState>(() => ({
+    search: this.q(),
+    regionGroup: this.group(),
+    zoneSupport: this.zones(),
+    sortKey: this.sort(),
+    sortDirection: this.dir(),
+  }))
 
-    return this.regions().filter((region) => {
-      const matchesGroup =
-        selectedRegionGroup === 'all' || region.regionGroup === selectedRegionGroup
-      if (!normalizedSearch) {
-        return matchesGroup
-      }
+  readonly filtersModel = linkedSignal(() => this.routeViewState())
+  readonly filtersForm = form(this.filtersModel, { name: 'awsRegionsFilters' })
 
-      return (
-        (region.regionId.toLowerCase().includes(normalizedSearch) ||
-          region.longName.toLowerCase().includes(normalizedSearch) ||
-          region.datacenterLocation.toLowerCase().includes(normalizedSearch) ||
-          region.geography.toLowerCase().includes(normalizedSearch) ||
-          region.regionGroup.toLowerCase().includes(normalizedSearch)) &&
-        matchesGroup
+  readonly filteredRegions = computed(() => {
+    const viewState = this.filtersModel()
+    const normalizedSearch = normalizeSearchValue(viewState.search.trim())
+    const selectedGroup = REGION_GROUPS.byValue.get(viewState.regionGroup)?.label ?? ''
+
+    const filteredRegions = ALL_REGIONS.filter((region) => {
+      if (selectedGroup && region.regionGroup !== selectedGroup) return false
+
+      if (viewState.zoneSupport === 'supported' && region.availabilityZoneCount === 0) return false
+      if (viewState.zoneSupport === 'unsupported' && region.availabilityZoneCount > 0) return false
+
+      if (!normalizedSearch) return true
+
+      const searchableValues = [
+        region.regionId,
+        region.displayName,
+        region.longName,
+        region.geography,
+        region.geographicLocation,
+        region.regionGroup,
+        region.datacenterLocation,
+        region.availabilityZones.join(' '),
+        region.launchYear ?? '',
+      ]
+
+      return searchableValues.some((value) =>
+        normalizeSearchValue(value).includes(normalizedSearch)
       )
     })
+
+    return [...filteredRegions].sort((left, right) =>
+      this.compareRegions(left, right, viewState.sortKey, viewState.sortDirection)
+    )
   })
 
-  formatRegionLongName(region: Region): string {
-    if (!region.longName) {
-      return region.displayName
-    }
+  readonly resultSummary = computed(
+    () =>
+      'Showing ' + this.filteredRegions().length + ' of ' + this.totalRegionCount + ' AWS regions'
+  )
 
-    return region.longName.replace(` ${region.regionId}`, '').trim()
+  readonly hasActiveFilters = computed(() => {
+    const { search, regionGroup, zoneSupport } = this.filtersModel()
+    return Boolean(search.trim() || regionGroup || zoneSupport)
+  })
+
+  protected readonly buildRegionDetailRouterLink = buildRegionDetailRouterLink
+
+  constructor() {
+    if (this.isBrowser) {
+      afterNextRender(() => this.canSyncUrl.set(true))
+
+      effect(() => {
+        if (!this.canSyncUrl()) return
+        this.syncUrlState(this.filtersModel(), this.routeViewState())
+      })
+    }
   }
 
   ngOnInit(): void {
-    this.seoService.setMetaTitle('AWS Regions and Data Centers')
-    this.seoService.setMetaDescription(
-      'Explore AWS regions and their available data centers. Get insights into geography, region names, and availability zones.'
-    )
-    this.seoService.setCanonicalUrl('https://awsspeedtest.com/regions')
-  }
-
-  hasActiveFilters(): boolean {
-    const { search, regionGroup } = this.filtersValue()
-    return Boolean((search ?? '').trim()) || (regionGroup ?? 'all') !== 'all'
+    this.seoService.setPageMeta({
+      title: 'AWS Regions and Data Centers',
+      description:
+        'Explore AWS regions by region group, geography, location, availability zones, region code, and launch year.',
+      canonicalUrl: 'https://awsspeedtest.com/regions',
+    })
   }
 
   clearFilters(): void {
-    this.filtersForm.setValue({ search: '', regionGroup: 'all' })
+    this.filtersModel.update((state) => ({
+      ...state,
+      search: '',
+      regionGroup: '',
+      zoneSupport: '',
+    }))
   }
 
   clearSearch(): void {
-    this.filtersForm.controls.search.setValue('')
+    this.filtersModel.update((state) => ({ ...state, search: '' }))
+  }
+
+  sortBy(sortKey: RegionSortKey): void {
+    this.filtersModel.update((state) => ({
+      ...state,
+      sortKey,
+      sortDirection:
+        state.sortKey === sortKey
+          ? state.sortDirection === 'asc'
+            ? 'desc'
+            : 'asc'
+          : DEFAULT_SORT_DIRECTION,
+    }))
+  }
+
+  sortAriaValue(sortKey: RegionSortKey): 'ascending' | 'descending' | null {
+    const state = this.filtersModel()
+    if (state.sortKey !== sortKey) return null
+    return state.sortDirection === 'asc' ? 'ascending' : 'descending'
+  }
+
+  isSortedBy(sortKey: RegionSortKey): boolean {
+    return this.filtersModel().sortKey === sortKey
+  }
+
+  isSortAscending(): boolean {
+    return this.filtersModel().sortDirection === 'asc'
+  }
+
+  availabilityZoneLabel(region: Region): string {
+    const count = region.availabilityZoneCount
+    if (count === 0) return 'No AZ support'
+    return count === 1 ? '1 zone' : String(count) + ' zones'
+  }
+
+  private compareRegions(
+    left: Region,
+    right: Region,
+    sortKey: RegionSortKey,
+    sortDirection: RegionSortDirection
+  ): number {
+    const direction = sortDirection === 'asc' ? 1 : -1
+    let comparison: number
+
+    switch (sortKey) {
+      case 'code':
+        comparison = REGION_NAME_COLLATOR.compare(left.regionId, right.regionId)
+        break
+      case 'geography':
+        comparison = REGION_NAME_COLLATOR.compare(left.geography, right.geography)
+        break
+      case 'location':
+        comparison = REGION_NAME_COLLATOR.compare(left.datacenterLocation, right.datacenterLocation)
+        break
+      case 'zones':
+        comparison = left.availabilityZoneCount - right.availabilityZoneCount
+        break
+      case 'opened':
+        comparison = this.compareOptionalText(left.launchYear, right.launchYear, direction)
+        if (comparison !== 0) return comparison
+        break
+      case 'region':
+        comparison = REGION_NAME_COLLATOR.compare(left.displayName, right.displayName)
+        break
+      default:
+        return sortKey
+    }
+
+    return comparison !== 0
+      ? comparison * direction
+      : REGION_NAME_COLLATOR.compare(left.displayName, right.displayName)
+  }
+
+  private compareOptionalText(
+    left: string | null,
+    right: string | null,
+    direction: 1 | -1
+  ): number {
+    if (left === null && right === null) return 0
+    if (left === null) return 1
+    if (right === null) return -1
+    return REGION_NAME_COLLATOR.compare(left, right) * direction
+  }
+
+  private syncUrlState(nextState: RegionViewState, routeState: RegionViewState): void {
+    const nextQueryParams = this.buildQueryParams(nextState)
+    const currentQueryParams = this.buildQueryParams(routeState)
+    if (JSON.stringify(nextQueryParams) === JSON.stringify(currentQueryParams)) return
+
+    const urlTree = this.router.createUrlTree([], {
+      relativeTo: this.route,
+      queryParams: nextQueryParams,
+      queryParamsHandling: 'merge',
+      preserveFragment: true,
+    })
+    this.location.replaceState(this.router.serializeUrl(urlTree))
+  }
+
+  private buildQueryParams(state: RegionViewState): Record<string, string | null> {
+    const search = state.search.trim()
+    return {
+      q: search || null,
+      group: state.regionGroup || null,
+      zones: state.zoneSupport || null,
+      sort: state.sortKey === DEFAULT_SORT_KEY ? null : state.sortKey,
+      dir: state.sortDirection === DEFAULT_SORT_DIRECTION ? null : state.sortDirection,
+    }
   }
 }

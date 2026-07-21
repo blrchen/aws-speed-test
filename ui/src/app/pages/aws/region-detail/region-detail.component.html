@@ -1,90 +1,171 @@
 @if (region(); as r) {
   <article class="page-shell section-stack mx-auto max-w-5xl">
     <nav class="breadcrumb" aria-label="Breadcrumb">
-      <a routerLink="/" class="breadcrumb-link"> Home </a>
+      <a routerLink="/latency" class="breadcrumb-link">Home</a>
       <span class="breadcrumb-separator">/</span>
-      <a routerLink="/regions" class="breadcrumb-link"> Regions </a>
+      <a routerLink="/regions" class="breadcrumb-link">Regions</a>
       <span class="breadcrumb-separator">/</span>
       <span class="breadcrumb-current" aria-current="page">{{ r.longName }}</span>
     </nav>
 
     <header class="page-header">
       <h1 class="page-title">{{ r.longName }}</h1>
-
       @if (regionSummary(); as summary) {
         <p class="page-lead">{{ summary }}</p>
       }
     </header>
 
-    <section class="section-block" aria-labelledby="overview-heading">
-      <h2 id="overview-heading" class="section-title">Region overview</h2>
-      <div class="table-shell">
-        <table class="table-base">
-          <caption class="sr-only">
-            Infrastructure details for
-            {{
-              r.displayName
-            }}
-            region.
-          </caption>
-          <tbody class="divide-y divide-border-soft">
-            @if (r.datacenterLocation) {
-              <tr>
-                <th class="detail-th" scope="row">Datacenter location</th>
-                <td class="detail-td">{{ r.datacenterLocation }}</td>
-              </tr>
-            }
-            @if (r.geography) {
-              <tr>
-                <th class="detail-th" scope="row">Geography</th>
-                <td class="detail-td">{{ r.geography }}</td>
-              </tr>
-            }
-            @if (r.availabilityZones && r.availabilityZones.length > 0) {
-              <tr>
-                <th class="detail-th" scope="row">
-                  Availability zones
-                  <span class="ml-1 text-text-muted">({{ r.availabilityZoneCount }})</span>
-                </th>
-                <td class="detail-td">
-                  <div class="flex flex-wrap gap-2">
-                    @for (zone of r.availabilityZones; track zone) {
-                      <code class="rounded bg-secondary px-2 py-1 text-xs text-text-body">
-                        {{ zone }}
-                      </code>
-                    }
-                  </div>
-                </td>
-              </tr>
-            }
-            @if (r.latitude && r.longitude) {
-              <tr>
-                <th class="detail-th" scope="row">Coordinates</th>
-                <td class="detail-td font-mono text-sm">{{ r.latitude }}, {{ r.longitude }}</td>
-              </tr>
-            }
-            @if (r.launchYear) {
-              <tr>
-                <th class="detail-th" scope="row">Launch year</th>
-                <td class="detail-td">{{ r.launchYear }}</td>
-              </tr>
-            }
-          </tbody>
-        </table>
+    <section class="section-block" aria-labelledby="status-heading">
+      <h2 id="status-heading" class="sr-only">Region status</h2>
+      <div class="flex flex-wrap items-center gap-3 text-sm">
+        <span
+          class="inline-flex items-center gap-1.5 rounded-full bg-success px-3 py-1 text-xs font-semibold text-success-foreground shadow-xs"
+        >
+          <app-lucide-icon name="check" class="size-3.5" aria-hidden="true" />
+          Generally Available
+        </span>
+        <span class="text-sm font-semibold tracking-wide text-brand tabular-nums">
+          {{ r.regionId }}
+        </span>
       </div>
     </section>
 
     <section class="section-block" aria-labelledby="actions-heading">
-      <h2 id="actions-heading" class="section-title">Actions</h2>
+      <h2 id="actions-heading" class="sr-only">Quick actions</h2>
       <div class="flex flex-wrap gap-3">
-        <a routerLink="/" [queryParams]="{ regions: r.regionId }" class="btn btn-primary">
-          <span>Test latency to this region</span>
+        <a routerLink="/latency" [queryParams]="latencyQueryParams()" class="btn btn-primary">
+          <app-lucide-icon name="activity" class="size-4" aria-hidden="true" />
+          Test latency
         </a>
         <a routerLink="/regions" class="btn btn-outline">
-          <span>View all regions</span>
+          <app-lucide-icon name="globe" class="size-4" aria-hidden="true" />
+          View all regions
         </a>
+        @if (mapsHref(); as href) {
+          <a
+            class="btn btn-outline"
+            [href]="href"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Open in Google Maps (opens in new tab)"
+          >
+            <app-lucide-icon name="map-pin" class="size-4" aria-hidden="true" />
+            Open in Maps
+            <app-lucide-icon name="external-link" class="ml-1 size-3" aria-hidden="true" />
+          </a>
+        }
       </div>
     </section>
+
+    <section class="section-block" aria-labelledby="details-heading">
+      <h2 id="details-heading" class="section-title">Region details</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        <!-- Location Card -->
+        <article class="card space-y-3">
+          <div class="flex items-center gap-3">
+            <div class="flex size-10 items-center justify-center rounded-lg bg-brand/10">
+              <app-lucide-icon name="map-pin" class="size-5 text-brand" aria-hidden="true" />
+            </div>
+            <h3 class="font-semibold text-text-strong">Location</h3>
+          </div>
+          <dl class="grid grid-cols-[140px,1fr] gap-y-2 text-sm tabular-nums">
+            @if (r.geography) {
+              <div class="contents">
+                <dt class="text-text-muted">Geography</dt>
+                <dd class="font-medium">{{ r.geography }}</dd>
+              </div>
+            }
+            @if (r.datacenterLocation) {
+              <div class="contents">
+                <dt class="text-text-muted">Datacenter</dt>
+                <dd class="font-medium">{{ r.datacenterLocation }}</dd>
+              </div>
+            }
+            @if (mapsHref(); as href) {
+              <div class="contents">
+                <dt class="text-text-muted">Coordinates</dt>
+                <dd>
+                  <a
+                    class="link-primary inline-flex items-center gap-1 font-mono text-xs tabular-nums"
+                    [href]="href"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="View coordinates on Google Maps (opens in new tab)"
+                  >
+                    {{ r.latitude }}, {{ r.longitude }}
+                    <app-lucide-icon name="external-link" class="size-3" aria-hidden="true" />
+                  </a>
+                </dd>
+              </div>
+            }
+          </dl>
+        </article>
+
+        <!-- Infrastructure Card -->
+        <article class="card space-y-3">
+          <div class="flex items-center gap-3">
+            <div class="flex size-10 items-center justify-center rounded-lg bg-success/10">
+              <app-lucide-icon name="cloud" class="size-5 text-success" aria-hidden="true" />
+            </div>
+            <h3 class="font-semibold text-text-strong">Infrastructure</h3>
+          </div>
+          <dl class="grid grid-cols-[140px,1fr] gap-y-2 text-sm tabular-nums">
+            <div class="contents">
+              <dt class="text-text-muted">Availability zones</dt>
+              <dd class="font-medium">
+                @if (r.availabilityZoneCount) {
+                  <span class="badge badge-success">{{ r.availabilityZoneCount }} AZ</span>
+                } @else {
+                  <span class="text-text-muted">None</span>
+                }
+              </dd>
+            </div>
+            @if (r.availabilityZones && r.availabilityZones.length > 0) {
+              <div class="contents">
+                <dt class="text-text-muted">Zone IDs</dt>
+                <dd>
+                  <div class="flex flex-wrap gap-1.5">
+                    @for (zone of r.availabilityZones; track zone) {
+                      <code class="rounded bg-surface-muted px-1.5 py-0.5 text-xs text-text-body">{{
+                        zone
+                      }}</code>
+                    }
+                  </div>
+                </dd>
+              </div>
+            }
+            @if (r.launchYear) {
+              <div class="contents">
+                <dt class="text-text-muted">Launched</dt>
+                <dd class="font-medium">{{ r.launchYear }}</dd>
+              </div>
+            }
+          </dl>
+        </article>
+      </div>
+    </section>
+
+    @if (relatedRegions().length) {
+      <section class="section-block" aria-labelledby="related-heading">
+        <h2 id="related-heading" class="section-title">Related regions</h2>
+        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          @for (region of relatedRegions(); track region.regionId) {
+            <a
+              class="card card-interactive flex items-center gap-3"
+              [routerLink]="buildRegionLink(region.regionId)"
+            >
+              <div class="flex size-10 items-center justify-center rounded-lg bg-brand/10">
+                <app-lucide-icon name="cloud" class="size-5 text-brand" aria-hidden="true" />
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="truncate font-semibold text-text-strong">{{ region.longName }}</div>
+                <div class="truncate text-xs text-text-muted">{{ region.datacenterLocation }}</div>
+              </div>
+            </a>
+          }
+        </div>
+      </section>
+    }
   </article>
 } @else {
   <article class="page-shell section-stack mx-auto max-w-5xl text-center">
@@ -92,6 +173,6 @@
       <h1 class="page-title text-center">Region not found</h1>
       <p class="page-lead">Unable to find region details.</p>
     </header>
-    <a routerLink="/regions" class="btn btn-primary"> Back to Regions </a>
+    <a routerLink="/regions" class="btn btn-primary">Back to Regions</a>
   </article>
 }

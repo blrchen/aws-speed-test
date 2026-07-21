@@ -13,7 +13,11 @@
         "longitude": 18.4241,
         "datacenterLocation": "Cape Town",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["af-south-1a", "af-south-1b", "af-south-1c"],
+        "availabilityZones": [
+          "af-south-1a",
+          "af-south-1b",
+          "af-south-1c"
+        ],
         "launchYear": "2020"
       }
     ]
@@ -32,7 +36,11 @@
         "longitude": 114.1694,
         "datacenterLocation": "Hong Kong",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["ap-east-1a", "ap-east-1b", "ap-east-1c"],
+        "availabilityZones": [
+          "ap-east-1a",
+          "ap-east-1b",
+          "ap-east-1c"
+        ],
         "launchYear": "2019"
       }
     ]
@@ -47,12 +55,16 @@
         "geography": "Taiwan",
         "regionGroup": "Asia Pacific",
         "geographicLocation": "Asia Pacific",
-        "latitude": null,
-        "longitude": null,
+        "latitude": 25.033,
+        "longitude": 121.5654,
         "datacenterLocation": "Taipei",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["ap-east-2a", "ap-east-2b", "ap-east-2c"],
-        "launchYear": null
+        "availabilityZones": [
+          "ap-east-2a",
+          "ap-east-2b",
+          "ap-east-2c"
+        ],
+        "launchYear": "2025"
       }
     ]
   },
@@ -70,7 +82,11 @@
         "longitude": 139.6503,
         "datacenterLocation": "Tokyo",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["ap-northeast-1a", "ap-northeast-1c", "ap-northeast-1d"],
+        "availabilityZones": [
+          "ap-northeast-1a",
+          "ap-northeast-1c",
+          "ap-northeast-1d"
+        ],
         "launchYear": "2011"
       },
       {
@@ -84,7 +100,11 @@
         "longitude": 135.5023,
         "datacenterLocation": "Osaka",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["ap-northeast-3a", "ap-northeast-3b", "ap-northeast-3c"],
+        "availabilityZones": [
+          "ap-northeast-3a",
+          "ap-northeast-3b",
+          "ap-northeast-3c"
+        ],
         "launchYear": "2021"
       }
     ]
@@ -127,7 +147,11 @@
         "longitude": 72.8777,
         "datacenterLocation": "Mumbai",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["ap-south-1a", "ap-south-1b", "ap-south-1c"],
+        "availabilityZones": [
+          "ap-south-1a",
+          "ap-south-1b",
+          "ap-south-1c"
+        ],
         "launchYear": "2016"
       },
       {
@@ -141,7 +165,11 @@
         "longitude": 78.4867,
         "datacenterLocation": "Hyderabad",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["ap-south-2a", "ap-south-2b", "ap-south-2c"],
+        "availabilityZones": [
+          "ap-south-2a",
+          "ap-south-2b",
+          "ap-south-2c"
+        ],
         "launchYear": "2022"
       }
     ]
@@ -160,7 +188,11 @@
         "longitude": 103.8198,
         "datacenterLocation": "Singapore",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"],
+        "availabilityZones": [
+          "ap-southeast-1a",
+          "ap-southeast-1b",
+          "ap-southeast-1c"
+        ],
         "launchYear": "2010"
       }
     ]
@@ -179,7 +211,11 @@
         "longitude": 151.2093,
         "datacenterLocation": "Sydney",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["ap-southeast-2a", "ap-southeast-2b", "ap-southeast-2c"],
+        "availabilityZones": [
+          "ap-southeast-2a",
+          "ap-southeast-2b",
+          "ap-southeast-2c"
+        ],
         "launchYear": "2012"
       },
       {
@@ -193,7 +229,11 @@
         "longitude": 144.9631,
         "datacenterLocation": "Melbourne",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["ap-southeast-4a", "ap-southeast-4b", "ap-southeast-4c"],
+        "availabilityZones": [
+          "ap-southeast-4a",
+          "ap-southeast-4b",
+          "ap-southeast-4c"
+        ],
         "launchYear": "2023"
       }
     ]
@@ -212,7 +252,11 @@
         "longitude": 106.8456,
         "datacenterLocation": "Jakarta",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["ap-southeast-3a", "ap-southeast-3b", "ap-southeast-3c"],
+        "availabilityZones": [
+          "ap-southeast-3a",
+          "ap-southeast-3b",
+          "ap-southeast-3c"
+        ],
         "launchYear": "2021"
       }
     ]
@@ -231,7 +275,11 @@
         "longitude": 101.6869,
         "datacenterLocation": "Malaysia",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["ap-southeast-5a", "ap-southeast-5b", "ap-southeast-5c"],
+        "availabilityZones": [
+          "ap-southeast-5a",
+          "ap-southeast-5b",
+          "ap-southeast-5c"
+        ],
         "launchYear": "2024"
       }
     ]
@@ -246,11 +294,15 @@
         "geography": "New Zealand",
         "regionGroup": "Australia and New Zealand",
         "geographicLocation": "Asia Pacific",
-        "latitude": -36.84599227,
-        "longitude": 174.782331,
+        "latitude": -36.8485,
+        "longitude": 174.7633,
         "datacenterLocation": "New Zealand",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["ap-southeast-6a", "ap-southeast-6b", "ap-southeast-6c"],
+        "availabilityZones": [
+          "ap-southeast-6a",
+          "ap-southeast-6b",
+          "ap-southeast-6c"
+        ],
         "launchYear": "2025"
       }
     ]
@@ -269,7 +321,11 @@
         "longitude": 100.5018,
         "datacenterLocation": "Thailand",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["ap-southeast-7a", "ap-southeast-7b", "ap-southeast-7c"],
+        "availabilityZones": [
+          "ap-southeast-7a",
+          "ap-southeast-7b",
+          "ap-southeast-7c"
+        ],
         "launchYear": "2025"
       }
     ]
@@ -288,7 +344,11 @@
         "longitude": -73.5673,
         "datacenterLocation": "Central",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["ca-central-1a", "ca-central-1b", "ca-central-1d"],
+        "availabilityZones": [
+          "ca-central-1a",
+          "ca-central-1b",
+          "ca-central-1d"
+        ],
         "launchYear": "2016"
       },
       {
@@ -302,7 +362,11 @@
         "longitude": -114.0719,
         "datacenterLocation": "Calgary",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["ca-west-1a", "ca-west-1b", "ca-west-1c"],
+        "availabilityZones": [
+          "ca-west-1a",
+          "ca-west-1b",
+          "ca-west-1c"
+        ],
         "launchYear": "2023"
       }
     ]
@@ -321,7 +385,11 @@
         "longitude": 8.6821,
         "datacenterLocation": "Frankfurt",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["eu-central-1a", "eu-central-1b", "eu-central-1c"],
+        "availabilityZones": [
+          "eu-central-1a",
+          "eu-central-1b",
+          "eu-central-1c"
+        ],
         "launchYear": "2014"
       }
     ]
@@ -340,7 +408,11 @@
         "longitude": 8.5417,
         "datacenterLocation": "Zurich",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["eu-central-2a", "eu-central-2b", "eu-central-2c"],
+        "availabilityZones": [
+          "eu-central-2a",
+          "eu-central-2b",
+          "eu-central-2c"
+        ],
         "launchYear": "2022"
       }
     ]
@@ -359,7 +431,11 @@
         "longitude": 18.0686,
         "datacenterLocation": "Stockholm",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["eu-north-1a", "eu-north-1b", "eu-north-1c"],
+        "availabilityZones": [
+          "eu-north-1a",
+          "eu-north-1b",
+          "eu-north-1c"
+        ],
         "launchYear": "2018"
       }
     ]
@@ -378,7 +454,11 @@
         "longitude": 9.19,
         "datacenterLocation": "Milan",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["eu-south-1a", "eu-south-1b", "eu-south-1c"],
+        "availabilityZones": [
+          "eu-south-1a",
+          "eu-south-1b",
+          "eu-south-1c"
+        ],
         "launchYear": "2020"
       }
     ]
@@ -397,7 +477,11 @@
         "longitude": -3.7038,
         "datacenterLocation": "Spain",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["eu-south-2a", "eu-south-2b", "eu-south-2c"],
+        "availabilityZones": [
+          "eu-south-2a",
+          "eu-south-2b",
+          "eu-south-2c"
+        ],
         "launchYear": "2022"
       }
     ]
@@ -416,7 +500,11 @@
         "longitude": -6.2603,
         "datacenterLocation": "Ireland",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["eu-west-1a", "eu-west-1b", "eu-west-1c"],
+        "availabilityZones": [
+          "eu-west-1a",
+          "eu-west-1b",
+          "eu-west-1c"
+        ],
         "launchYear": "2007"
       }
     ]
@@ -435,7 +523,11 @@
         "longitude": -0.1278,
         "datacenterLocation": "London",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["eu-west-2a", "eu-west-2b", "eu-west-2c"],
+        "availabilityZones": [
+          "eu-west-2a",
+          "eu-west-2b",
+          "eu-west-2c"
+        ],
         "launchYear": "2016"
       }
     ]
@@ -454,7 +546,11 @@
         "longitude": 2.3522,
         "datacenterLocation": "Paris",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["eu-west-3a", "eu-west-3b", "eu-west-3c"],
+        "availabilityZones": [
+          "eu-west-3a",
+          "eu-west-3b",
+          "eu-west-3c"
+        ],
         "launchYear": "2017"
       }
     ]
@@ -473,7 +569,11 @@
         "longitude": 34.7818,
         "datacenterLocation": "Tel Aviv",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["il-central-1a", "il-central-1b", "il-central-1c"],
+        "availabilityZones": [
+          "il-central-1a",
+          "il-central-1b",
+          "il-central-1c"
+        ],
         "launchYear": "2023"
       }
     ]
@@ -492,7 +592,11 @@
         "longitude": 55.2708,
         "datacenterLocation": "UAE",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["me-central-1a", "me-central-1b", "me-central-1c"],
+        "availabilityZones": [
+          "me-central-1a",
+          "me-central-1b",
+          "me-central-1c"
+        ],
         "launchYear": "2022"
       }
     ]
@@ -510,8 +614,8 @@
         "latitude": 26.0667,
         "longitude": 50.5577,
         "datacenterLocation": "Bahrain",
-        "availabilityZoneCount": 3,
-        "availabilityZones": ["me-south-1a", "me-south-1b", "me-south-1c"],
+        "availabilityZoneCount": 0,
+        "availabilityZones": [],
         "launchYear": "2019"
       }
     ]
@@ -530,7 +634,11 @@
         "longitude": -99.1332,
         "datacenterLocation": "Central",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["mx-central-1a", "mx-central-1b", "mx-central-1c"],
+        "availabilityZones": [
+          "mx-central-1a",
+          "mx-central-1b",
+          "mx-central-1c"
+        ],
         "launchYear": "2025"
       }
     ]
@@ -549,7 +657,11 @@
         "longitude": -46.6333,
         "datacenterLocation": "Sao Paulo",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["sa-east-1a", "sa-east-1b", "sa-east-1c"],
+        "availabilityZones": [
+          "sa-east-1a",
+          "sa-east-1b",
+          "sa-east-1c"
+        ],
         "launchYear": "2011"
       }
     ]
@@ -589,7 +701,11 @@
         "longitude": -82.9071,
         "datacenterLocation": "Ohio",
         "availabilityZoneCount": 3,
-        "availabilityZones": ["us-east-2a", "us-east-2b", "us-east-2c"],
+        "availabilityZones": [
+          "us-east-2a",
+          "us-east-2b",
+          "us-east-2c"
+        ],
         "launchYear": "2016"
       },
       {
@@ -603,7 +719,10 @@
         "longitude": -122.4194,
         "datacenterLocation": "N. California",
         "availabilityZoneCount": 2,
-        "availabilityZones": ["us-west-1a", "us-west-1b"],
+        "availabilityZones": [
+          "us-west-1a",
+          "us-west-1b"
+        ],
         "launchYear": "2009"
       },
       {
@@ -617,7 +736,12 @@
         "longitude": -122.6789,
         "datacenterLocation": "Oregon",
         "availabilityZoneCount": 4,
-        "availabilityZones": ["us-west-2a", "us-west-2b", "us-west-2c", "us-west-2d"],
+        "availabilityZones": [
+          "us-west-2a",
+          "us-west-2b",
+          "us-west-2c",
+          "us-west-2d"
+        ],
         "launchYear": "2011"
       }
     ]

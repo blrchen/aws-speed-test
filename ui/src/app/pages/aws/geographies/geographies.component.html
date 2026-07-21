@@ -1,115 +1,340 @@
 <article class="page-shell section-stack mx-auto max-w-5xl">
   <header class="page-header">
-    <h1 class="page-title">AWS geographic infrastructure</h1>
+    <h1 class="page-title">AWS geographies</h1>
+
+    <nav class="flex flex-wrap gap-2" aria-label="AWS infrastructure directories">
+      <span class="btn btn--sm btn-current min-h-11 md:min-h-9" aria-current="page">
+        Geographies
+      </span>
+      <a class="btn btn-outline btn--sm min-h-11 md:min-h-9" routerLink="/regions"> Regions </a>
+      <a class="btn btn-outline btn--sm min-h-11 md:min-h-9" routerLink="/availability-zones">
+        Availability zones
+      </a>
+    </nav>
 
     <p class="page-lead">
-      AWS Geographies represent strategic market boundaries that ensure data sovereignty and
-      regulatory compliance while enabling customers to deploy resilient, low-latency applications.
+      Browse AWS regions by geography to compare market coverage, location, and Availability Zone
+      support.
+    </p>
+    <p class="max-w-4xl text-sm leading-relaxed text-text-muted">
+      Geography labels in this directory are planning aids, not service-specific data residency or
+      compliance guarantees. Confirm the data handling and service availability requirements for
+      each workload before deployment.
     </p>
   </header>
 
-  <section class="section-block" aria-labelledby="distribution-heading">
-    <div>
-      <h2 id="distribution-heading" class="section-title">Global geographic distribution</h2>
-      <p class="text-base leading-relaxed text-text-muted">
-        AWS organizes its cloud infrastructure into distinct geographies to help customers meet
-        their data residency, compliance, and latency requirements. Each geography serves a specific
-        market area and contains multiple regions for redundancy.
-      </p>
-    </div>
-    <!-- Desktop table view -->
-    <div class="table-shell hidden sm:block">
-      <table class="table-base">
-        <caption class="sr-only">
-          AWS geographies with their associated regions.
-        </caption>
-        <thead class="table-head">
-          <tr>
-            <th class="px-4 py-3" scope="col">Geography</th>
-            <th class="px-4 py-3" scope="col">Regions</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-border-soft">
-          @for (g of tableData(); track g.name) {
-            <tr class="table-row-hover">
-              <td
-                class="min-w-48 px-4 py-3 align-top text-sm font-semibold tracking-wide text-text-strong uppercase"
-              >
-                {{ g.name }}
-              </td>
-              <td class="px-4 py-3">
-                <ul class="grid gap-x-6 gap-y-3 sm:grid-cols-2 xl:grid-cols-3">
-                  @for (r of g.regions; track r.regionId) {
-                    <li class="min-w-[12rem] space-y-1 text-left">
-                      <a class="link-primary font-semibold" [routerLink]="['/regions', r.regionId]">
-                        {{ r.displayName }}
-                        <span aria-hidden="true" class="text-text-muted">></span>
-                      </a>
-                      <div class="text-xs font-semibold tracking-wide text-text-subtle uppercase">
-                        {{ r.regionId }}
-                      </div>
-                    </li>
-                  }
-                </ul>
-              </td>
-            </tr>
+  <section class="section-block" aria-labelledby="geographies-heading">
+    <h2 id="geographies-heading" class="section-title">Regions by AWS geography</h2>
+    <p class="text-text-muted">{{ selectedRegionGroupDescription() }}</p>
+
+    <form
+      class="grid gap-4 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)_minmax(0,1fr)]"
+      role="search"
+      (submit)="$event.preventDefault()"
+    >
+      <div class="flex min-w-0 flex-col gap-2">
+        <label for="geographySearchInput" class="form-label">Search geographies or regions</label>
+        <div class="form-control-shell">
+          <app-lucide-icon
+            name="search"
+            class="form-control-shell__icon size-4"
+            aria-hidden="true"
+          />
+          <input
+            #geographiesSearchInput
+            type="search"
+            id="geographySearchInput"
+            placeholder="Japan, Tokyo, ap-northeast-1, or 2011..."
+            [formField]="filtersForm.search"
+            class="form-control form-control--icon-start form-control--action-end form-control-focus-ring min-h-11"
+            autocomplete="off"
+            spellcheck="false"
+            aria-describedby="geography-search-hint"
+          />
+          <span id="geography-search-hint" class="sr-only">
+            Search by geography, region name, region code, region group, location, availability
+            zone, or launch year.
+          </span>
+          @if (filtersModel().search) {
+            <button
+              type="button"
+              class="form-control-shell__action"
+              aria-label="Clear geography and region search"
+              (click)="clearSearch(); geographiesSearchInput.focus()"
+            >
+              <app-lucide-icon name="x" class="size-4" aria-hidden="true" />
+            </button>
           }
-        </tbody>
-      </table>
+        </div>
+      </div>
+
+      <div class="flex min-w-0 flex-col gap-2">
+        <label for="geographyRegionGroupFilter" class="form-label">Filter by region group</label>
+        <div class="form-select-wrapper">
+          <select
+            id="geographyRegionGroupFilter"
+            [formField]="filtersForm.regionGroup"
+            class="form-select min-h-11"
+            autocomplete="off"
+          >
+            <option value="">All region groups</option>
+            @for (regionGroup of regionGroupOptions; track regionGroup.value) {
+              <option [value]="regionGroup.value">
+                {{ regionGroup.label }} ({{ regionGroup.count }})
+              </option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="flex min-w-0 flex-col gap-2">
+        <label for="geographyZoneFilter" class="form-label">Filter by availability zones</label>
+        <div class="form-select-wrapper">
+          <select
+            id="geographyZoneFilter"
+            [formField]="filtersForm.zoneSupport"
+            class="form-select min-h-11"
+            autocomplete="off"
+          >
+            <option value="">All regions</option>
+            <option value="supported">AZ supported ({{ availabilityZoneRegionCount() }})</option>
+            <option value="unsupported">
+              AZ not listed ({{ groupRegionCount() - availabilityZoneRegionCount() }})
+            </option>
+          </select>
+        </div>
+      </div>
+    </form>
+
+    @let geographies = filteredGeographies();
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <p
+        id="geography-results-summary"
+        class="m-0 text-sm font-semibold text-text-body tabular-nums"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {{ resultSummary() }}
+      </p>
+      @if (hasActiveFilters()) {
+        <button
+          type="button"
+          class="btn btn-outline btn--sm"
+          (click)="clearFilters(); geographiesSearchInput.focus()"
+        >
+          <app-lucide-icon name="x" class="size-3.5" aria-hidden="true" />
+          Clear filters
+        </button>
+      }
     </div>
 
-    <!-- Mobile card view -->
-    <div class="space-y-4 sm:hidden">
-      @for (g of tableData(); track g.name) {
-        <div class="rounded-lg border border-border-soft bg-surface-raised p-4">
-          <div class="mb-3 text-sm font-semibold tracking-wide text-text-strong uppercase">
-            {{ g.name }}
-          </div>
-          <ul class="grid gap-3">
-            @for (r of g.regions; track r.regionId) {
-              <li>
-                <a
-                  class="block rounded-md bg-surface-muted px-3 py-2 transition-colors hover:bg-surface-contrast"
-                  [routerLink]="['/regions', r.regionId]"
+    <div
+      id="geography-table-legend"
+      class="flex flex-wrap items-center gap-x-5 gap-y-2 rounded-md bg-surface-muted px-3 py-2 text-xs text-text-muted"
+    >
+      <span class="font-semibold text-text-body">Legend</span>
+      <span class="inline-flex items-center gap-1.5">
+        <span class="tag tag-success" aria-hidden="true">AZ</span>
+        Availability Zones listed
+      </span>
+    </div>
+
+    @if (geographies.length) {
+      <div class="table-shell overflow-x-auto">
+        <table
+          class="table-base"
+          aria-describedby="geography-results-summary geography-table-legend"
+        >
+          <caption class="sr-only">
+            {{
+              tableCaption()
+            }}
+          </caption>
+          <thead class="table-head">
+            <tr>
+              <th scope="col" class="px-4 py-3">Geography</th>
+              <th scope="col" class="px-4 py-3">Regions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border-soft">
+            @for (geography of geographies; track geography.name) {
+              <tr class="table-row-hover align-top" [id]="geographyAnchor(geography.name)">
+                <th
+                  scope="row"
+                  class="w-48 px-4 py-4 text-left text-sm font-semibold tracking-wide text-text-muted uppercase"
                 >
-                  <div class="font-semibold text-text-strong">{{ r.displayName }}</div>
-                  <div class="text-xs font-semibold tracking-wide text-text-subtle uppercase">
-                    {{ r.regionId }}
-                  </div>
-                </a>
-              </li>
+                  {{ geography.name }}
+                </th>
+                <td class="px-4 py-4">
+                  <ul class="grid gap-x-6 gap-y-3 sm:grid-cols-2 xl:grid-cols-3" role="list">
+                    @for (region of geography.regions; track region.regionId) {
+                      <li class="min-w-[12rem]">
+                        <div class="space-y-1">
+                          <span class="inline-flex items-center gap-1.5 whitespace-nowrap">
+                            <a
+                              class="link-primary font-semibold"
+                              [routerLink]="buildRegionDetailRouterLink(region.regionId)"
+                            >
+                              {{ region.displayName }}
+                            </a>
+                            @if (region.availabilityZoneCount) {
+                              <span class="tag tag-success" aria-hidden="true">AZ</span>
+                              <span class="sr-only">Availability Zones listed</span>
+                            }
+                          </span>
+                          <div
+                            class="font-mono text-xs font-semibold tracking-wide text-text-subtle"
+                            translate="no"
+                          >
+                            {{ region.regionId }}
+                          </div>
+                        </div>
+                      </li>
+                    }
+                  </ul>
+                </td>
+              </tr>
             }
-          </ul>
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <div
+        class="flex flex-col items-center justify-center gap-3 rounded-lg bg-surface-raised px-4 py-8 text-center text-sm text-text-muted shadow-sm"
+      >
+        <app-lucide-icon name="search" class="size-8 text-text-muted" aria-hidden="true" />
+        <div class="space-y-1">
+          <p class="font-semibold text-text-strong">No regions match your filters</p>
+          <p>Try a broader search, another region group, or a different AZ filter.</p>
         </div>
-      }
+        @if (hasActiveFilters()) {
+          <button
+            type="button"
+            class="btn btn-outline btn--sm"
+            (click)="clearFilters(); geographiesSearchInput.focus()"
+          >
+            <app-lucide-icon name="x" class="size-3.5" aria-hidden="true" />
+            Clear filters
+          </button>
+        }
+      </div>
+    }
+  </section>
+
+  <section class="section-block" aria-labelledby="geography-definition-heading">
+    <h2 id="geography-definition-heading" class="section-title">
+      What does geography mean in this directory?
+    </h2>
+    <div class="max-w-4xl space-y-3 leading-relaxed text-text-muted">
+      <p>
+        A geography groups AWS regions by the market or country label in the current infrastructure
+        dataset. One geography can contain one or more regions, and each region contains multiple
+        isolated Availability Zones.
+      </p>
+      <p>
+        Treat this grouping as a navigation aid. AWS service documentation, compliance programs, and
+        service-specific data residency guidance are the authoritative sources for workload
+        decisions.
+      </p>
     </div>
   </section>
 
-  <section class="section-block" aria-labelledby="resources-heading">
-    <h2 id="resources-heading" class="section-title">Additional resources</h2>
+  <section class="section-block" aria-labelledby="geography-comparison-heading">
+    <h2 id="geography-comparison-heading" class="section-title">AWS geography vs. region</h2>
+    <p class="max-w-4xl leading-relaxed text-text-muted">
+      These terms describe different levels of the AWS infrastructure directory.
+    </p>
+    <dl class="grid gap-4 md:grid-cols-2">
+      <div class="rounded-lg bg-surface-muted p-4">
+        <dt class="font-semibold text-text-strong">Geography</dt>
+        <dd class="mt-1 text-sm leading-relaxed text-text-muted">
+          A market or country grouping containing one or more AWS regions.
+        </dd>
+      </div>
+      <div class="rounded-lg bg-surface-muted p-4">
+        <dt class="font-semibold text-text-strong">Region</dt>
+        <dd class="mt-1 text-sm leading-relaxed text-text-muted">
+          A separate geographic area identified by a stable code such as us-east-1.
+        </dd>
+      </div>
+      <div class="rounded-lg bg-surface-muted p-4">
+        <dt class="font-semibold text-text-strong">Availability Zone</dt>
+        <dd class="mt-1 text-sm leading-relaxed text-text-muted">
+          An isolated location within a region, connected through low-latency networking.
+        </dd>
+      </div>
+      <div class="rounded-lg bg-surface-muted p-4">
+        <dt class="font-semibold text-text-strong">Region group</dt>
+        <dd class="mt-1 text-sm leading-relaxed text-text-muted">
+          A broader directory grouping such as Asia Pacific, Europe, or North America.
+        </dd>
+      </div>
+    </dl>
+    <p class="max-w-4xl text-sm leading-relaxed text-text-muted">
+      Compare individual <a class="link-primary" routerLink="/regions">AWS regions</a> or review
+      <a class="link-primary" routerLink="/availability-zones">Availability Zone coverage</a>.
+    </p>
+  </section>
+
+  <section class="section-block" aria-labelledby="geo-resources-heading">
+    <h2 id="geo-resources-heading" class="section-title">Additional resources</h2>
+    <p class="text-text-muted">
+      Explore related AWS infrastructure directories and official planning guidance.
+    </p>
+
+    <nav class="flex flex-wrap gap-2" aria-label="Related AWS infrastructure pages">
+      <a class="btn btn-outline btn--sm" routerLink="/regions">AWS regions</a>
+      <a class="btn btn-outline btn--sm" routerLink="/availability-zones"> Availability Zones </a>
+    </nav>
+
     <div class="resource-grid">
       <article class="card card-resource">
         <h3 class="card-title">AWS Global Infrastructure</h3>
-        <p class="card-description">Explore AWS's worldwide presence</p>
+        <p class="card-description">
+          Explore the official AWS global infrastructure footprint and region directory.
+        </p>
         <a
           href="https://aws.amazon.com/about-aws/global-infrastructure/"
           target="_blank"
           rel="noopener noreferrer"
           class="card-cta"
+          aria-label="Explore AWS Global Infrastructure (opens in new tab)"
         >
-          View global infrastructure
+          Explore infrastructure
+          <app-lucide-icon name="external-link" class="ml-1 size-3" aria-hidden="true" />
         </a>
       </article>
       <article class="card card-resource">
-        <h3 class="card-title">AWS Compliance Programs</h3>
-        <p class="card-description">Understand regional compliance coverage</p>
+        <h3 class="card-title">AWS compliance programs</h3>
+        <p class="card-description">
+          Review AWS compliance programs and service-specific scope documentation.
+        </p>
         <a
           href="https://aws.amazon.com/compliance/programs/"
           target="_blank"
           rel="noopener noreferrer"
           class="card-cta"
+          aria-label="Review AWS compliance programs (opens in new tab)"
         >
-          See compliance programs
+          Review compliance
+          <app-lucide-icon name="external-link" class="ml-1 size-3" aria-hidden="true" />
+        </a>
+      </article>
+      <article class="card card-resource">
+        <h3 class="card-title">AWS infrastructure map</h3>
+        <p class="card-description">
+          Explore AWS regions and edge locations on an interactive map.
+        </p>
+        <a
+          href="https://infrastructure.aws/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="card-cta"
+          aria-label="Open the AWS infrastructure map (opens in new tab)"
+        >
+          Open map
+          <app-lucide-icon name="external-link" class="ml-1 size-3" aria-hidden="true" />
         </a>
       </article>
     </div>

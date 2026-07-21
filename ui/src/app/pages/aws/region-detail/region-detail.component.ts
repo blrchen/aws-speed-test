@@ -1,86 +1,68 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  DestroyRef,
-  inject,
-  OnInit,
-  signal
-} from '@angular/core'
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { ActivatedRoute, Router, RouterLink } from '@angular/router'
-import { distinctUntilChanged, map } from 'rxjs'
+import { Component, computed, effect, inject, input } from '@angular/core'
+import { Router, RouterLink } from '@angular/router'
 
 import { RegionModel } from '../../../models'
-import { RegionService, SeoService } from '../../../services'
+import { RegionService } from '../../../services/region.service'
+import { SeoService } from '../../../services/seo.service'
+import { LucideIconComponent } from '../../../shared/icons/lucide-icons.component'
+import { buildRegionDetailRouterLink } from '../../../shared/utils'
 
 @Component({
   selector: 'app-region-detail',
   templateUrl: './region-detail.component.html',
-  styleUrl: './region-detail.component.css',
-  imports: [RouterLink],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  imports: [RouterLink, LucideIconComponent],
+  host: { class: 'block' },
 })
-export class RegionDetailComponent implements OnInit {
-  private readonly route = inject(ActivatedRoute)
+export class RegionDetailComponent {
   private readonly router = inject(Router)
   private readonly regionService = inject(RegionService)
   private readonly seoService = inject(SeoService)
-  private readonly destroyRef = inject(DestroyRef)
 
-  private readonly regionIdSignal = signal<string | null>(
-    this.route.snapshot.paramMap.get('regionId')
-  )
-
-  readonly regionId = this.regionIdSignal.asReadonly()
+  readonly regionId = input<string | undefined>(undefined)
   readonly region = computed<RegionModel | null>(() => {
-    const regionId = this.regionId()
-    if (!regionId) {
-      return null
-    }
-    return this.regionService.getRegionByName(regionId) ?? null
+    const regionId = this.regionId()?.trim()
+    return regionId ? (this.regionService.getRegionByName(regionId) ?? null) : null
   })
+
+  readonly mapsHref = computed(() => {
+    const region = this.region()
+    if (!region || region.latitude == null || region.longitude == null) return ''
+    return `https://www.google.com/maps/search/${region.latitude},${region.longitude}`
+  })
+  readonly latencyQueryParams = computed(() => ({
+    regions: this.region()?.regionId ?? this.regionId() ?? '',
+  }))
+
+  readonly relatedRegions = computed(() => {
+    const current = this.region()
+    if (!current) return []
+    const allRegions = this.regionService.getAllRegions()
+    return allRegions
+      .filter((r) => r.regionId !== current.regionId && r.geography === current.geography)
+      .slice(0, 6)
+  })
+
   readonly regionSummary = computed(() => {
     const region = this.region()
-    if (!region) {
-      return ''
-    }
+    if (!region) return ''
 
-    const descriptors: string[] = []
-    if (region.datacenterLocation) {
-      descriptors.push(`based in ${region.datacenterLocation}`)
-    }
-    if (region.geography) {
-      descriptors.push(`serving customers across ${region.geography}`)
-    }
+    const descriptors = [
+      region.datacenterLocation && `based in ${region.datacenterLocation}`,
+      region.geography && `serving customers across ${region.geography}`,
+    ].filter(Boolean)
 
-    const formatList = (items: string[]): string => {
-      if (items.length <= 1) {
-        return items[0] ?? ''
-      }
-      if (items.length === 2) {
-        return `${items[0]} and ${items[1]}`
-      }
-      return `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`
-    }
-
-    let intro = `AWS ${region.longName} (${region.regionId})`
-    if (descriptors.length > 0) {
-      intro += ` is ${formatList(descriptors)}`
-    } else {
-      intro += ` delivers regional AWS infrastructure`
-    }
-    intro += '.'
+    const intro = descriptors.length
+      ? `AWS ${region.longName} (${region.regionId}) is ${descriptors.join(' and ')}.`
+      : `AWS ${region.longName} (${region.regionId}) delivers regional AWS infrastructure.`
 
     const sentences = [intro]
 
-    const zoneCount = region.availabilityZoneCount ?? region.availabilityZones?.length ?? 0
+    const zoneCount = region.availabilityZoneCount
     if (zoneCount > 0) {
       const zoneLabel = zoneCount === 1 ? 'availability zone' : 'availability zones'
-      const zoneList =
-        region.availabilityZones && region.availabilityZones.length > 0
-          ? ` (${region.availabilityZones.join(', ')})`
-          : ''
+      const zoneList = region.availabilityZones.length
+        ? ` (${region.availabilityZones.join(', ')})`
+        : ''
       sentences.push(`It offers ${zoneCount} ${zoneLabel}${zoneList}.`)
     }
 
@@ -91,23 +73,15 @@ export class RegionDetailComponent implements OnInit {
     return sentences.join(' ')
   })
 
+  readonly buildRegionLink = buildRegionDetailRouterLink
+
   private navigatedToFallback = false
 
-  ngOnInit(): void {
-    // Subscribe to route changes and handle SEO
-    this.route.paramMap
-      .pipe(
-        map((params) => params.get('regionId')),
-        distinctUntilChanged(),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe((regionId) => {
-        this.regionIdSignal.set(regionId)
-        this.handleNavigationAndSeo(regionId, this.region())
-      })
+  constructor() {
+    effect(() => this.handleNavigationAndSeo(this.regionId(), this.region()))
   }
 
-  private handleNavigationAndSeo(regionId: string | null, region: RegionModel | null): void {
+  private handleNavigationAndSeo(regionId: string | undefined, region: RegionModel | null): void {
     if (!regionId || !region) {
       if (!this.navigatedToFallback) {
         this.navigatedToFallback = true
@@ -117,10 +91,34 @@ export class RegionDetailComponent implements OnInit {
     }
 
     this.navigatedToFallback = false
-    this.seoService.setMetaTitle(`AWS Region ${region.longName} - AWS Speed Test`)
-    this.seoService.setMetaDescription(
-      `Comprehensive information about AWS ${region.longName} region including location, availability zones, coordinates, and launch details.`
-    )
-    this.seoService.setCanonicalUrl(`https://awsspeedtest.com/regions/${regionId}`)
+    this.seoService.setPageMeta(this.buildSeoMeta(regionId, region))
+  }
+
+  private buildSeoMeta(
+    regionId: string,
+    region: RegionModel
+  ): {
+    title: string
+    description: string
+    canonicalUrl: string
+  } {
+    return {
+      title: `${region.displayName} AWS Region | ${region.regionId}`,
+      description: this.buildSeoDescription(region),
+      canonicalUrl: `https://awsspeedtest.com/regions/${regionId}`,
+    }
+  }
+
+  private buildSeoDescription(region: RegionModel): string {
+    const locationParts = [
+      ...new Set(
+        [region.datacenterLocation, region.geography]
+          .map((location) => location.trim())
+          .filter(Boolean)
+      ),
+    ]
+    const locationPhrase = locationParts.length ? ` in ${locationParts.join(', ')}` : ''
+
+    return `Explore AWS ${region.displayName} (${region.regionId})${locationPhrase}. See availability zones, launch year, and nearby regions.`
   }
 }

@@ -2,231 +2,413 @@
   <header class="page-header">
     <h1 class="page-title">AWS regions</h1>
 
+    <nav class="flex flex-wrap gap-2" aria-label="AWS infrastructure directories">
+      <span class="aws-regions-nav-link btn btn--sm btn-current" aria-current="page">
+        Regions
+      </span>
+      <a class="aws-regions-nav-link btn btn-outline btn--sm" routerLink="/availability-zones">
+        Availability zones
+      </a>
+      <a class="aws-regions-nav-link btn btn-outline btn--sm" routerLink="/geographies">
+        Geographies
+      </a>
+    </nav>
+
     <p class="page-lead">
-      AWS Regions are independent service deployments across strategic global locations, each
-      offering complete infrastructure and services while maintaining data residency and ensuring
-      consistent low-latency access.
+      Compare AWS regions by region code, geography, location, availability zones, and launch year.
+    </p>
+    <p class="max-w-4xl text-sm leading-relaxed text-text-muted">
+      Region and service availability changes over time. Confirm that each required AWS service and
+      feature is available in your chosen region before deployment.
     </p>
   </header>
 
-  <section class="section-block" aria-labelledby="stats-heading">
-    <h2 id="stats-heading" class="section-title">At a glance</h2>
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      <div class="card card-stat">
-        <div class="text-4xl font-bold text-primary">{{ totalRegions() }}</div>
-        <div class="leading-tight">
-          <div class="font-semibold text-text-strong">Total regions</div>
-          <span class="text-sm text-text-muted">Worldwide</span>
-        </div>
-      </div>
-      <div class="card card-stat">
-        <div class="text-4xl font-bold text-primary">{{ totalAZs() }}</div>
-        <div class="leading-tight">
-          <div class="font-semibold text-text-strong">Availability zones</div>
-          <span class="text-sm text-text-muted">Combined</span>
-        </div>
-      </div>
-      <div class="card card-stat">
-        <div class="text-4xl font-bold text-primary">{{ uniqueGeographies() }}</div>
-        <div class="leading-tight">
-          <div class="font-semibold text-text-strong">Geographies</div>
-          <span class="text-sm text-text-muted">Coverage</span>
-        </div>
-      </div>
-    </div>
-  </section>
+  <section class="section-block" aria-labelledby="aws-regions-heading">
+    <h2 id="aws-regions-heading" class="section-title">AWS regions and data centers</h2>
+    <p class="text-text-muted">
+      Browse the AWS commercial regions in the current dataset and open a region for detailed
+      availability-zone and location information.
+    </p>
 
-  <section class="section-block" aria-labelledby="distribution-heading">
-    <div>
-      <h2 id="distribution-heading" class="section-title">Global region distribution</h2>
-      <p class="text-base leading-relaxed text-text-muted">
-        Compare each AWS geography by region coverage, availability zone depth, and launch year,
-        then use the search and filters to zero in on the locations that fit your workload needs.
-      </p>
-    </div>
-
-    <form [formGroup]="filtersForm" class="form-grid-2" role="search">
-      <div>
-        <label for="regionSearch" class="sr-only">Search</label>
-        <div class="form-icon-wrapper">
+    <form
+      class="grid gap-4 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)_minmax(0,1fr)]"
+      role="search"
+      (submit)="$event.preventDefault()"
+    >
+      <div class="flex min-w-0 flex-col gap-2">
+        <label for="regionSearchInput" class="form-label">Search regions</label>
+        <div class="form-control-shell">
           <app-lucide-icon
             name="search"
-            class="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-text-muted"
+            class="form-control-shell__icon size-4"
             aria-hidden="true"
           />
           <input
-            type="text"
-            id="regionSearch"
-            class="form-control-icon pr-10"
-            placeholder="Search regions..."
-            formControlName="search"
+            #regionsSearchInput
+            type="search"
+            id="regionSearchInput"
+            placeholder="Virginia, us-east-1, Europe, or 2025..."
+            [formField]="filtersForm.search"
+            class="aws-regions-filter-control form-control form-control--icon-start form-control--action-end form-control-focus-ring"
             autocomplete="off"
+            spellcheck="false"
+            aria-describedby="region-search-hint"
           />
-          @if (hasSearchTerm()) {
+          <span id="region-search-hint" class="sr-only">
+            Search by region name, region code, region group, geography, location, availability
+            zone, or launch year.
+          </span>
+          @if (filtersModel().search) {
             <button
               type="button"
-              (click)="clearSearch()"
-              aria-label="Clear search"
-              class="form-icon-clear"
+              class="form-control-shell__action"
+              aria-label="Clear region search"
+              (click)="clearSearch(); regionsSearchInput.focus()"
             >
-              <app-lucide-icon name="x" class="h-4 w-4" aria-hidden="true" />
+              <app-lucide-icon name="x" class="size-4" aria-hidden="true" />
             </button>
           }
         </div>
       </div>
-      <div>
-        <label for="geographyFilter" class="sr-only">Geography</label>
-        <select id="geographyFilter" class="form-select" formControlName="regionGroup">
-          <option value="all">All Regions</option>
-          @for (regionGroup of availableGeographies(); track regionGroup) {
-            <option [value]="regionGroup">{{ regionGroup }}</option>
-          }
-        </select>
+
+      <div class="flex min-w-0 flex-col gap-2">
+        <label for="regionGroupFilter" class="form-label">Filter by region group</label>
+        <div class="form-select-wrapper">
+          <select
+            id="regionGroupFilter"
+            [formField]="filtersForm.regionGroup"
+            class="aws-regions-filter-control form-select"
+            autocomplete="off"
+          >
+            <option value="">All region groups</option>
+            @for (regionGroup of availableRegionGroups; track regionGroup.value) {
+              <option [value]="regionGroup.value">
+                {{ regionGroup.label }} ({{ regionGroup.count }})
+              </option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="flex min-w-0 flex-col gap-2">
+        <label for="zoneFilter" class="form-label">Filter by availability zones</label>
+        <div class="form-select-wrapper">
+          <select
+            id="zoneFilter"
+            [formField]="filtersForm.zoneSupport"
+            class="aws-regions-filter-control form-select"
+            autocomplete="off"
+          >
+            <option value="">All regions</option>
+            <option value="supported">AZ supported ({{ availabilityZoneRegionCount }})</option>
+            <option value="unsupported">
+              No AZ support ({{ totalRegionCount - availabilityZoneRegionCount }})
+            </option>
+          </select>
+        </div>
       </div>
     </form>
 
-    <!-- Desktop table view -->
-    <div class="table-shell hidden sm:block">
-      <table class="table-base">
-        <caption class="sr-only">
-          AWS regions overview with geography, location, availability zone counts, and launch year
-          details.
-        </caption>
-        <thead class="table-head">
-          <tr>
-            <th class="px-4 py-3" scope="col">Region</th>
-            <th class="px-4 py-3" scope="col">Geography</th>
-            <th class="px-4 py-3" scope="col">Datacenter Location</th>
-            <th class="px-4 py-3 text-right" scope="col">AZ Count</th>
-            <th class="px-4 py-3 text-right" scope="col">Launch Date</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-border-soft">
-          @for (r of filteredData(); track r.regionId) {
-            <tr class="table-row-hover">
-              <td class="px-4 py-3">
-                <div class="space-y-1 text-left">
+    @let regions = filteredRegions();
+    <div class="grid min-h-11 grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+      <p
+        id="region-results-summary"
+        class="m-0 text-sm font-semibold text-text-body tabular-nums"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {{ resultSummary() }}
+      </p>
+      <button
+        type="button"
+        class="btn btn-outline btn--sm"
+        [class.invisible]="!hasActiveFilters()"
+        [disabled]="!hasActiveFilters()"
+        [attr.aria-hidden]="hasActiveFilters() ? null : 'true'"
+        [tabIndex]="hasActiveFilters() ? 0 : -1"
+        (click)="clearFilters(); regionsSearchInput.focus()"
+      >
+        <app-lucide-icon name="x" class="size-3.5" aria-hidden="true" />
+        Clear filters
+      </button>
+    </div>
+
+    @if (regions.length) {
+      <p id="region-table-scroll-hint" class="m-0 text-xs text-text-muted xl:hidden">
+        On smaller screens, scroll horizontally to view all columns. The Region column stays
+        visible.
+      </p>
+      <div class="table-shell aws-regions-table-shell">
+        <table
+          class="table-base aws-regions-table min-w-[64rem]"
+          aria-describedby="region-results-summary region-table-scroll-hint"
+        >
+          <caption class="sr-only">
+            AWS regions.
+            {{
+              resultSummary()
+            }}. Use a column heading button to change the sort order.
+          </caption>
+          <thead class="table-head">
+            <tr>
+              @for (column of sortColumns; track column.key) {
+                <th
+                  scope="col"
+                  class="p-0"
+                  [class.w-28]="column.key === 'code' || column.key === 'opened'"
+                  [class.text-right]="column.align === 'right'"
+                  [attr.aria-sort]="sortAriaValue(column.key)"
+                >
+                  <button
+                    type="button"
+                    class="aws-regions-sort-button"
+                    [class.justify-end]="column.align === 'right'"
+                    [class.text-right]="column.align === 'right'"
+                    (click)="sortBy(column.key)"
+                  >
+                    {{ column.label }}
+                    <app-lucide-icon
+                      name="chevron-down"
+                      class="aws-regions-sort-icon size-3.5"
+                      [class.invisible]="!isSortedBy(column.key)"
+                      [class.aws-regions-sort-icon--ascending]="
+                        isSortedBy(column.key) && isSortAscending()
+                      "
+                      aria-hidden="true"
+                    />
+                  </button>
+                </th>
+              }
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border-soft">
+            @for (region of regions; track region.regionId) {
+              <tr class="table-row-hover">
+                <td class="px-4 py-3 whitespace-nowrap">
                   <a
                     class="link-primary font-semibold"
-                    [routerLink]="['/regions', r.regionId]"
-                    [attr.aria-label]="'View details for ' + r.regionId"
+                    [routerLink]="buildRegionDetailRouterLink(region.regionId)"
+                    [attr.aria-label]="'View details for ' + region.displayName"
                   >
-                    {{ r.displayName }}
+                    {{ region.displayName }}
                     <span aria-hidden="true" class="text-text-muted">></span>
                   </a>
-                  <div class="text-xs font-semibold tracking-wide text-text-subtle uppercase">
-                    {{ r.regionId }}
-                  </div>
-                </div>
-              </td>
-              <td class="px-4 py-3 text-text-muted">{{ r.geography }}</td>
-              <td class="px-4 py-3 text-text-muted">
-                {{ r.datacenterLocation }}
-              </td>
-              <td class="px-4 py-3 text-right">
-                <span class="badge-latency badge-latency-neutral tabular-nums">
-                  {{ r.availabilityZoneCount || 'N/A' }}
-                </span>
-              </td>
-              <td class="px-4 py-3 text-right">
-                @if (r.launchYear) {
-                  <span class="pill-badge bg-secondary text-text-muted tabular-nums">
-                    <app-lucide-icon name="calendar" class="h-4 w-4" aria-hidden="true" />
-                    {{ r.launchYear }}
-                  </span>
-                } @else {
-                  <span class="text-sm text-text-muted">N/A</span>
-                }
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Mobile card view -->
-    <div class="space-y-2 sm:hidden">
-      @for (r of filteredData(); track r.regionId) {
-        <a
-          class="block rounded-lg border border-border-soft bg-surface-raised p-3 transition-colors hover:bg-surface-muted"
-          [routerLink]="['/regions', r.regionId]"
-        >
-          <div class="flex items-start justify-between gap-3">
-            <div class="min-w-0 flex-1">
-              <div class="font-semibold text-text-strong">{{ r.displayName }}</div>
-              <div class="text-xs font-semibold tracking-wide text-text-subtle uppercase">
-                {{ r.regionId }}
-              </div>
-              <div class="mt-1 text-sm text-text-muted">
-                {{ r.geography }} · {{ r.datacenterLocation }}
-              </div>
-            </div>
-            <div class="flex shrink-0 flex-col items-end gap-1">
-              <span class="badge-latency badge-latency-neutral tabular-nums">
-                {{ r.availabilityZoneCount || 'N/A' }} AZs
-              </span>
-              @if (r.launchYear) {
-                <span class="text-xs text-text-muted tabular-nums">{{ r.launchYear }}</span>
-              }
-            </div>
-          </div>
-        </a>
-      }
-    </div>
-
-    @if (filteredData().length === 0) {
-      <div class="empty-state">
-        <app-lucide-icon name="search" class="h-8 w-8" aria-hidden="true" />
-        <p>No regions found matching your search and filter criteria.</p>
+                </td>
+                <td class="px-4 py-3 font-mono text-xs font-semibold text-text-body">
+                  {{ region.regionId }}
+                </td>
+                <td class="px-4 py-3 text-text-muted">
+                  {{ region.geography }}
+                </td>
+                <td class="px-4 py-3 text-text-muted">
+                  {{ region.datacenterLocation }}
+                </td>
+                <td class="px-4 py-3 text-right">
+                  @if (region.availabilityZoneCount) {
+                    <span class="badge badge-success whitespace-nowrap tabular-nums">
+                      {{ availabilityZoneLabel(region) }}
+                    </span>
+                  } @else {
+                    <span class="whitespace-nowrap text-text-muted">No AZ support</span>
+                  }
+                </td>
+                <td class="px-4 py-3 text-right text-text-body tabular-nums">
+                  {{ region.launchYear || 'Unknown' }}
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <div
+        class="flex flex-col items-center justify-center gap-3 rounded-lg border border-border-soft bg-surface-raised px-4 py-8 text-center text-sm text-text-muted shadow-sm"
+      >
+        <app-lucide-icon name="search" class="size-8 text-text-muted" aria-hidden="true" />
+        <div class="space-y-1">
+          <p class="font-semibold text-text-strong">No regions match your filters</p>
+          <p>Try a broader search, another region group, or a different AZ filter.</p>
+        </div>
         @if (hasActiveFilters()) {
-          <button type="button" class="btn btn-outline" (click)="clearFilters()">
-            <app-lucide-icon name="x" class="h-3 w-3" aria-hidden="true" />
-            Clear Filters
+          <button
+            type="button"
+            class="btn btn-outline btn--sm"
+            (click)="clearFilters(); regionsSearchInput.focus()"
+          >
+            <app-lucide-icon name="x" class="size-3.5" aria-hidden="true" />
+            Clear filters
           </button>
         }
       </div>
     }
   </section>
 
-  <section class="section-block" aria-labelledby="resources-heading">
-    <h2 id="resources-heading" class="section-title">Additional resources</h2>
+  <section class="section-block" aria-labelledby="key-concepts-heading">
+    <h2 id="key-concepts-heading" class="section-title">Key concepts</h2>
+    <p class="text-text-muted">
+      Use region boundaries and availability zones as inputs to a service-specific resiliency
+      design.
+    </p>
+    <div class="grid gap-4 md:grid-cols-2">
+      <article class="rounded-lg border border-border-soft bg-surface-raised p-5 shadow-sm">
+        <div class="flex items-center gap-3">
+          <div class="flex size-10 items-center justify-center rounded-lg bg-primary/10">
+            <app-lucide-icon name="globe" class="size-5 text-primary" aria-hidden="true" />
+          </div>
+          <h3 class="text-lg font-semibold text-text-strong">Regional isolation</h3>
+        </div>
+        <p class="mt-3 text-sm leading-relaxed text-text-muted">
+          AWS Regions are separate geographic areas. This directory currently lists
+          {{ totalRegionCount }} regions across {{ uniqueGeographyCount }} geographies. Service
+          availability, quotas, pricing, and compliance coverage can differ by region.
+        </p>
+        <ul class="mt-3 space-y-1.5 text-sm text-text-body">
+          <li class="flex items-start gap-2">
+            <app-lucide-icon
+              name="check"
+              class="mt-0.5 size-4 shrink-0 text-success-foreground dark:text-success"
+              aria-hidden="true"
+            />
+            Choose regions that satisfy service availability and compliance requirements
+          </li>
+          <li class="flex items-start gap-2">
+            <app-lucide-icon
+              name="check"
+              class="mt-0.5 size-4 shrink-0 text-success-foreground dark:text-success"
+              aria-hidden="true"
+            />
+            Validate cross-region replication and failover per AWS service
+          </li>
+          <li class="flex items-start gap-2">
+            <app-lucide-icon
+              name="check"
+              class="mt-0.5 size-4 shrink-0 text-success-foreground dark:text-success"
+              aria-hidden="true"
+            />
+            Use region codes such as us-east-1 in APIs, CLIs, and infrastructure templates
+          </li>
+        </ul>
+      </article>
+
+      <article class="rounded-lg border border-border-soft bg-surface-raised p-5 shadow-sm">
+        <div class="flex items-center gap-3">
+          <div class="flex size-10 items-center justify-center rounded-lg bg-primary/10">
+            <app-lucide-icon name="building-2" class="size-5 text-primary" aria-hidden="true" />
+          </div>
+          <h3 class="text-lg font-semibold text-text-strong">Availability zones</h3>
+        </div>
+        <p class="mt-3 text-sm leading-relaxed text-text-muted">
+          Availability Zones are isolated locations within a region. The current dataset records
+          {{ totalAvailabilityZoneCount }} zones across {{ availabilityZoneRegionCount }} regions.
+        </p>
+        <ul class="mt-3 space-y-1.5 text-sm text-text-body">
+          <li class="flex items-start gap-2">
+            <app-lucide-icon
+              name="check"
+              class="mt-0.5 size-4 shrink-0 text-success-foreground dark:text-success"
+              aria-hidden="true"
+            />
+            Independent power, cooling, and networking isolate zone-level failures
+          </li>
+          <li class="flex items-start gap-2">
+            <app-lucide-icon
+              name="check"
+              class="mt-0.5 size-4 shrink-0 text-success-foreground dark:text-success"
+              aria-hidden="true"
+            />
+            High-bandwidth, low-latency links support multi-AZ architectures
+          </li>
+          <li class="flex items-start gap-2">
+            <app-lucide-icon
+              name="check"
+              class="mt-0.5 size-4 shrink-0 text-success-foreground dark:text-success"
+              aria-hidden="true"
+            />
+            Availability and deployment options remain service-specific
+          </li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section-block" aria-labelledby="regions-faq-heading">
+    <h2 id="regions-faq-heading" class="section-title">Frequently asked questions</h2>
+    <p class="text-text-muted">Helpful context when planning region-specific deployments.</p>
+    <div class="faq-list">
+      <details class="faq-item group">
+        <summary class="faq-summary">
+          <span class="faq-question">What defines an AWS Region?</span>
+          <app-lucide-icon name="chevron-down" class="faq-icon" aria-hidden="true" />
+        </summary>
+        <div class="faq-body">
+          An AWS Region is a separate geographic area containing multiple isolated Availability
+          Zones. Each region has a stable code and a provider-defined set of available services.
+        </div>
+      </details>
+      <details class="faq-item group">
+        <summary class="faq-summary">
+          <span class="faq-question">How should I choose an AWS Region?</span>
+          <app-lucide-icon name="chevron-down" class="faq-icon" aria-hidden="true" />
+        </summary>
+        <div class="faq-body">
+          Compare service availability, latency, data residency, compliance, price, capacity, and
+          disaster-recovery requirements. No single metric is sufficient for every workload.
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="section-block" aria-labelledby="regions-resources-heading">
+    <h2 id="regions-resources-heading" class="section-title">Additional resources</h2>
+    <p class="text-text-muted">Official AWS references for infrastructure planning.</p>
     <div class="resource-grid">
       <article class="card card-resource">
         <h3 class="card-title">AWS Global Infrastructure</h3>
         <p class="card-description">
-          Explore AWS's worldwide presence and infrastructure capabilities.
+          Explore AWS regions, Availability Zones, and the global infrastructure footprint.
         </p>
         <a
           href="https://aws.amazon.com/about-aws/global-infrastructure/"
           target="_blank"
           rel="noopener noreferrer"
           class="card-cta"
+          aria-label="Explore AWS Global Infrastructure (opens in new tab)"
         >
-          View global infrastructure
+          Explore infrastructure
+          <app-lucide-icon name="external-link" class="ml-1 size-3" aria-hidden="true" />
         </a>
       </article>
       <article class="card card-resource">
-        <h3 class="card-title">Infrastructure Map</h3>
-        <p class="card-description">Interactive visual guide to AWS regions and edge locations.</p>
+        <h3 class="card-title">AWS infrastructure map</h3>
+        <p class="card-description">
+          Explore AWS regions and edge locations on an interactive map.
+        </p>
         <a
           href="https://infrastructure.aws/"
           target="_blank"
           rel="noopener noreferrer"
           class="card-cta"
+          aria-label="Open the AWS infrastructure map (opens in new tab)"
         >
-          Open interactive map
+          Open map
+          <app-lucide-icon name="external-link" class="ml-1 size-3" aria-hidden="true" />
         </a>
       </article>
       <article class="card card-resource">
-        <h3 class="card-title">Regions &amp; Availability Zones</h3>
-        <p class="card-description">Detailed information about AWS regions and AZ architecture.</p>
+        <h3 class="card-title">Regions and Availability Zones</h3>
+        <p class="card-description">
+          Review AWS guidance for region and Availability Zone architecture.
+        </p>
         <a
           href="https://aws.amazon.com/about-aws/global-infrastructure/regions_az/"
           target="_blank"
           rel="noopener noreferrer"
           class="card-cta"
+          aria-label="Read AWS Regions and Availability Zones guidance (opens in new tab)"
         >
-          Read AZ guide
+          Read guidance
+          <app-lucide-icon name="external-link" class="ml-1 size-3" aria-hidden="true" />
         </a>
       </article>
     </div>

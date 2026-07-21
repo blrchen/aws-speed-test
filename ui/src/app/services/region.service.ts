@@ -1,60 +1,59 @@
-import { Injectable, Signal, signal } from '@angular/core'
+import { Service, Signal, signal } from '@angular/core'
 
 import geographyJson from '../../assets/data/geographies.json'
 import regionJson from '../../assets/data/regions.json'
 import { Geography, RegionModel } from '../models'
 
 export interface RegionGroup {
-  regionGroup: string
-  regions: RegionModel[]
+  readonly regionGroup: string
+  readonly regions: readonly RegionModel[]
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class RegionService {
-  private readonly selectedRegionsState = signal<RegionModel[]>([])
-  readonly selectedRegions: Signal<RegionModel[]> = this.selectedRegionsState.asReadonly()
+  private readonly selectedRegionsState = signal<readonly RegionModel[]>([])
+  readonly selectedRegions: Signal<readonly RegionModel[]> = this.selectedRegionsState.asReadonly()
 
-  // Memoization cache
-  private cachedRegions: RegionModel[] | null = null
-  private cachedRegionGroups: RegionGroup[] | null = null
-  private cachedGeographies: Geography[] | null = null
+  private cachedRegions: readonly RegionModel[] | null = null
+  private cachedRegionGroups: readonly RegionGroup[] | null = null
+  private cachedGeographies: readonly Geography[] | null = null
   private readonly regionCollator = new Intl.Collator('en', { sensitivity: 'base' })
 
   getRegionByName(name: string): RegionModel | undefined {
     const normalized = name.toLowerCase()
-    return this.getAllRegions().find((region: RegionModel) => {
-      const matchesRegionId = region.regionId.toLowerCase() === normalized
-      const matchesDisplayName = region.displayName.toLowerCase() === normalized
-      const matchesLongName = region.longName?.toLowerCase().replace(/\s+/g, '') === normalized
-
-      return matchesRegionId || matchesDisplayName || matchesLongName
-    })
+    const normalizedCompact = normalized.replace(/\s+/g, '')
+    return this.getAllRegions().find(
+      (region) =>
+        region.regionId.toLowerCase() === normalized ||
+        region.displayName.toLowerCase() === normalized ||
+        region.longName.toLowerCase().replace(/\s+/g, '') === normalizedCompact
+    )
   }
 
-  updateSelectedRegions(regions: RegionModel[]): void {
-    this.selectedRegionsState.set(regions)
+  updateSelectedRegions(regions: readonly RegionModel[]): void {
+    this.selectedRegionsState.set([...regions])
   }
 
-  getAllRegions(): RegionModel[] {
+  getAllRegions(): readonly RegionModel[] {
     if (this.cachedRegions) {
-      return this.cachedRegions
+      return [...this.cachedRegions]
     }
 
-    this.cachedRegions = regionJson.map((regionData) => {
-      return {
-        ...regionData,
-        storageAccountName: this.buildStorageAccountName(regionData.regionId)
-      }
-    })
+    this.cachedRegions = Object.freeze(
+      regionJson.map((regionData) =>
+        this.freezeRegion({
+          ...regionData,
+          storageAccountName: this.buildStorageAccountName(regionData.regionId),
+        })
+      )
+    )
 
-    return this.cachedRegions
+    return [...this.cachedRegions]
   }
 
-  getRegionGroups(): RegionGroup[] {
+  getRegionGroups(): readonly RegionGroup[] {
     if (this.cachedRegionGroups) {
-      return this.cachedRegionGroups
+      return [...this.cachedRegionGroups]
     }
 
     const groupsByName = new Map<string, RegionModel[]>()
@@ -72,37 +71,54 @@ export class RegionService {
     }
 
     const collator = this.regionCollator
-    this.cachedRegionGroups = Array.from(groupsByName.entries())
-      .map(([regionGroup, groupedRegions]) => ({
-        regionGroup,
-        regions: [...groupedRegions].sort((a, b) => collator.compare(a.displayName, b.displayName))
-      }))
-      .sort((a, b) => b.regions.length - a.regions.length)
+    this.cachedRegionGroups = Object.freeze(
+      Array.from(groupsByName.entries())
+        .map(([regionGroup, groupedRegions]) =>
+          Object.freeze({
+            regionGroup,
+            regions: Object.freeze(
+              [...groupedRegions].sort((a, b) => collator.compare(a.displayName, b.displayName))
+            ),
+          })
+        )
+        .sort((a, b) => b.regions.length - a.regions.length)
+    )
 
-    return this.cachedRegionGroups
+    return [...this.cachedRegionGroups]
   }
 
-  getAllGeographies(): Geography[] {
+  getAllGeographies(): readonly Geography[] {
     if (this.cachedGeographies) {
-      return this.cachedGeographies
+      return [...this.cachedGeographies]
     }
 
-    this.cachedGeographies = geographyJson.map((geography) => ({
-      ...geography,
-      regions: geography.regions.map((regionData) => {
-        return {
-          ...regionData,
-          storageAccountName: this.buildStorageAccountName(regionData.regionId)
-        }
-      })
-    }))
+    this.cachedGeographies = Object.freeze(
+      geographyJson.map((geography) =>
+        Object.freeze({
+          ...geography,
+          regions: Object.freeze(
+            geography.regions.map((regionData) =>
+              this.freezeRegion({
+                ...regionData,
+                storageAccountName: this.buildStorageAccountName(regionData.regionId),
+              })
+            )
+          ),
+        })
+      )
+    )
 
-    return this.cachedGeographies
+    return [...this.cachedGeographies]
   }
 
   private buildStorageAccountName(regionId: string): string {
-    const prefix = 'ast'
-    const postfix = '693a6c0'
-    return `${prefix}-${regionId}-${postfix}`
+    return `ast-${regionId}-693a6c0`
+  }
+
+  private freezeRegion(region: RegionModel): RegionModel {
+    return Object.freeze({
+      ...region,
+      availabilityZones: Object.freeze([...region.availabilityZones]),
+    })
   }
 }
